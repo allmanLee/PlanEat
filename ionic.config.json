@@ -1,0 +1,7 @@
+{
+  "name": "planeat-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
