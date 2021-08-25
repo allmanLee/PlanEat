@@ -1,13 +1,18 @@
 <template>
-  <ion-page>add</ion-page>
+  <ion-page></ion-page>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { IonPage } from "@ionic/vue";
-
+import { useStore } from "@/store/index";
 export default defineComponent({
   components: {
     IonPage,
+  },
+  setup() {
+    const store = useStore();
+
+    return {};
   },
 });
 </script>
