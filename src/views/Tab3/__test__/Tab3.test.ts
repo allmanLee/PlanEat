@@ -1,24 +1,14 @@
-import { mount, shallowMount, VueWrapper } from "@vue/test-utils";
-import Vue from "vue";
-import Tab3Add from "../Tab3Add.vue";
-import Tab from "../index.vue";
+import { mount, shallowMount } from "@vue/test-utils";
+import Tab3 from "../index.vue";
 
 describe("vuex에서 재료 데이터 가져와서 재료리스트 출력", function () {
-  let wrapper: VueWrapper<any>;
-  beforeEach(function () {
-    wrapper = shallowMount(Tab3Add);
+  test("FETCH: vuex에서 재료데이터(ingredients) 가져오기", () => {
+    const wrapper = shallowMount(Tab3);
   });
-  it("FETCH: vuex에서 재료데이터(ingredients) 가져오기", () => {
-    console.log(wrapper.vm.ingredients);
-    expect(wrapper.vm.ingredients).toStrictEqual([
-      "item1", "item2", "item3", "item4"
-    ]);
-  });
-
-  it("SHOW: TagUpadedDate 컴포넌트 출력", () => {
-    // ADD: 만약 오늘날짜가 아닌 데이터가 받아온 객체에 있다면 **업데이트 데이트 태그 컴포넌트 컴포넌트 출력으로 날짜 구분**
-
-  });
+  //test("SHOW: 데이터 화면 에 리스트로 출력", () => {});
+  //test("SHOW: TagUpadedDate 컴포넌트 출력", () => {
+    //ADD: 만약 오늘날짜가 아닌 데이터가 받아온 객체에 있다면 **업데이트 데이트 태그 컴포넌트 컴포넌트 출력으로 날짜 구분**
+  //});
 });
 
 describe("라우팅 및 모달", function () {
@@ -27,7 +17,7 @@ describe("라우팅 및 모달", function () {
 });
 
 describe("배열에서 데이터 컨트롤", function () {
-  test("ADD/DELETE: arrSelectedAdd", () => { });
-  test("ADD: arrSelectedRemove", () => { });
-  test("DELETE: arrSelectedRemove", () => { });
+  //test("ADD/DELETE: arrSelectedAdd", () => {});
+  //test("ADD: arrSelectedRemove", () => {});
+  //test("DELETE: arrSelectedRemove", () => {});
 });
