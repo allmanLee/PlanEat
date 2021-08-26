@@ -1,6 +1,6 @@
 <template>
-  <ion-chip>
-    <ion-label>{{ dateUpdated }}</ion-label>
+  <ion-chip class="chip-date">
+    <ion-label>{{ number }}</ion-label>
   </ion-chip>
 </template>
 <script lang="ts">
@@ -10,12 +10,21 @@ export default defineComponent({
   date() {
     return {};
   },
-  props: {
-    dateUpdated: { type: Date, default: "2021-00-00" },
-  },
   components: {
     IonLabel,
     IonChip,
   },
+  props: {
+    number: {
+      type: Number,
+      default: 0,
+    },
+  },
 });
 </script>
+<style lang="scss" scoped>
+.chip-date {
+  --background: #2e2e2e;
+  --color: white;
+}
+</style>
