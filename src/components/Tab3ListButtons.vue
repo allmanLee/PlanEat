@@ -25,17 +25,29 @@
             </ion-col>
           </ion-row>
         </ion-col>
-        <button-item-list :propMode="'addActive'"></button-item-list>
+        <button-item-list
+          @callAddButton="emitAddItem"
+          :propMode="'addActive'"
+        ></button-item-list>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <teleport to="body">
+    <ion-modal
+      :is-open="isOpenRef"
+      css-class="my-custom-class"
+      @didDismiss="setOpen(false)"
+    >
+      <Modal :title="'냉장고를 부탁해'"><div>content</div></Modal>
+    </ion-modal>
+  </teleport>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue";
-import { IonRow, IonGrid, IonCol } from "@ionic/vue";
+import { computed, defineComponent, ref } from "vue";
+import { IonRow, IonGrid, IonCol, IonModal, modalController } from "@ionic/vue";
 import ButtonItemList from "./ButtonItemList.vue";
 import TagUpdatedDate from "./TagUpdatedDate.vue";
-
+import Modal from "./AppModal.vue";
 export interface ArrMock {
   name: string;
   updatedDate: Date;
@@ -43,7 +55,15 @@ export interface ArrMock {
 }
 
 export default defineComponent({
-  components: { IonGrid, IonCol, IonRow, ButtonItemList, TagUpdatedDate },
+  components: {
+    IonGrid,
+    IonCol,
+    IonRow,
+    IonModal,
+    ButtonItemList,
+    TagUpdatedDate,
+    Modal,
+  },
   setup() {
     const ArrMock: ArrMock[] = [
       { name: "사과", updatedDate: new Date(), amount: "충분" },
@@ -62,8 +82,15 @@ export default defineComponent({
       }, {});
       return TestReduce;
     });
+    const isOpenRef = ref(false);
+    const openModal = (state: boolean) => (isOpenRef.value = state);
 
-    return { ArrMock, fetchIngredients };
+    const emitAddItem = function (val: any) {
+      console.log(val);
+      openModal(true);
+    };
+
+    return { ArrMock, fetchIngredients, isOpenRef, emitAddItem };
   },
 });
 </script>

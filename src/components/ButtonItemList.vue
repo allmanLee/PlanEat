@@ -11,7 +11,7 @@
         <ion-grid>
           <ion-row>
             <ion-col>{{ itemName }}</ion-col>
-            <ion-col class="text-item-amount">{{ itemAmount }}</ion-col>
+            <ion-col class="text-item-amount">{{ itemAmount }} / D + 1</ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-title>
@@ -49,16 +49,20 @@ export default defineComponent({
   },
   methods: {
     async openPopover(ev: Event) {
-      const popover = await popoverController.create({
-        component: PopoverDeleteVue,
-        cssClass: "my-custom-class",
-        event: ev,
-        translucent: true,
-      });
-      await popover.present();
+      if (this.buttonMode === "disable") {
+        const popover = await popoverController.create({
+          component: PopoverDeleteVue,
+          cssClass: "my-custom-class",
+          event: ev,
+          translucent: true,
+        });
+        await popover.present();
 
-      const { role } = await popover.onDidDismiss();
-      console.log("onDidDismiss resolved with role", role);
+        const { role } = await popover.onDidDismiss();
+        console.log("onDidDismiss resolved with role", role);
+      } else {
+        this.$emit("callAddButton", "why");
+      }
     },
   },
 });
@@ -77,5 +81,6 @@ export default defineComponent({
 .text-item-amount {
   text-align: end;
   color: #d5a506;
+  opacity: 0.6;
 }
 </style>
