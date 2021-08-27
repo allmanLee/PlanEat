@@ -36,9 +36,12 @@
     <ion-modal
       :is-open="isOpenRef"
       css-class="my-custom-class"
-      @didDismiss="setOpen(false)"
+      :swipe-to-close="true"
+      @didDismiss="openModal(false)"
     >
-      <Modal :title="'냉장고를 부탁해'"><div>content</div></Modal>
+      <Modal :title="'냉장고를 부탁해'"
+        ><tab-3-modal-content></tab-3-modal-content
+      ></Modal>
     </ion-modal>
   </teleport>
 </template>
@@ -47,6 +50,7 @@ import { computed, defineComponent, ref } from "vue";
 import { IonRow, IonGrid, IonCol, IonModal, modalController } from "@ionic/vue";
 import ButtonItemList from "./ButtonItemList.vue";
 import TagUpdatedDate from "./TagUpdatedDate.vue";
+import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
 export interface ArrMock {
   name: string;
@@ -62,6 +66,7 @@ export default defineComponent({
     IonModal,
     ButtonItemList,
     TagUpdatedDate,
+    Tab3ModalContent,
     Modal,
   },
   setup() {
@@ -90,7 +95,7 @@ export default defineComponent({
       openModal(true);
     };
 
-    return { ArrMock, fetchIngredients, isOpenRef, emitAddItem };
+    return { ArrMock, fetchIngredients, isOpenRef, openModal, emitAddItem };
   },
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <ion-header>
-    <ion-toolbar>
-      <ion-back-button></ion-back-button>
+    <ion-toolbar
+      ><ion-back-button></ion-back-button>
       <ion-title class="app-header-title">{{ headerTitle }}</ion-title>
     </ion-toolbar>
   </ion-header>
