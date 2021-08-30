@@ -20,12 +20,25 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { IonCard, popoverController } from "@ionic/vue";
+import {
+  IonCard,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCardHeader,
+  IonCardTitle,
+  popoverController,
+} from "@ionic/vue";
 import PopoverDeleteVue from "./PopoverDelete.vue";
 
 export default defineComponent({
   components: {
     IonCard,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCardHeader,
+    IonCardTitle,
   },
   props: {
     propIngredient: {
