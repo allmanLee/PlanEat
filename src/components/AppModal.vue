@@ -1,7 +1,10 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <ion-title>{{ title }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="button-submit" @click="submit"> 확인 </ion-button>
+      </ion-buttons>
+      <ion-title>{{ headerTitle }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -11,18 +14,26 @@
 
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
   name: "Modal",
   props: {
     title: { type: String, default: "Super Modal" }
   },
-  data() {
-    return {
-      content: "Content"
+  components: { IonContent, IonHeader, IonTitle, IonToolbar },
+  setup(props, { emit }) {
+    const headerTitle = reactive(props.title);
+    const submit = () => {
+      emit("submit");
+      console.log("보내기")
     };
-  },
-  components: { IonContent, IonHeader, IonTitle, IonToolbar }
+    return { headerTitle, submit };
+  }
 });
 </script>
+<style>
+.button-submit {
+  font-weight: 600 !important;
+}
+</style>

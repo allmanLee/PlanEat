@@ -15,8 +15,8 @@
           </ion-row>
         </ion-grid>
       </ion-card-title>
-    </ion-card-header></ion-card
-  >
+    </ion-card-header>
+  </ion-card>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";

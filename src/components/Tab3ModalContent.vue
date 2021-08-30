@@ -16,6 +16,7 @@
   <ion-content fullscreen>
     <ion-list ref="searchList">
       <ion-button
+        :id="`button-${item}`"
         class="list-button"
         fill="solid"
         expand="full"
@@ -23,7 +24,6 @@
         :key="index"
         @click="clickItem"
         :value="item"
-        :ref="buttonItem"
         >{{ item }}
       </ion-button>
     </ion-list>
@@ -98,31 +98,19 @@ export default defineComponent({
       event.target.placeholder = "재료를 검색하세요";
     };
 
-    const searchedItem: any = reactive([]);
+    const searchedItem: any[] = reactive([]);
     const clickItem = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       event.target.style.opacity = "0.26";
       event.target.disabled = true;
       searchedItem.push(event.target.innerHTML);
     };
-
-    let buttonItemRefs: any[] = [];
-    const buttonItem = (el: any) => {
-      buttonItemRefs.push(el);
-    };
-    onBeforeUpdate(() => {
-      buttonItemRefs = [];
-    });
-    onMounted(() => {
-      console.log(buttonItemRefs);
-    });
     const cancleChip = (val: any) => {
-      // const selectedCancleButton = Array.from(buttonItemRefs).filter(
-      //   (el) => {}
-      // );
-
-      //selectedCancleButton[0].style.opacity = "1";
-      // selectedCancleButton.disabled = false;
-      searchedItem.pop(val);
+      const buttonId: HTMLIonButtonElement | null = document.getElementById(
+        `button-${val}`
+      ) as HTMLIonButtonElement; // 선택한  버튼 dom 객체
+      buttonId.style.opacity = "1";
+      buttonId.setAttribute("disabled", "false");
+      searchedItem.splice(searchedItem.indexOf(val), 1);
     };
 
     return {
@@ -132,11 +120,9 @@ export default defineComponent({
       clearSearch,
       focusSearch,
       blurSearch,
-      searchedItem,
+      searchedItem, //vuex에서 관리 필요
       clickItem,
       cancleChip,
-      buttonItem,
-      buttonItemRefs,
     };
   },
 });

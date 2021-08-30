@@ -39,7 +39,7 @@
       :swipe-to-close="true"
       @didDismiss="openModal(false)"
     >
-      <Modal :title="'냉장고를 부탁해'"
+      <Modal :title="'냉장고를 부탁해'" @submit="openModal(false)"
         ><tab-3-modal-content></tab-3-modal-content
       ></Modal>
     </ion-modal>

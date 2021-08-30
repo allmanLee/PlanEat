@@ -31,7 +31,6 @@ export default defineComponent({
     });
     const cancleItem = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       const chipLabel = event.target.children[0].innerHTML;
-      console.log(chipLabel);
       emit("emitCancleItem", chipLabel);
     };
 
