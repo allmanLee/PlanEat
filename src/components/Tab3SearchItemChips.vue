@@ -14,7 +14,7 @@
 import { computed, defineComponent } from "vue";
 import { IonItemGroup, IonIcon, IonLabel, IonChip } from "@ionic/vue";
 import { closeCircle } from "ionicons/icons";
-import { VueEvent } from "@/types";
+import { VueEvent } from "@/types/event";
 export default defineComponent({
   components: { IonItemGroup, IonIcon, IonLabel, IonChip },
   props: {

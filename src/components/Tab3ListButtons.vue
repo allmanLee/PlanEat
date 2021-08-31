@@ -39,25 +39,23 @@
       :swipe-to-close="true"
       @didDismiss="openModal(false)"
     >
-      <Modal :title="'냉장고를 부탁해'" @submit="openModal(false)"
-        ><tab-3-modal-content></tab-3-modal-content
+      <Modal :title="'냉장고를 부탁해'" @submit="submitAddItem"
+        ><tab-3-modal-content
+          @emitUpdatedItemsBeAdd="updatedItemsBeAdd"
+        ></tab-3-modal-content
       ></Modal>
     </ion-modal>
   </teleport>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 import { IonRow, IonGrid, IonCol, IonModal, modalController } from "@ionic/vue";
 import ButtonItemList from "./ButtonItemList.vue";
 import TagUpdatedDate from "./TagUpdatedDate.vue";
 import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
-export interface ArrMock {
-  name: string;
-  updatedDate: Date;
-  amount: "충분" | "보통" | "소량";
-}
-
+import { FrigeType } from "@/types/frige";
+import { useStore } from "@/store/index";
 export default defineComponent({
   components: {
     IonGrid,
@@ -70,16 +68,14 @@ export default defineComponent({
     Modal,
   },
   setup() {
-    const ArrMock: ArrMock[] = [
-      { name: "사과", updatedDate: new Date(), amount: "충분" },
-      { name: "감", updatedDate: new Date(-1), amount: "충분" },
-      { name: "배추", updatedDate: new Date(-2), amount: "충분" },
-      { name: "딸기", updatedDate: new Date(5), amount: "충분" },
-      { name: "김치", updatedDate: new Date(-4), amount: "충분" },
-    ];
+    const store = useStore();
+
+    const ArrMock = computed(() => {
+      return store.state.frige.items;
+    });
 
     const fetchIngredients = computed(() => {
-      const TestReduce = ArrMock.reduce((acc: any, item: any): any => {
+      const TestReduce = ArrMock.value.reduce((acc: any, item: any): any => {
         return {
           ...acc,
           [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
@@ -95,7 +91,30 @@ export default defineComponent({
       openModal(true);
     };
 
-    return { ArrMock, fetchIngredients, isOpenRef, openModal, emitAddItem };
+    // 모달 데이터 emit 받아오고 업데이트 한다.
+    // 확인버튼을 선택했을 때 vuex에서 ItemsBeAdd가 업데이트 된다.
+    let itemsBeAdd: any = reactive([]);
+
+    const updatedItemsBeAdd = (items: FrigeType[]) => {
+      itemsBeAdd = items;
+      console.log("emit :", items);
+    };
+
+    const submitAddItem = () => {
+      openModal(false);
+      console.log(`보내는 데이터: ${itemsBeAdd}`);
+      store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
+    };
+
+    return {
+      ArrMock,
+      fetchIngredients,
+      isOpenRef,
+      openModal,
+      emitAddItem,
+      submitAddItem,
+      updatedItemsBeAdd,
+    };
   },
 });
 </script>

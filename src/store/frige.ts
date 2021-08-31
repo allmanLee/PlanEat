@@ -1,20 +1,43 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
+import { FrigeType } from "@/types/frige";
 
 export interface FrigeModuleState {
-  name: string;
-  email: string;
+  items: FrigeType[];
+  itemsBeAdd: FrigeType[];
+  itemsBeDeleted: FrigeType[];
+
 }
 
-export const userModule: Module<FrigeModuleState, RootState> = {
+export const FrigeModule: Module<FrigeModuleState, RootState> = {
   namespaced: true,
   state: () => ({
-    name: 'hihdi',
-    email: ''
+    items: [{ name: "사과", updatedDate: new Date(), amount: "충분" },
+    { name: "감", updatedDate: new Date(-1), amount: "충분" },
+    { name: "배추", updatedDate: new Date(-2), amount: "충분" },
+    { name: "딸기", updatedDate: new Date(5), amount: "충분" },
+    { name: "김치", updatedDate: new Date(-4), amount: "충분" },],
+
+    itemsBeAdd: [],
+    itemsBeDeleted: [],
   }),
   getters: {
-    getName(state) {
-      return state.name;
+    getItemNames(state) {
+      const itemNames = state.itemsBeAdd.map((item) => {
+        return item.name;
+      });
+      return itemNames;
+    }
+  },
+  mutations: {
+    fetchItemsBeAdd(state, payload) {
+      state.itemsBeAdd = payload;
+    },
+    fetchItemsBeDeleted(state, { items }) {
+
+      items.forEach((element: FrigeType) => {
+        state.itemsBeDeleted.splice(state.itemsBeDeleted.indexOf(element), 1);
+      });
     }
   }
 };

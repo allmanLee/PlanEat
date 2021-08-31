@@ -26,7 +26,7 @@ export default defineComponent({
     const headerTitle = reactive(props.title);
     const submit = () => {
       emit("submit");
-      console.log("보내기")
+      console.log("보내기");
     };
     return { headerTitle, submit };
   }

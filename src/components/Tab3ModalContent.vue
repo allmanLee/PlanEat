@@ -30,19 +30,10 @@
   </ion-content>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  onUpdated,
-  reactive,
-  onBeforeUpdate,
-  onMounted,
-  readonly,
-  isReactive,
-  toRefs,
-} from "vue";
+import { defineComponent, ref, reactive, computed, Ref, onUpdated } from "vue";
 import Tab3SearchItemChips from "./Tab3SearchItemChips.vue";
-import { VueEvent } from "@/types/index.js";
+import { VueEvent } from "@/types/event.js";
+import { useStore } from "@/store/index";
 import {
   IonContent,
   IonList,
@@ -50,6 +41,7 @@ import {
   IonSearchbar,
   IonHeader,
 } from "@ionic/vue";
+
 export default defineComponent({
   components: {
     Tab3SearchItemChips,
@@ -60,6 +52,15 @@ export default defineComponent({
     IonHeader,
   },
   setup() {
+    const store = useStore();
+
+    //ItemNamesBeAdd에 추가된 상품이 있다면 초기 모달 회면에 표시
+    const ItemNamesBeAdd = computed(() => {
+      return store.getters["frige/getItemName"];
+    });
+
+    console.log(ItemNamesBeAdd.value);
+
     const ArrMock = [
       "Arthur",
       "Augustin",
@@ -84,10 +85,11 @@ export default defineComponent({
     };
 
     const clearSearch = () => {
-      const test = Array.from(searchList.value.children);
-      test.forEach((item: any) => {
-        item.style.display = "block";
-      });
+      // const test = Array.from(searchList.value.children);
+      // test.forEach((item: any) => {
+      //   item.style.display = "block";
+      // });
+      return 0;
     };
 
     const focusSearch = (event: VueEvent.Input<HTMLInputElement>) => {
@@ -103,6 +105,7 @@ export default defineComponent({
       event.target.style.opacity = "0.26";
       event.target.disabled = true;
       searchedItem.push(event.target.innerHTML);
+      //emit("emitUpdatedItemsBeAdd", searchedItem);
     };
     const cancleChip = (val: any) => {
       const buttonId: HTMLIonButtonElement | null = document.getElementById(
@@ -111,6 +114,7 @@ export default defineComponent({
       buttonId.style.opacity = "1";
       buttonId.setAttribute("disabled", "false");
       searchedItem.splice(searchedItem.indexOf(val), 1);
+      //emit("emitUpdatedItemsBeAdd", searchedItem);
     };
 
     return {
