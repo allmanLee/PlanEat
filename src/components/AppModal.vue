@@ -13,17 +13,35 @@
 </template>
 
 <script>
-import { IonContent, IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
-import { defineComponent, reactive } from "vue";
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonButtons
+} from "@ionic/vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   name: "Modal",
   props: {
     title: { type: String, default: "Super Modal" }
   },
-  components: { IonContent, IonHeader, IonTitle, IonToolbar },
+  components: {
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonButtons
+  },
+
+  emits: ["submit"],
   setup(props, { emit }) {
-    const headerTitle = reactive(props.title);
+    const headerTitle = computed(() => {
+      return props.title;
+    });
     const submit = () => {
       emit("submit");
       console.log("보내기");

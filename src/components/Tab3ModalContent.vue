@@ -20,9 +20,10 @@
         class="list-button"
         fill="solid"
         expand="full"
-        v-for="(item, index) in ArrMock"
+        v-for="(item, index) in ArrMock || []"
         :key="index"
         @click="clickItem"
+        :ref="setButtonRef"
         :value="item"
         >{{ item }}
       </ion-button>
@@ -30,7 +31,16 @@
   </ion-content>
 </template>
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, Ref, onUpdated } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  onUpdated,
+  computed,
+  onBeforeUpdate,
+  Ref,
+  onMounted,
+} from "vue";
 import Tab3SearchItemChips from "./Tab3SearchItemChips.vue";
 import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
@@ -43,6 +53,7 @@ import {
 } from "@ionic/vue";
 
 export default defineComponent({
+  emits: ["emitUpdatedItemsBeAdd"],
   components: {
     Tab3SearchItemChips,
     IonContent,
@@ -51,15 +62,9 @@ export default defineComponent({
     IonSearchbar,
     IonHeader,
   },
-  setup() {
+
+  setup(props, { emit }) {
     const store = useStore();
-
-    //ItemNamesBeAdd에 추가된 상품이 있다면 초기 모달 회면에 표시
-    const ItemNamesBeAdd = computed(() => {
-      return store.getters["frige/getItemName"];
-    });
-
-    console.log(ItemNamesBeAdd.value);
 
     const ArrMock = [
       "Arthur",
@@ -70,25 +75,56 @@ export default defineComponent({
       "Chloe",
       "Freeman",
     ];
+    //ref setting/////////////////////
+    let buttonRefs: HTMLElement[] = [];
+    const setButtonRef = (el: any) => {
+      if (el) {
+        buttonRefs.push(el.$el);
+      }
+    };
+    const searchedItem: any[] = reactive([]);
     let searchList = ref();
     onUpdated(() => {
       searchList = ref();
     });
+    onBeforeUpdate(() => {
+      buttonRefs = [];
+    });
+    ///////////////////////////////////
+
+    // ItemNamesBeAdd에 추가된 상품이 있다면 초기 모달 회면에 표시
+    const ItemNamesBeAdd = computed(() => {
+      return store.getters["frige/getItemName"];
+    });
+
+    onMounted(() => {
+      if (ItemNamesBeAdd.value) {
+        ItemNamesBeAdd.value.forEach((element: any) => {
+          searchedItem.push(element);
+          buttonRefs.filter((el) => {
+            if (el.getAttribute("value") === element) {
+              el.style.opacity = "0.26";
+              el.setAttribute("disabled", "true");
+            }
+          });
+        });
+      }
+    });
 
     const searchInput = (event: VueEvent.Input<HTMLInputElement>) => {
       const query = event.target.value.toLowerCase();
-      const test = Array.from(searchList.value.children);
-      test.forEach((item: any) => {
+      const test = searchList.value.$el;
+      Array.from(test.children).forEach((item: any) => {
         const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
         item.style.display = shouldShow ? "block" : "none";
       });
     };
 
     const clearSearch = () => {
-      // const test = Array.from(searchList.value.children);
-      // test.forEach((item: any) => {
-      //   item.style.display = "block";
-      // });
+      const test = searchList.value.$el;
+      Array.from(test.children).forEach((item: any) => {
+        item.style.display = "block";
+      });
       return 0;
     };
 
@@ -100,13 +136,13 @@ export default defineComponent({
       event.target.placeholder = "재료를 검색하세요";
     };
 
-    const searchedItem: any[] = reactive([]);
     const clickItem = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       event.target.style.opacity = "0.26";
       event.target.disabled = true;
       searchedItem.push(event.target.innerHTML);
-      //emit("emitUpdatedItemsBeAdd", searchedItem);
+      emit("emitUpdatedItemsBeAdd", searchedItem);
     };
+
     const cancleChip = (val: any) => {
       const buttonId: HTMLIonButtonElement | null = document.getElementById(
         `button-${val}`
@@ -114,11 +150,13 @@ export default defineComponent({
       buttonId.style.opacity = "1";
       buttonId.setAttribute("disabled", "false");
       searchedItem.splice(searchedItem.indexOf(val), 1);
-      //emit("emitUpdatedItemsBeAdd", searchedItem);
+      emit("emitUpdatedItemsBeAdd", searchedItem);
     };
 
     return {
       ArrMock,
+      buttonRefs,
+      setButtonRef,
       searchList,
       searchInput,
       clearSearch,

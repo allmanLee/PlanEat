@@ -4,7 +4,7 @@
       <ion-col>
         <ion-col
           size="auto"
-          v-for="(item, index) in fetchIngredients"
+          v-for="(item, index) in fetchIngredients || []"
           :key="index"
         >
           <ion-row class="ion-justify-content-center">
@@ -17,7 +17,7 @@
           <ion-row class="ion-justify-content-center">
             <ion-col size="12">
               <button-item-list
-                v-for="(ingredient, index) in item"
+                v-for="(ingredient, index) in item || []"
                 :key="index"
                 :propIngredient="ingredient.name"
                 :propAmount="ingredient.amount"
@@ -67,6 +67,7 @@ export default defineComponent({
     Tab3ModalContent,
     Modal,
   },
+
   setup() {
     const store = useStore();
 

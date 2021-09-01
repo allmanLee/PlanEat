@@ -2,6 +2,7 @@ import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeType } from "@/types/frige";
 
+
 export interface FrigeModuleState {
   items: FrigeType[];
   itemsBeAdd: FrigeType[];
@@ -22,19 +23,32 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     itemsBeDeleted: [],
   }),
   getters: {
-    getItemNames(state) {
-      const itemNames = state.itemsBeAdd.map((item) => {
-        return item.name;
+    getItemName: (state) => {
+      const itemNames: string[] = [];
+      state.itemsBeAdd.forEach((item) => {
+        itemNames.push(item.name);
       });
       return itemNames;
     }
   },
   mutations: {
     fetchItemsBeAdd(state, payload) {
-      state.itemsBeAdd = payload;
+      const selectedItems: FrigeType[] = [];
+      if (payload) {
+        payload.forEach((element: string) => {
+          selectedItems.push({
+            name: element,
+            amount: "보통",
+            updatedDate: new Date()
+          });
+        });
+        state.itemsBeAdd = selectedItems;
+      } else {
+        return;
+      }
+
     },
     fetchItemsBeDeleted(state, { items }) {
-
       items.forEach((element: FrigeType) => {
         state.itemsBeDeleted.splice(state.itemsBeDeleted.indexOf(element), 1);
       });
