@@ -1,4 +1,9 @@
 <template>
+  <ion-header v-if="deletePannelShow" class="header-delete-item" translucent>
+    <ion-toolbar>
+      <ion-title class="app-header-title">삭제</ion-title>
+    </ion-toolbar></ion-header
+  >
   <ion-grid>
     <ion-row class="ion-justify-content-center">
       <ion-col>
@@ -19,24 +24,39 @@
               <button-item-list
                 v-for="(ingredient, index) in item || []"
                 :key="index"
-                :propIngredient="ingredient.name"
-                :propAmount="ingredient.amount"
+                :propIngredient="ingredient"
                 :ref="setCardRef"
                 :propMode="buttomMode"
                 @emitDeleteItems="deleteItems"
               >
-                <ion-checkbox class="checkbox-delete"> </ion-checkbox
+                <ion-checkbox
+                  v-if="deletePannelShow"
+                  @update:modelValue="checkBeCancledId(ingredient.id)"
+                  :modelValue="checkBeCancledId(ingredient.id)"
+                  class="checkbox-delete"
+                >
+                </ion-checkbox
               ></button-item-list>
             </ion-col>
           </ion-row>
         </ion-col>
         <button-item-list
+          v-if="addButtonShow"
           @emitAddItems="addItems"
           :propMode="'addActive'"
         ></button-item-list>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div v-if="deletePannelShow" class="delete-footer">
+    <ion-button
+      expand="full"
+      class="delte-footer-button"
+      color="danger"
+      @click="SubmitDeleteItems"
+      >삭제하기</ion-button
+    >
+  </div>
   <teleport to="body">
     <ion-modal
       :is-open="isOpenRef"
@@ -44,7 +64,7 @@
       :swipe-to-close="true"
       @didDismiss="openModal(false)"
     >
-      <Modal :title="'냉장고를 부탁해'" @submit="submitAddItem"
+      <Modal :title="'냉장고를 부탁해'" @submit="SubmitAddItems"
         ><tab-3-modal-content
           @emitUpdatedItemsBeAdd="updatedItemsBeAdd"
         ></tab-3-modal-content
@@ -55,24 +75,42 @@
 <script lang="ts">
 import {
   computed,
+  ComputedRef,
   defineComponent,
   onBeforeUpdate,
   onMounted,
   reactive,
+  Ref,
   ref,
 } from "vue";
-import { IonRow, IonGrid, IonCol, IonModal, modalController } from "@ionic/vue";
-import ButtonItemList from "./ButtonItemList.vue";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonRow,
+  IonGrid,
+  IonCol,
+  IonModal,
+  IonButton,
+  IonCheckbox,
+} from "@ionic/vue";
+import ButtonItemList from "./cardButton.vue";
 import TagUpdatedDate from "./TagUpdatedDate.vue";
 import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 import { useStore } from "@/store/index";
+import { VueEvent } from "@/types/event";
 
 export default defineComponent({
   components: {
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButton,
     IonGrid,
     IonCol,
+    IonCheckbox,
     IonRow,
     IonModal,
     ButtonItemList,
@@ -82,6 +120,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const addButtonShow = computed(() => {
+      return store.state.ui.addButton;
+    });
+    const deletePannelShow = computed(() => {
+      return store.state.ui.deletePannel;
+    });
     const buttomMode = ref("nomal");
     let cardRefs: HTMLElement[] = [];
 
@@ -95,10 +139,11 @@ export default defineComponent({
       cardRefs = [];
     });
 
-    const ArrMock = computed(() => {
+    const ArrMock: ComputedRef<FrigeType[]> = computed(() => {
       return store.state.frige.items;
     });
 
+    //재료 날자별로 객체배열 재정렬
     const fetchIngredients = computed(() => {
       const TestReduce = ArrMock.value.reduce((acc: any, item: any): any => {
         return {
@@ -113,21 +158,29 @@ export default defineComponent({
     const isOpenRef = ref(false);
     const openModal = (state: boolean) => (isOpenRef.value = state);
     const addItems = function (val: any) {
-      console.log(val);
       openModal(true);
     };
     console.log(ArrMock.value);
     //삭제버튼 눌렀을때 삭제내용 선택 할 수 있도록
-    //좌측 checkbox 생성
-    const ItemsBeDeleted = [];
+    //좌측 checkbox 생성 및 다음 버튼 부턴 삭제
+    const ItemsBeDeleted: Ref<string[]> = ref([]);
+    const deleteItems = function (val: string) {
+      const includeId = ItemsBeDeleted.value.includes(val);
+      if (!deletePannelShow.value) {
+        store.commit("ui/fetchStateDelete");
+      }
 
-    const deleteItems = function (val: any) {
-      console.log("h생성");
+      if (includeId) {
+        ItemsBeDeleted.value.splice(ItemsBeDeleted.value.indexOf(val), 1);
+      } else {
+        ItemsBeDeleted.value.push(val);
+      }
+
       buttomMode.value = "disable";
-
-      // Array.from(cardRefs).forEach((el) => {
-      //   el.appendChild(ButtonItemList);
-      // });
+    };
+    const checkBeCancledId = (val: string): boolean => {
+      const includeId = ItemsBeDeleted.value.includes(val);
+      return includeId;
     };
 
     // 모달 데이터 emit 받아오고 업데이트 한다.
@@ -138,22 +191,34 @@ export default defineComponent({
       itemsBeAdd = items;
     };
 
-    const submitAddItem = () => {
+    const SubmitAddItems = () => {
       openModal(false);
       store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
     };
 
+    const SubmitDeleteItems = (event: VueEvent.Mouse<HTMLElement>) => {
+      store.commit("ui/fetchStateAdd");
+      store.commit("frige/fetchItemsBeDelete", ItemsBeDeleted.value);
+      ItemsBeDeleted.value = [];
+    };
+
     return {
       ArrMock,
+      addButtonShow,
+      deletePannelShow,
       buttomMode,
       fetchIngredients,
       isOpenRef,
       openModal,
       addItems,
       deleteItems,
-      submitAddItem,
+
       updatedItemsBeAdd,
       setCardRef,
+      checkBeCancledId,
+      ItemsBeDeleted,
+      SubmitAddItems,
+      SubmitDeleteItems,
     };
   },
 });
@@ -168,5 +233,20 @@ li {
 .checkbox-delete {
   --size: 20px;
   align-content: center;
+  pointer-events: none;
+}
+.header-delete-item {
+  position: fixed;
+  z-index: 2;
+}
+.delete-footer {
+  box-shadow: 0px -2px 12px 4px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  z-index: 3;
+}
+.delte-footer-button {
+  margin: 0px;
 }
 </style>

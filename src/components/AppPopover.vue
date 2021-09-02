@@ -1,10 +1,12 @@
 <template>
   <teleport to="body">
-    <div v-if="openPopover" class="popover-background" @click="ClickOutside">
-      <ion-card class="popover-content">
-        <slot></slot>
-      </ion-card>
-    </div>
+    <transition name="fade">
+      <div v-if="openPopover" class="popover-background" @click="ClickOutside">
+        <ion-card class="popover-content">
+          <slot></slot>
+        </ion-card>
+      </div>
+    </transition>
   </teleport>
 </template>
 
@@ -55,5 +57,14 @@ export default defineComponent({
   transform: translate(-50%, -50%);
   background-color: white;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

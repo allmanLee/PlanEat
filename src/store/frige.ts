@@ -37,19 +37,21 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     fetchItemsBeAdd(state, payload) {
       const selectedItems: FrigeType[] = [];
       const date = new Date();
-      const year = date.getFullYear;
-      const month = date.getMonth;
-      const day = date.getDay;
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDay();
 
       if (payload) {
         payload.forEach((element: FrigeType) => {
           const ItemId = String(year) + String(month) + String(day) + element.engName;
-
-          selectedItems.push({
+          const ItemObject: FrigeType = {
             name: element.name,
             amount: "보통",
-            id: ItemId
-          });
+            id: ItemId,
+            updatedDate: date,
+          };
+          selectedItems.push(ItemObject);
+          state.items.push(ItemObject);
         });
         state.itemsBeAdd = selectedItems;
       } else {
@@ -57,10 +59,18 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       }
 
     },
-    fetchItemsBeDeleted(state, { items }) {
-      items.forEach((element: FrigeType) => {
-        state.itemsBeDeleted.splice(state.itemsBeDeleted.indexOf(element), 1);
+    fetchItemsBeDelete(state, payload) {
+      const selectedItems: FrigeType[] = [];
+      console.log(payload);
+      payload.forEach((id: string) => {
+        state.items.forEach((el: FrigeType) => {
+          if (el.id === id) {
+            selectedItems.push(el);
+            state.items.splice(state.items.indexOf(el), 1);
+          }
+        });
       });
+      state.itemsBeDeleted = selectedItems;
     }
   }
 };

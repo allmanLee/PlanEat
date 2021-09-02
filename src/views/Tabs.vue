@@ -2,7 +2,7 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar>
+      <ion-tab-bar v-if="footer">
         <ion-tab-button tab="tab1" href="/tabs/tab1">
           <ion-icon :icon="triangle" />
           <ion-label>쇼핑</ion-label>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import {
   IonTabBar,
   IonTabButton,
@@ -33,6 +33,7 @@ import {
   IonPage,
   IonRouterOutlet,
 } from "@ionic/vue";
+import { useStore } from "@/store/index";
 import { ellipse, square, triangle } from "ionicons/icons";
 
 export default defineComponent({
@@ -47,7 +48,12 @@ export default defineComponent({
     IonRouterOutlet,
   },
   setup() {
+    const store = useStore();
+    const footer = computed(() => {
+      return store.state.ui.footer;
+    });
     return {
+      footer,
       ellipse,
       square,
       triangle,

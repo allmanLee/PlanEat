@@ -14,10 +14,10 @@
               ><slot></slot
             ></ion-col>
             <ion-col class="ion-align-self-center" size="auto">{{
-              itemName
+              ingredient.name
             }}</ion-col>
             <ion-col class="text-item-amount ion-align-self-center"
-              >{{ itemAmount }} / D + 1</ion-col
+              >{{ ingredient.amount }} / D + 1</ion-col
             >
           </ion-row>
         </ion-grid>
@@ -37,7 +37,7 @@
   </app-popover>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, PropType } from "vue";
 import {
   IonCard,
   IonGrid,
@@ -50,6 +50,7 @@ import {
 } from "@ionic/vue";
 import AppPopover from "./AppPopover.vue";
 import { VueEvent } from "@/types/event";
+import { FrigeType } from "@/types/frige";
 
 export default defineComponent({
   components: {
@@ -65,48 +66,46 @@ export default defineComponent({
   },
   props: {
     propIngredient: {
-      type: String,
-      default: "추가하기",
+      type: Object as PropType<FrigeType>,
+      default: () => {
+        return {
+          id: "0",
+          name: "+ 추가",
+          engName: "add",
+          updatedDate: new Date(),
+          amount: "보통",
+        };
+      },
     },
     propMode: {
       type: String,
       default: "nomal",
     },
-    propAmount: {
-      type: String,
-      default: "보통",
-    },
   },
   emits: ["emitAddItems", "emitDeleteItems"],
   setup(props, { emit }) {
     const buttonMode = computed(() => props.propMode);
-    const itemName = computed(() => props.propIngredient);
-    const itemAmount = computed(() => props.propAmount);
+    const ingredient = computed(() => props.propIngredient);
     const closePopover = ref(false);
     const AddItems = (event: VueEvent.Mouse<HTMLButtonElement>) => {
-      console.log("ShowSearchItems");
       emit("emitAddItems", "why");
     };
     const DeleteItems = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       closePopover.value = false;
-      console.log(itemName.value);
-      emit("emitDeleteItems", itemName.value);
+      emit("emitDeleteItems", ingredient.value.id);
     };
     const ClickButton = (event: VueEvent.Mouse<HTMLButtonElement>) => {
-      console.log(buttonMode.value);
       if (buttonMode.value == "nomal") {
-        console.log("nomal");
         closePopover.value = true;
       } else if (buttonMode.value === "addActive") {
         AddItems(event);
-      } else emit("emitDeleteItems", itemName.value);
+      } else emit("emitDeleteItems", ingredient.value.id);
     };
 
     return {
-      itemName,
+      ingredient,
       buttonMode,
       closePopover,
-      itemAmount,
       AddItems,
       DeleteItems,
       ClickButton,
@@ -121,6 +120,7 @@ export default defineComponent({
 }
 .list-button-active {
   --border-width: 2px;
+  color: #3d2f01;
 }
 .list-buton {
   --border-width: 1px;
