@@ -1,0 +1,14 @@
+ion-popover {
+    div.popover-content {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
+.popover-arrow.sc-ion-popover-ios::after {
+    display: none;
+}
+
+.list-header-inner.slot {
+    vertical-align: middle !important;
+}
