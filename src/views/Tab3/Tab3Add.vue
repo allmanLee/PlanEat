@@ -8,18 +8,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
-import { useStore } from "@/store/index";
 import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
 export default defineComponent({
   components: {
     IonPage,
     IonContent,
     Tab3ListButtons,
-  },
-  setup() {
-    const store = useStore();
-
-    return {};
   },
 });
 </script>

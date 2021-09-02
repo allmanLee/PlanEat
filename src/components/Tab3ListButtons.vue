@@ -21,12 +21,17 @@
                 :key="index"
                 :propIngredient="ingredient.name"
                 :propAmount="ingredient.amount"
+                :ref="setCardRef"
+                :propMode="buttomMode"
+                @emitDeleteItems="deleteItems"
+              >
+                <ion-checkbox class="checkbox-delete"> </ion-checkbox
               ></button-item-list>
             </ion-col>
           </ion-row>
         </ion-col>
         <button-item-list
-          @callAddButton="emitAddItem"
+          @emitAddItems="addItems"
           :propMode="'addActive'"
         ></button-item-list>
       </ion-col>
@@ -48,14 +53,22 @@
   </teleport>
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeUpdate,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { IonRow, IonGrid, IonCol, IonModal, modalController } from "@ionic/vue";
 import ButtonItemList from "./ButtonItemList.vue";
 import TagUpdatedDate from "./TagUpdatedDate.vue";
 import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
-import { FrigeType } from "@/types/frige";
+import { FrigeType, IngredientType } from "@/types/frige";
 import { useStore } from "@/store/index";
+
 export default defineComponent({
   components: {
     IonGrid,
@@ -67,9 +80,20 @@ export default defineComponent({
     Tab3ModalContent,
     Modal,
   },
-
   setup() {
     const store = useStore();
+    const buttomMode = ref("nomal");
+    let cardRefs: HTMLElement[] = [];
+
+    //카드 Dom 설정
+    const setCardRef = (el: any) => {
+      if (el) {
+        cardRefs.push(el.$el);
+      }
+    };
+    onBeforeUpdate(() => {
+      cardRefs = [];
+    });
 
     const ArrMock = computed(() => {
       return store.state.frige.items;
@@ -84,37 +108,52 @@ export default defineComponent({
       }, {});
       return TestReduce;
     });
+
+    //버튼에서 emit 을 받온다.
     const isOpenRef = ref(false);
     const openModal = (state: boolean) => (isOpenRef.value = state);
-
-    const emitAddItem = function (val: any) {
+    const addItems = function (val: any) {
       console.log(val);
       openModal(true);
+    };
+    console.log(ArrMock.value);
+    //삭제버튼 눌렀을때 삭제내용 선택 할 수 있도록
+    //좌측 checkbox 생성
+    const ItemsBeDeleted = [];
+
+    const deleteItems = function (val: any) {
+      console.log("h생성");
+      buttomMode.value = "disable";
+
+      // Array.from(cardRefs).forEach((el) => {
+      //   el.appendChild(ButtonItemList);
+      // });
     };
 
     // 모달 데이터 emit 받아오고 업데이트 한다.
     // 확인버튼을 선택했을 때 vuex에서 ItemsBeAdd가 업데이트 된다.
     let itemsBeAdd: any = reactive([]);
 
-    const updatedItemsBeAdd = (items: FrigeType[]) => {
+    const updatedItemsBeAdd = (items: IngredientType[]) => {
       itemsBeAdd = items;
-      console.log("emit :", items);
     };
 
     const submitAddItem = () => {
       openModal(false);
-      console.log(`보내는 데이터: ${itemsBeAdd}`);
       store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
     };
 
     return {
       ArrMock,
+      buttomMode,
       fetchIngredients,
       isOpenRef,
       openModal,
-      emitAddItem,
+      addItems,
+      deleteItems,
       submitAddItem,
       updatedItemsBeAdd,
+      setCardRef,
     };
   },
 });
@@ -125,5 +164,9 @@ li {
 }
 .tab3-list-content {
   --ion-grid-columns: 6;
+}
+.checkbox-delete {
+  --size: 20px;
+  align-content: center;
 }
 </style>

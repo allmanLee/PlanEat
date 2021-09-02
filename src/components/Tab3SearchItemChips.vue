@@ -1,11 +1,11 @@
 <template>
   <ion-item-group
     ><ion-chip
-      v-for="(item, index) in propAddItems"
+      v-for="(item, index) in addItems"
       :key="index"
       @click="cancleItem"
     >
-      <ion-label class="event--disable">{{ item }}</ion-label
+      <ion-label class="event--disable">{{ item.name }}</ion-label
       ><ion-icon class="event--disable" :icon="closeCircle"></ion-icon
     ></ion-chip>
   </ion-item-group>
@@ -26,15 +26,22 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const addItem = computed(() => {
+    const addItems = computed(() => {
       return props.propAddItems;
     });
     const cancleItem = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       const chipLabel = event.target.children[0].innerHTML;
-      emit("emitCancleItem", chipLabel);
+      console.log(addItems.value);
+      const searchOfAddItems = addItems.value.filter((el: any) => {
+        if (el.name === chipLabel) {
+          return el;
+        }
+      });
+      console.log(searchOfAddItems[0]);
+      emit("emitCancleItem", searchOfAddItems[0]);
     };
 
-    return { addItem, closeCircle, cancleItem };
+    return { addItems, closeCircle, cancleItem };
   },
 });
 </script>

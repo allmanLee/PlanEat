@@ -9,14 +9,14 @@
       @ionBlur="blurSearch"
     ></ion-searchbar>
     <tab-3-search-item-chips
-      :propAddItems="searchedItem"
+      :propAddItems="selectedItems"
       @emitCancleItem="cancleChip"
     ></tab-3-search-item-chips>
   </ion-header>
   <ion-content fullscreen>
     <ion-list ref="searchList">
       <ion-button
-        :id="`button-${item}`"
+        :id="`button-${item.name}`"
         class="list-button"
         fill="solid"
         expand="full"
@@ -24,8 +24,8 @@
         :key="index"
         @click="clickItem"
         :ref="setButtonRef"
-        :value="item"
-        >{{ item }}
+        :value="JSON.stringify(item)"
+        >{{ item.name }}
       </ion-button>
     </ion-list>
   </ion-content>
@@ -51,6 +51,7 @@ import {
   IonSearchbar,
   IonHeader,
 } from "@ionic/vue";
+import { IngredientType } from "@/types/frige";
 
 export default defineComponent({
   emits: ["emitUpdatedItemsBeAdd"],
@@ -66,15 +67,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore();
 
-    const ArrMock = [
-      "Arthur",
-      "Augustin",
-      "Bibiane",
-      "Bernice",
-      "Brooke",
-      "Chloe",
-      "Freeman",
+    const ArrMock: IngredientType[] = [
+      { name: "파", engName: "GreenOnion" },
+      { name: "마늘", engName: "Garlic" },
+      { name: "돼지고기", engName: "Pork" },
+      { name: "간장", engName: "SoySauce" },
     ];
+
     //ref setting/////////////////////
     let buttonRefs: HTMLElement[] = [];
     const setButtonRef = (el: any) => {
@@ -82,8 +81,9 @@ export default defineComponent({
         buttonRefs.push(el.$el);
       }
     };
-    const searchedItem: any[] = reactive([]);
+    const selectedItems: any[] = reactive([]);
     let searchList = ref();
+
     onUpdated(() => {
       searchList = ref();
     });
@@ -94,15 +94,17 @@ export default defineComponent({
 
     // ItemNamesBeAdd에 추가된 상품이 있다면 초기 모달 회면에 표시
     const ItemNamesBeAdd = computed(() => {
-      return store.getters["frige/getItemName"];
+      return store.state.frige.itemsBeAdd;
     });
 
     onMounted(() => {
       if (ItemNamesBeAdd.value) {
         ItemNamesBeAdd.value.forEach((element: any) => {
-          searchedItem.push(element);
+          selectedItems.push(element);
           buttonRefs.filter((el) => {
-            if (el.getAttribute("value") === element) {
+            const itemJsonString: string = el.getAttribute("value") as string;
+
+            if (JSON.parse(itemJsonString).name === element.name) {
               el.style.opacity = "0.26";
               el.setAttribute("disabled", "true");
             }
@@ -111,6 +113,8 @@ export default defineComponent({
       }
     });
 
+    //재료 검색 기능
+    //[input ,clear, focus, blur]에 해당하는 기능 동작
     const searchInput = (event: VueEvent.Input<HTMLInputElement>) => {
       const query = event.target.value.toLowerCase();
       const test = searchList.value.$el;
@@ -136,21 +140,27 @@ export default defineComponent({
       event.target.placeholder = "재료를 검색하세요";
     };
 
+    //재료선택
     const clickItem = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       event.target.style.opacity = "0.26";
       event.target.disabled = true;
-      searchedItem.push(event.target.innerHTML);
-      emit("emitUpdatedItemsBeAdd", searchedItem);
+      const itemJsonString: string = event.target.getAttribute(
+        "value"
+      ) as string;
+      selectedItems.push(JSON.parse(itemJsonString));
+      emit("emitUpdatedItemsBeAdd", selectedItems);
     };
+    ////////////////////
 
+    //재료선택에서 제거
     const cancleChip = (val: any) => {
       const buttonId: HTMLIonButtonElement | null = document.getElementById(
-        `button-${val}`
+        `button-${val.name}`
       ) as HTMLIonButtonElement; // 선택한  버튼 dom 객체
       buttonId.style.opacity = "1";
       buttonId.setAttribute("disabled", "false");
-      searchedItem.splice(searchedItem.indexOf(val), 1);
-      emit("emitUpdatedItemsBeAdd", searchedItem);
+      selectedItems.splice(selectedItems.indexOf(val), 1);
+      emit("emitUpdatedItemsBeAdd", selectedItems);
     };
 
     return {
@@ -162,7 +172,7 @@ export default defineComponent({
       clearSearch,
       focusSearch,
       blurSearch,
-      searchedItem, //vuex에서 관리 필요
+      selectedItems, //vuex에서 관리 필요
       clickItem,
       cancleChip,
     };
