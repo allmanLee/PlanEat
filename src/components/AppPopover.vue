@@ -2,7 +2,7 @@
   <teleport to="body">
     <transition name="fade">
       <div v-if="openPopover" class="popover-background" @click="ClickOutside">
-        <ion-card class="popover-content">
+        <ion-card mode="ios" class="popover-content">
           <slot></slot>
         </ion-card>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <ion-header v-if="header">
+  <ion-header mode="ios" v-if="header">
     <ion-toolbar>
       <ion-title class="app-header-title">{{ headerTitle }}</ion-title>
     </ion-toolbar>

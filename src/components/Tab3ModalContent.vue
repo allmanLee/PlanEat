@@ -1,5 +1,5 @@
 <template>
-  <ion-header translucent>
+  <ion-header mode="ios" translucent>
     <ion-searchbar
       @input="searchInput"
       placeholder="재료를 검색하세요"
@@ -16,6 +16,7 @@
   <ion-content fullscreen>
     <ion-list ref="searchList">
       <ion-button
+        mode="ios"
         :id="`button-${item.name}`"
         class="list-button"
         fill="solid"

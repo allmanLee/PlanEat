@@ -1,6 +1,7 @@
 <template>
   <ion-card
-    id="buttonCard"
+    ios="add"
+    mode="ios"
     :class="buttonMode === 'addActive' ? 'list-button-active' : 'list-buton'"
     Expand="block"
     :color="buttonMode === 'addActive' ? 'primary' : ''"

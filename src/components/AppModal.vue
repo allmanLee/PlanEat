@@ -1,10 +1,12 @@
 <template>
   <ion-header>
     <ion-toolbar>
+      <ion-title class="header-title">{{ headerTitle }}</ion-title>
       <ion-buttons slot="end">
-        <ion-button class="button-submit" @click="submit"> 확인 </ion-button>
+        <ion-button class="button-submit" color="primary" @click="submit">
+          확인
+        </ion-button>
       </ion-buttons>
-      <ion-title>{{ headerTitle }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -51,7 +53,12 @@ export default defineComponent({
 });
 </script>
 <style>
+.header-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
 .button-submit {
+  font-size: 16px !important;
   font-weight: 600 !important;
 }
 </style>
