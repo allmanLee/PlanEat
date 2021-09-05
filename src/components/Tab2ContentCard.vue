@@ -1,5 +1,6 @@
 <template>
-  <ion-card mode="ios">
+  <ion-card mode="ios" class="ion-activatable ripple-parent">
+    <ion-ripple-effect></ion-ripple-effect>
     <div class="tab2-thumbnail">
       <img src="@/assets/img/youtube_thum.png" />
       <tab-2-tool-chip></tab-2-tool-chip>
@@ -19,11 +20,18 @@
     </ion-grid>
   </ion-card>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonCard, IonGrid, IonRow, IonCardTitle, IonChip } from "@ionic/vue";
+import {
+  IonCard,
+  IonGrid,
+  IonRow,
+  IonCardTitle,
+  IonChip,
+  IonRippleEffect,
+} from "@ionic/vue";
 import Tab2ToolChip from "./Tab2ToolChip.vue";
-
 export default defineComponent({
   components: {
     IonCard,
@@ -32,6 +40,7 @@ export default defineComponent({
     IonRow,
     IonCardTitle,
     Tab2ToolChip,
+    IonRippleEffect,
   },
 });
 </script>
@@ -56,5 +65,9 @@ export default defineComponent({
   color: #616161;
   font-size: 12px;
   font-weight: bold;
+}
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
 }
 </style>
