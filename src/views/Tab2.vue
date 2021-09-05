@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { IonPage, IonContent, IonHeader } from "@ionic/vue";
 import AppHeader from "@/components/AppHeader.vue";
 import AppSegment from "@/components/AppSegment.vue";
-import { IonPage } from "@ionic/vue";
 import AppSlider from "@/components/AppSlider.vue";
 
 export default defineComponent({
@@ -22,6 +22,8 @@ export default defineComponent({
     AppHeader,
     AppSegment,
     IonPage,
+    IonContent,
+    IonHeader,
     AppSlider,
   },
   setup() {
