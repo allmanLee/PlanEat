@@ -23,7 +23,10 @@ import "@ionic/vue/css/display.css";
 import "@/theme/variables.css";
 import "@/assets/css/globle.scss";
 
-const app = createApp(App).use(store, key).use(IonicVue).use(router);
+/* youtube player api plugin */
+import YoutubeIframe from '@techassi/vue-youtube-iframe';
+
+const app = createApp(App).use(store, key).use(IonicVue).use(router).use(YoutubeIframe);
 
 router.isReady().then(() => {
   app.mount("#app");
