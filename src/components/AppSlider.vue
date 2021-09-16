@@ -1,10 +1,44 @@
 <template>
+<<<<<<< Updated upstream
   <swiper ref="swiper" :slides-per-view="1" @slideChange="onSlideChange">
     <swiper-slide value="Today">
       <tab-2-content-card @click="openModal(true)"></tab-2-content-card>
     </swiper-slide>
     <swiper-slide value="Total">Slide 3</swiper-slide>
     <swiper-slide value="MyRecipe">Slide 3</swiper-slide>
+=======
+<<<<<<< Updated upstream
+  <swiper>
+    <swiper-slide>
+      <tab-2-content-card @click="openModal(true)"></tab-2-content-card>
+    </swiper-slide>
+    <swiper-slide>Slide 3</swiper-slide>
+    <swiper-slide>Slide 3</swiper-slide>
+=======
+  <swiper ref="swiper" :slides-per-view="1" @slideChange="onSlideChange">
+    <swiper-slide value="Today">
+      <tab-2-content-card
+        v-for="(item, index) in 3"
+        :key="index"
+        @click="openModal(true)"
+      ></tab-2-content-card>
+    </swiper-slide>
+    <swiper-slide value="Total">
+      <tab-2-content-card
+        v-for="(item, index) in 3"
+        :key="index"
+        @click="openModal(true)"
+      ></tab-2-content-card
+    ></swiper-slide>
+    <swiper-slide value="MyRecipe">
+      <tab-2-content-card
+        v-for="(item, index) in 3"
+        :key="index"
+        @click="openModal(true)"
+      ></tab-2-content-card>
+    </swiper-slide>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   </swiper>
   <!-- <teleport to="#tab2"> -->
   <ion-modal
