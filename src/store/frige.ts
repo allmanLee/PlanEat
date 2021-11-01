@@ -1,25 +1,24 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeType } from "@/types/frige";
-
+import axios, { AxiosResponse } from 'axios';
 
 export interface FrigeModuleState {
   items: FrigeType[];
   itemsBeAdd: FrigeType[];
   itemsBeDeleted: FrigeType[];
-
 }
 
 export const FrigeModule: Module<FrigeModuleState, RootState> = {
   namespaced: true,
   state: () => ({
-    items: [{ id: "apple20210902", name: "사과", engName: "apple", updatedDate: new Date(), amount: "충분" },
-    { id: "persimmon20210902", name: "감", updatedDate: new Date(-1), amount: "충분" },
-    { id: "cabbage20210904", name: "배추", updatedDate: new Date(-2), amount: "충분" },
+    items: [{ id: "20210902apple", name: "사과", engName: "apple", updatedDate: new Date(), amount: "충분" },
+    { id: "20210902persimmon", name: "감", updatedDate: new Date(-1), amount: "충분" },
+    { id: "20210904cabbage", name: "배추", updatedDate: new Date(-2), amount: "충분" },
     {
-      id: "strawberry20210904", name: "딸기", updatedDate: new Date(5), amount: "충분"
+      id: "20210904strawberry", name: "딸기", updatedDate: new Date(5), amount: "충분"
     },
-    { id: "kimchi20210906", name: "김치", updatedDate: new Date(-4), amount: "충분" },],
+    { id: "20210906kimchi", name: "김치", updatedDate: new Date(-4), amount: "충분" },],
 
     itemsBeAdd: [],
     itemsBeDeleted: [],
@@ -72,5 +71,14 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       });
       state.itemsBeDeleted = selectedItems;
     }
+  },
+  actions: {
+    frizeIngredientGet(context) {
+    },
+    frizeIngredient(constext) { },
+    frizeAdd(constext) { },
+    frizeDelete(constext) { },
+    AllFrizeGet(constext) { }
+
   }
 };

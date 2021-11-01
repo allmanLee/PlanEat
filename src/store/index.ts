@@ -5,6 +5,7 @@ import {
   createStore,
   useStore as baseUseStore
 } from 'vuex';
+
 import { InjectionKey } from 'vue';
 import { UserModuleState, userModule as user } from './user';
 import { FrigeModuleState, FrigeModule as frige } from "./frige";
