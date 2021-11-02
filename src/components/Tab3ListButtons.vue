@@ -243,10 +243,13 @@ li {
   box-shadow: 0px -2px 12px 4px rgba(0, 0, 0, 0.2);
   position: fixed;
   width: 100%;
+  height: 46px;
   bottom: 0px;
   z-index: 3;
 }
 .delte-footer-button {
+  font-weight: bold;
   margin: 0px;
+  height: 46px;
 }
 </style>

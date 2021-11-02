@@ -2,36 +2,48 @@
   <ion-page>
     <app-header :headerTitle="'레시피'"></app-header>
     <ion-header>
-      <app-segment :emitSegmentValue="fetchSegmentValue"></app-segment>
+      <tab-2-segment
+        :propSegmentValue="segmentValue"
+        @emitSegmentValue="fetchSegmentValue"
+      ></tab-2-segment>
     </ion-header>
     <ion-content class="b">
-      <app-slider></app-slider>
+      <app-slider
+        :propSegmentValue="segmentValue"
+        @emitSlideValue="fetchSlideValue"
+      ></app-slider>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { IonPage, IonContent, IonHeader } from "@ionic/vue";
 import AppHeader from "@/components/AppHeader.vue";
-import AppSegment from "@/components/AppSegment.vue";
+import Tab2Segment from "@/components/Tab2Segment.vue";
 import AppSlider from "@/components/AppSlider.vue";
 
 export default defineComponent({
   components: {
     AppHeader,
-    AppSegment,
+    Tab2Segment,
     IonPage,
     IonContent,
     IonHeader,
     AppSlider,
   },
   setup() {
-    let segmentIndex = 0;
-    const fetchSegmentValue = (val: any) => {
-      segmentIndex = val;
+    const segmentValue = ref(0);
+    const fetchSegmentValue = (val: number) => {
+      segmentValue.value = val;
+      console.log("segment: ", val);
     };
-    return { segmentIndex, fetchSegmentValue };
+    const fetchSlideValue = (val: number) => {
+      console.log("emit: ", val);
+      segmentValue.value = val;
+    };
+
+    return { segmentValue, fetchSegmentValue, fetchSlideValue };
   },
 });
 </script>
