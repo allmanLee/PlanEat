@@ -1,4 +1,5 @@
 //lol-request-controller
+import { AuthUser, Email, RegisterUser } from "@/types/request-types/auth-request-types";
 import requestApi from "./requestApi";
 
 export default {
@@ -6,10 +7,11 @@ export default {
    * /api/auth/register
    * 회원가입
    */
-  SearchIngredientInFrize() {
+  RegisterToEmail(reqData: RegisterUser) {
     return requestApi({
-      url: "/api/service/frize/ingredientGet",
-      method: "get",
+      url: "/api/auth/register",
+      method: "post",
+      params: reqData
     });
   },
 
@@ -17,10 +19,12 @@ export default {
    * /api/auth/check_email
    * 이메일 중복 확인
    */
-  ModifyIngredientInFrize() {
+  CheckEmailDuplicates(reqParams: Email) {
     return requestApi({
       url: "/api/auth/check_email",
-      method: "post",
+      method: "get",
+      params: JSON.stringify(reqParams),
+
     });
   },
 
@@ -28,21 +32,24 @@ export default {
    * /api/auth/send_auth_email
    * 인증키 이메일 보내기
    */
-  SearchUserFrizes() {
+  SendAuthEmail(reqData: Email) {
     return requestApi({
       url: "/api/auth/send_auth_email",
       method: "post",
+      data: reqData,
     });
   },
 
-  /*GET
-   * /api/auth/check
-   * JWT 확인
+  /*POST
+   * /api/auth/check_authkey
+   * 인증키 확인(회원가입)
    */
-  AddUserFrize() {
+  CheckAuthkey(reqData: AuthUser) {
     return requestApi({
-      url: "/api/auth/check",
-      method: "get",
+      url: "/api/auth/check_authkey",
+      method: "post",
+      data: reqData
     });
+
   },
 };

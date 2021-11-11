@@ -1,13 +1,16 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeType } from "@/types/frige";
-import axios, { AxiosResponse } from 'axios';
+import frizeAPI from "@/assets/api/frizeAPI";
+import { FrizeIngreModify, FrizeOnlyEmail, FrizeUser } from "@/types/request-types/frize-request-types";
+
 
 export interface FrigeModuleState {
   items: FrigeType[];
   itemsBeAdd: FrigeType[];
   itemsBeDeleted: FrigeType[];
 }
+
 
 export const FrigeModule: Module<FrigeModuleState, RootState> = {
   namespaced: true,
@@ -73,12 +76,47 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     }
   },
   actions: {
-    frizeIngredientGet(context) {
+    async frizeIngredientGet(context, payload: FrizeOnlyEmail) {
+      const reqData: FrizeOnlyEmail = {
+        email: "muenzz119@naver.com",
+        frizeCate: undefined,
+      };
+      const res = await frizeAPI.SearchIngredientInFrize(reqData);
+      console.log(res);
     },
-    frizeIngredient(constext) { },
-    frizeAdd(constext) { },
-    frizeDelete(constext) { },
-    AllFrizeGet(constext) { }
+    async frizeIngredient(context, payload: FrizeIngreModify) {
+      const reqData: FrizeIngreModify = {
+        email: payload.email,
+        frizeName: payload.frizeName,
+        ingredientAdd: null,
+      };
+      const res = await frizeAPI.ModifyIngredientInFrize(reqData);
+      console.log(res);
+    },
+    async frizeAdd(constext, payload: FrizeUser) {
+      const reqData = {
+        email: payload.email,
+        frizeName: payload.frizeName,
+      };
+      const res = await frizeAPI.AddUserFrize(reqData);
+      console.log(res);
+    },
+    async frizeDelete(constext, payload: FrizeUser) {
+      const reqData = {
+        email: payload.email,
+        frizeName: payload.frizeName
+      };
+      const res = await frizeAPI.DeleteUserFrize(reqData);
+      console.log(res);
+    },
+    async AllFrizeGet(constext, payload: FrizeUser) {
+      const reqData = {
+        email: payload.email,
+        frizeName: payload.frizeName
+      };
+      const res = await frizeAPI.SearchUserFrizes(reqData);
+      console.log(res);
+    }
 
   }
 };
