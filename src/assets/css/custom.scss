@@ -1,0 +1,40 @@
+//layout-custom
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+//button-custom
+ion-buttons {
+  margin: 0px;
+}
+ion-button {
+  --border-radius: 12px !important;
+  margin: 0px;
+  font: {
+    size: rem-calc(16px);
+    weight: bold;
+  }
+}
+//input-custom
+ion-input {
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+}
+//heaer-custom
+ion-header {
+  font-size: 16px;
+  width: 100vw;
+  height: 3.75em;
+  ion-title {
+    padding: {
+      top: 0;
+      bottom: 0;
+      left: 16px;
+      right: 16px;
+    }
+    font: {
+      size: 1.313em;
+      weight: bold;
+    }
+  }
+}

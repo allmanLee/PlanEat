@@ -17,10 +17,11 @@ export default {
    * /api/auth/check_email
    * 이메일 중복 확인
    */
-  ModifyIngredientInFrize() {
+  CheckDuplicateEmail(data) {
     return requestApi({
       url: "/api/auth/check_email",
       method: "post",
+      data: data
     });
   },
 

@@ -45,7 +45,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .event--disable {
   pointer-events: none;
 }
