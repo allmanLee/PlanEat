@@ -1,12 +1,9 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeType } from "@/types/frige";
-<<<<<<< HEAD
 import frizeAPI from "@/assets/api/frizeAPI";
 import { FrizeIngreModify, FrizeOnlyEmail, FrizeUser } from "@/types/request-types/frize-request-types";
 
-=======
->>>>>>> ionic-custom
 
 export interface FrigeModuleState {
   items: FrigeType[];
