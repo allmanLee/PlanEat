@@ -1,33 +1,42 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
+@import url(./../assets/font/pretendard-subset.css);
+/**font-custom subset**/
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-background-color: #f5f5f5;
+  /* --ion-font-family: "Pretendard"; /**font-custom subset**/
+  --ion-background-color: #ffffff;
   --ion-tab-bar-background: #ffffff;
   /** primary **/
-  --ion-color-primary: #f2bc07;
-  --ion-color-primary-rgb: 242, 188, 7;
-  --ion-color-primary-contrast: #000000;
-  --ion-color-primary-contrast-rgb: 0, 0, 0;
-  --ion-color-primary-shade: #d5a506;
+  --ion-color-primary: #f8a70a;
+  --ion-color-primary-rgb: ;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: ;
+  --ion-color-primary-shade: #f79503;
   --ion-color-primary-tint: #f3c320;
+  /** grey-scale**/
+  --custom-gray-01: #363940;
+  --custom-gray-02: #52575d;
+  --custom-gray-03: #9e9e9e;
+  --custom-gray-04: #dbdbdb;
+  --custom-gray-05: #f3f3f3;
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
-  --ion-color-secondary-rgb: 61, 194, 255;
+  --ion-color-secondary: #fddb34;
+  --ion-color-secondary-rgb: ;
   --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary-contrast-rgb: ;
+  --ion-color-secondary-shade: #f1d029;
+  --ion-color-secondary-tint: #fce159;
 
   /** tertiary **/
-  --ion-color-tertiary: #5260ff;
-  --ion-color-tertiary-rgb: 82, 96, 255;
+  --ion-color-tertiary: #0091ea;
+  --ion-color-tertiary-rgb: ;
   --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 25 5, 255, 255;
-  --ion-color-tertiary-shade: #4854e0;
-  --ion-color-tertiary-tint: #6370ff;
+  --ion-color-tertiary-contrast-rgb: ;
+  --ion-color-tertiary-shade: #0284d4;
+  --ion-color-tertiary-tint: #10a0fa;
 
   /** success **/
   --ion-color-success: #2dd36f;
@@ -90,47 +99,39 @@ http://ionicframework.com/docs/theming/ */
    */
 
   body {
-    --ion-color-primary: #f2bc07;
-    --ion-color-primary-rgb: 242, 188, 7;
-    --ion-color-primary-contrast: #000000;
-    --ion-color-primary-contrast-rgb: 0, 0, 0;
+    --ion-background-color: #ffffff;
+    --ion-tab-bar-background: #ffffff;
+    /** primary **/
+    --ion-color-primary: #ffb423;
+    --ion-color-primary-rgb: ;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: ;
     --ion-color-primary-shade: #d5a506;
     --ion-color-primary-tint: #f3c320;
 
-    --ion-color-secondary: #50c8ff;
-    --ion-color-secondary-rgb: 80, 200, 255;
+    /** secondary **/
+    --ion-color-secondary: #fddb34;
+    --ion-color-secondary-rgb: ;
     --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-contrast-rgb: 255, 255, 255;
-    --ion-color-secondary-shade: #46b0e0;
-    --ion-color-secondary-tint: #62ceff;
+    --ion-color-secondary-contrast-rgb: ;
+    --ion-color-secondary-shade: #f1d029;
+    --ion-color-secondary-tint: #fce159;
 
-    --ion-color-tertiary: #6a64ff;
-    --ion-color-tertiary-rgb: 106, 100, 255;
+    /** tertiary **/
+    --ion-color-tertiary: #0091ea;
+    --ion-color-tertiary-rgb: ;
     --ion-color-tertiary-contrast: #ffffff;
-    --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-    --ion-color-tertiary-shade: #5d58e0;
-    --ion-color-tertiary-tint: #7974ff;
+    --ion-color-tertiary-contrast-rgb: ;
+    --ion-color-tertiary-shade: #0284d4;
+    --ion-color-tertiary-tint: #10a0fa;
 
-    --ion-color-success: #2fdf75;
-    --ion-color-success-rgb: 47, 223, 117;
-    --ion-color-success-contrast: #000000;
-    --ion-color-success-contrast-rgb: 0, 0, 0;
-    --ion-color-success-shade: #29c467;
-    --ion-color-success-tint: #44e283;
-
-    --ion-color-warning: #ffd534;
-    --ion-color-warning-rgb: 255, 213, 52;
-    --ion-color-warning-contrast: #000000;
-    --ion-color-warning-contrast-rgb: 0, 0, 0;
-    --ion-color-warning-shade: #e0bb2e;
-    --ion-color-warning-tint: #ffd948;
-
-    --ion-color-danger: #ff4961;
-    --ion-color-danger-rgb: 255, 73, 97;
-    --ion-color-danger-contrast: #ffffff;
-    --ion-color-danger-contrast-rgb: 255, 255, 255;
-    --ion-color-danger-shade: #e04055;
-    --ion-color-danger-tint: #ff5b71;
+    /** success **/
+    --ion-color-success: #2dd36f;
+    --ion-color-success-rgb: 45, 211, 111;
+    --ion-color-success-contrast: #ffffff;
+    --ion-color-success-contrast-rgb: 255, 255, 255;
+    --ion-color-success-shade: #28ba62;
+    --ion-color-success-tint: #42d77d;
 
     --ion-color-dark: #f4f5f8;
     --ion-color-dark-rgb: 244, 245, 248;
@@ -231,12 +232,10 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
 
+    /*another compenent background*/
     --ion-item-background: #1e1e1e;
-
     --ion-toolbar-background: #1f1f1f;
-
     --ion-tab-bar-background: #1f1f1f;
-
     --ion-card-background: #1e1e1e;
   }
 }

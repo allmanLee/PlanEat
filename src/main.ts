@@ -22,6 +22,7 @@ import "@ionic/vue/css/display.css";
 
 import "@/theme/variables.css";
 import "@/assets/css/globle.scss";
+import "@/assets/css/custom.scss";
 
 /* youtube player api plugin */
 import YoutubeIframe from '@techassi/vue-youtube-iframe';
