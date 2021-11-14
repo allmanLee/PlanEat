@@ -1,7 +1,6 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeType } from "@/types/frige";
-import axios, { AxiosResponse } from 'axios';
 
 export interface FrigeModuleState {
   items: FrigeType[];
@@ -72,13 +71,4 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       state.itemsBeDeleted = selectedItems;
     }
   },
-  actions: {
-    frizeIngredientGet(context) {
-    },
-    frizeIngredient(constext) { },
-    frizeAdd(constext) { },
-    frizeDelete(constext) { },
-    AllFrizeGet(constext) { }
-
-  }
 };
