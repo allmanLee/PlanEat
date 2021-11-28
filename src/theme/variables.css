@@ -5,7 +5,7 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
-  /* --ion-font-family: "Pretendard"; /**font-custom subset**/
+  --ion-font-family: "Pretendard"; /**font-custom subset**/
   --ion-background-color: #ffffff;
   --ion-tab-bar-background: #ffffff;
   /** primary **/
