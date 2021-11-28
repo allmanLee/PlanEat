@@ -3,18 +3,18 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar v-if="footer">
-        <ion-tab-button tab="tab1" href="/tabs/tab1">
-          <ion-icon :icon="triangle" />
-          <ion-label>쇼핑</ion-label>
+        <ion-tab-button tab="tab2" href="/tabs/tab2">
+          <ion-icon :icon="homeOutline" />
+          <ion-label>홈</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
-          <ion-icon :icon="ellipse" />
-          <ion-label>레시피</ion-label>
+        <ion-tab-button tab="tab1" href="/tabs/tab1">
+          <ion-icon :icon="notificationsOutline" />
+          <ion-label>알림</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="tab3" href="/tabs/tab3">
-          <ion-icon :icon="square" />
+          <ion-icon :icon="fishOutline"></ion-icon>
           <ion-label>냉장고</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
@@ -34,7 +34,7 @@ import {
   IonRouterOutlet,
 } from "@ionic/vue";
 import { useStore } from "@/store/index";
-import { ellipse, square, triangle } from "ionicons/icons";
+import { homeOutline, notificationsOutline, fishOutline } from "ionicons/icons";
 
 export default defineComponent({
   name: "Tabs",
@@ -54,10 +54,17 @@ export default defineComponent({
     });
     return {
       footer,
-      ellipse,
-      square,
-      triangle,
+      homeOutline,
+      notificationsOutline,
+      fishOutline,
     };
   },
 });
 </script>
+<style lang="scss"  scoped>
+ion-tab-bar {
+  height: 56px;
+  border: none;
+  box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.07);
+}
+</style>
