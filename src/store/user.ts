@@ -32,7 +32,7 @@ export const userModule: Module<UserModuleState, RootState> = {
     //이메일 중복 확인
     async CheckEmail(context, payload: Email) {
       const reqParams = payload;
-      const res = await userAPI.CheckEmailDuplicates(reqParams);
+      const res = await userAPI.CheckDuplicateEmail(reqParams);
       console.log(res);
     },
 
@@ -40,13 +40,12 @@ export const userModule: Module<UserModuleState, RootState> = {
     async SendAuthEmail(context, payload: Email) {
       const reqData = payload;
       const res = await userAPI.SendAuthEmail(reqData);
-      console.log(res);
     },
 
     //인증키 확인 (회원가입)
     async CheckAuthkey(context, payload: AuthUser) {
       const reqData = payload;
-      const res = await userAPI.SendAuthEmail(reqData);
+      const res = await userAPI.CheckAuthKey(reqData);
       console.log(res);
     }
   }

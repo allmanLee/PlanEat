@@ -1,0 +1,29 @@
+.register-input-container {
+  .register-title {
+    color: var(--custom-gray-02);
+  }
+  margin: {
+    top: rem-calc(40px);
+    bottom: rem-calc(10px);
+  }
+  font: {
+    size: rem-calc(21px);
+    weight: bold;
+  }
+}
+.register-input {
+  margin: {
+    bottom: rem-calc(60px) !important;
+  }
+}
+.check-input {
+  margin-top: rem-calc(14px);
+}
+.sub-lable {
+  position: absolute;
+  font-size: rem-calc(14px);
+  margin: {
+    top: rem-calc(6px);
+  }
+  color: var(--ion-color-danger);
+}

@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <ion-input
-      ref="test"
-      type="email"
-      :placeholder="propPlaceholder"
-      class="input-outline"
-    ></ion-input>
-  </div>
+  <ion-input
+    ref="test"
+    :type="type"
+    :placeholder="propPlaceholder"
+    class="input-outline"
+    :value="valueText"
+  ></ion-input>
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, toRefs } from "vue";
@@ -17,9 +16,17 @@ import { useStore } from "@/store/index";
 export default defineComponent({
   props: {
     propPlaceholder: String,
+    propType: {
+      default: "text",
+      type: String,
+    },
     propAutofocus: {
       default: false,
       type: Boolean,
+    },
+    propValue: {
+      defalt: "",
+      type: String,
     },
   },
   components: { IonInput },
@@ -27,6 +34,12 @@ export default defineComponent({
     const store = useStore();
     const Autofocus = computed(() => {
       return props.propAutofocus;
+    });
+    const valueText = computed(() => {
+      return props.propValue;
+    });
+    const type = computed(() => {
+      return props.propType;
     });
     const test = ref();
     const header = computed(() => {
@@ -42,7 +55,7 @@ export default defineComponent({
         }
       }
     });
-    return { test, arrowBack, header };
+    return { valueText, test, arrowBack, type, header };
   },
 });
 </script>
@@ -51,9 +64,9 @@ export default defineComponent({
 .input-outline > input {
   border-radius: 4px !important;
   border: 2px solid #9e9e9e !important;
-  background-color: #f5f5f5;
+  background-color: #f5f5f5 !important;
   &:focus {
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     border: 2px solid #f79503 !important;
   }
 }

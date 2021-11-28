@@ -75,7 +75,6 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       state.itemsBeDeleted = selectedItems;
     }
   },
-<<<<<<< HEAD
   actions: {
     async frizeIngredientGet(context, payload: FrizeOnlyEmail) {
       const reqData: FrizeOnlyEmail = {
@@ -120,6 +119,4 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     }
 
   }
-=======
->>>>>>> ionic-custom
 };

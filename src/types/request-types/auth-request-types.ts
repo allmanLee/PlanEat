@@ -4,7 +4,7 @@ export interface Email {
 }
 
 export interface AuthUser extends Email {
-  auth: string;
+  key: string;
 }
 export interface RegisterUser extends Email {
   password: string;
