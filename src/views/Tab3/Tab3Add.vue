@@ -27,7 +27,7 @@
 
     <!--컨텐츠-->
     <ion-content>
-      <!-- <tab-3-list-buttons></tab-3-list-buttons> -->
+      <tab-3-list-buttons></tab-3-list-buttons>
     </ion-content>
     <app-popover :propOpenPopover="popStatus">
       <div class="remove-cate-popover">
@@ -64,9 +64,13 @@ import {
   IonRow,
   IonButton,
   IonCol,
+  IonTitle,
+  IonButtons,
+  IonToolbar,
+  IonText,
 } from "@ionic/vue";
 import FrizeCateThumbnail from "@/components/FrizeCateThumbnail.vue";
-// import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
+import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
 import { useStore } from "@/store/index";
 import {
   addOutline,
@@ -79,23 +83,32 @@ export default defineComponent({
     const store = useStore();
     const cateIndex = ref(0);
     const testMock = ref(store.state.frige.frizeCate);
+
     //팝업 열기/닫기
     const popStatus = ref(false);
     const openPop = (state: boolean) => {
       popStatus.value = state;
     };
-    //냉장고 [이름, 아이디] 가져오기
 
     //냉장고 이름
     const frizeSeletedName = computed(
       () => testMock.value[cateIndex.value].frizeName
     );
+    //냉장고 아이디
+    const frizeSeletedId = computed(
+      () => testMock.value[cateIndex.value].frizeId
+    );
+
+    //냉장고 [이름, 아이디] 가져오기
     store
       .dispatch("frige/AllFrizeGet", {
         email: localStorage.getItem("email"),
       })
       .then((data) => {
         testMock.value = store.state.frige.frizeCate;
+        store.dispatch("frige/frizeIngredientGet", {
+          frizeId: frizeSeletedId.value,
+        });
       });
 
     //카테고리 삭제
@@ -115,9 +128,12 @@ export default defineComponent({
       return undefined;
     };
 
-    //EIMT cateIndex
+    //EIMT cateIndex -> 해당 냉장고의 인덱스를 가지고 온다.
     const emitedCateIndex = (val: any) => {
       cateIndex.value = val.value;
+      store.dispatch("frige/frizeIngredientGet", {
+        frizeId: frizeSeletedId.value,
+      });
     };
 
     //툴바 버튼
@@ -148,13 +164,19 @@ export default defineComponent({
       openPop,
       popStatus,
       frizeSeletedName,
+      frizeSeletedId,
     };
   },
   components: {
     IonPage,
     IonContent,
     IonIcon,
+    IonTitle,
+    IonButtons,
+    IonToolbar,
+    IonText,
     FrizeCateThumbnail,
+    Tab3ListButtons,
     AppPopover,
     IonRow,
     IonButton,

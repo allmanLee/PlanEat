@@ -1,22 +1,17 @@
 <template>
-  <ion-header v-if="deletePannelShow" class="header-delete-item" translucent>
-    <ion-toolbar>
-      <ion-title class="app-header-title">삭제</ion-title>
-    </ion-toolbar></ion-header
-  >
   <ion-grid>
     <ion-row class="ion-justify-content-center">
       <ion-col>
         <ion-col
           size="auto"
-          v-for="(item, index) in fetchIngredients || []"
+          v-for="(item, index) in sortedItems || []"
           :key="index"
         >
           <ion-row class="ion-justify-content-center">
             <ion-col size="auto">
-              <tag-updated-date
+              <!-- <tag-updated-date
                 :propDate="item[0].updatedDate"
-              ></tag-updated-date>
+              ></tag-updated-date> -->
             </ion-col>
           </ion-row>
           <ion-row class="ion-justify-content-center">
@@ -29,22 +24,22 @@
                 :propMode="buttomMode"
                 @emitDeleteItems="deleteItems"
               >
-                <ion-checkbox
+                <!-- <ion-checkbox
                   v-if="deletePannelShow"
                   @update:modelValue="checkBeCancledId(ingredient.id)"
                   :modelValue="checkBeCancledId(ingredient.id)"
                   class="checkbox-delete"
                 >
-                </ion-checkbox
-              ></button-item-list>
+                </ion-checkbox> -->
+              </button-item-list>
             </ion-col>
           </ion-row>
         </ion-col>
-        <button-item-list
+        <!-- <button-item-list
           v-if="addButtonShow"
           @emitAddItems="addItems"
           :propMode="'addActive'"
-        ></button-item-list>
+        ></button-item-list> -->
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -78,24 +73,20 @@ import {
   ComputedRef,
   defineComponent,
   onBeforeUpdate,
-  onMounted,
   reactive,
   Ref,
   ref,
 } from "vue";
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonRow,
   IonGrid,
   IonCol,
   IonModal,
   IonButton,
-  IonCheckbox,
+  // IonCheckbox,
 } from "@ionic/vue";
 import ButtonItemList from "./cardButton.vue";
-import TagUpdatedDate from "./TagUpdatedDate.vue";
+// import TagUpdatedDate from "./TagUpdatedDate.vue";
 import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
 import { FrigeType, IngredientType } from "@/types/frige";
@@ -104,22 +95,19 @@ import { VueEvent } from "@/types/event";
 
 export default defineComponent({
   components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonButton,
     IonGrid,
     IonCol,
-    IonCheckbox,
+    // IonCheckbox,
     IonRow,
     IonModal,
     ButtonItemList,
-    TagUpdatedDate,
+    // TagUpdatedDate,
     Tab3ModalContent,
     Modal,
   },
   setup() {
-    const store = useStore();
+    const store = useStore(); //스토어
     const addButtonShow = computed(() => {
       return store.state.ui.addButton;
     });
@@ -128,7 +116,6 @@ export default defineComponent({
     });
     const buttomMode = ref("nomal");
     let cardRefs: HTMLElement[] = [];
-
     //카드 Dom 설정
     const setCardRef = (el: any) => {
       if (el) {
@@ -143,15 +130,8 @@ export default defineComponent({
       return store.state.frige.items;
     });
 
-    //재료 날자별로 객체배열 재정렬
-    const fetchIngredients = computed(() => {
-      const TestReduce = ArrMock.value.reduce((acc: any, item: any): any => {
-        return {
-          ...acc,
-          [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
-        };
-      }, {});
-      return TestReduce;
+    const sortedItems = computed(() => {
+      return store.getters["frige/fetchIngredients"];
     });
 
     //버튼에서 emit 을 받온다.
@@ -160,7 +140,6 @@ export default defineComponent({
     const addItems = function (val: any) {
       openModal(true);
     };
-    console.log(ArrMock.value);
     //삭제버튼 눌렀을때 삭제내용 선택 할 수 있도록
     //좌측 checkbox 생성 및 다음 버튼 부턴 삭제
     const ItemsBeDeleted: Ref<string[]> = ref([]);
@@ -207,12 +186,11 @@ export default defineComponent({
       addButtonShow,
       deletePannelShow,
       buttomMode,
-      fetchIngredients,
+      sortedItems,
       isOpenRef,
       openModal,
       addItems,
       deleteItems,
-
       updatedItemsBeAdd,
       setCardRef,
       checkBeCancledId,

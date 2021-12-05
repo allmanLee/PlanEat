@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch, computed } from "vue";
+import { defineComponent, ref, PropType, computed } from "vue";
 import {
   IonIcon,
   IonText,

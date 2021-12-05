@@ -12,17 +12,10 @@ export interface FrigeModuleState {
   itemsBeDeleted: FrigeType[];
 }
 
-
 export const FrigeModule: Module<FrigeModuleState, RootState> = {
   namespaced: true,
   state: () => ({
-    items: [{ id: "20210902apple", name: "사과", engName: "apple", updatedDate: new Date(), amount: "충분" },
-    { id: "20210902persimmon", name: "감", updatedDate: new Date(-1), amount: "충분" },
-    { id: "20210904cabbage", name: "배추", updatedDate: new Date(-2), amount: "충분" },
-    {
-      id: "20210904strawberry", name: "딸기", updatedDate: new Date(5), amount: "충분"
-    },
-    { id: "20210906kimchi", name: "김치", updatedDate: new Date(-4), amount: "충분" },],
+    items: [],
     frizeCate: [],
     itemsBeAdd: [],
     itemsBeDeleted: [],
@@ -34,6 +27,14 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         itemNames.push(item.name);
       });
       return itemNames;
+    },
+    fetchIngredients: (state) => {
+      return state.items.reduce((acc: any, item: any): any => {
+        return {
+          ...acc,
+          [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
+        };
+      }, {});
     }
   },
   mutations: {
@@ -44,6 +45,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       state.frizeCate = state.frizeCate.filter((el) => el.frizeId !== payload.frizeId);
     },
     fetchFrizeIngredients(state, payload) {
+      console.log(payload);
       state.items = payload;
     },
     fetchItemsBeAdd(state, payload) {
@@ -60,7 +62,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
             name: element.name,
             amount: "보통",
             id: ItemId,
-            updatedDate: date,
+            updatedDate: `${year}-${month}-${day}`,
           };
           selectedItems.push(ItemObject);
           state.items.push(ItemObject);
@@ -91,7 +93,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         frizeId: payload.frizeId
       };
       await frizeAPI.SearchIngredientInFrize(reqData).then((res) => {
-        context.commit("fetchFrizeIngredients", res.data.datObj);
+        context.commit("fetchFrizeIngredients", res.data.dataObj);
       });
     },
     async frizeIngredient(context, payload: FrizeIngreModify) {
