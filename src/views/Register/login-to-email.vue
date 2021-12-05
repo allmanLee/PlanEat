@@ -66,7 +66,6 @@ export default defineComponent({
     };
     //로그인
     const router = useRouter();
-    const route = useRoute();
     const login = () => {
       userAPI
         .LoginToEmail({
@@ -76,6 +75,7 @@ export default defineComponent({
         .then((res) => {
           localStorage.setItem("act", res.data.returnObj.token);
           localStorage.setItem("reft", res.data.returnObj.ref_token);
+          localStorage.setItem("email", loginEmail.value);
           router.push({
             path: "/tabs/",
           });
