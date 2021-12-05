@@ -2,8 +2,9 @@
 
 import axios from "axios";
 
+
 const instance = axios.create({
-  baseURL: "http://172.27.158.5:3001",
+  baseURL: "http://172.28.51.205:3001",
 });
 
 // 인텀셉터를 활용하여 헤더에서 accessToken을 받아오거나 기능 사용시 헤더에 accessToken을 넣어 사용한다.

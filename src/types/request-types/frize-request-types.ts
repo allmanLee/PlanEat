@@ -11,7 +11,10 @@ export interface FrizeUser {
 }
 
 export type FrizeOnlyEmail = Omit<FrizeUser, 'frizeName'>;
-
+export interface FrizeOnlyId {
+  frizeId: string;
+  frizeCate?: string | undefined;
+}
 export interface FrizeIngreModify extends FrizeUser {
   ingredientDelete?: string[];
   ingredientAdd: FrigeType[] | null;

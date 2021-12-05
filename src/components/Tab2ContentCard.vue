@@ -1,24 +1,26 @@
 <template>
-  <ion-card mode="ios" class="ion-activatable ripple-parent">
-    <ion-ripple-effect></ion-ripple-effect>
-    <div class="tab2-thumbnail">
-      <img src="@/assets/img/youtube_thum.png" />
-      <tab-2-tool-chip></tab-2-tool-chip>
-    </div>
-    <ion-grid class="tab2-card-grid">
-      <ion-row>
-        <ion-card-title class="tab2-card-title"
-          >[백종원의 집밥 레시피]콩나물무침 100인분!!!! 기가막힌 맛
-          엄지척</ion-card-title
-        >
-      </ion-row>
-      <ion-row class="tab2-chip-container">
-        <ion-chip class="tab2-chip" outline v-for="index in 2" :key="index">
-          재료이름
-        </ion-chip>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
+  <ion-row>
+    <ion-card mode="ios" class="ion-activatable ripple-parent">
+      <ion-ripple-effect></ion-ripple-effect>
+      <div class="tab2-thumbnail">
+        <img src="@/assets/img/youtube_thum.png" />
+        <tab-2-tool-chip></tab-2-tool-chip>
+      </div>
+      <ion-grid class="tab2-card-grid">
+        <ion-row>
+          <ion-card-title class="tab2-card-title"
+            >[백종원의 집밥 레시피]콩나물무침 100인분!!!! 기가막힌 맛
+            엄지척</ion-card-title
+          >
+        </ion-row>
+        <ion-row class="tab2-chip-container">
+          <ion-chip class="tab2-chip" outline v-for="index in 2" :key="index">
+            재료이름
+          </ion-chip>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-row>
 </template>
 
 <script lang="ts">

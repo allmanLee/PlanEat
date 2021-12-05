@@ -3,7 +3,7 @@
     <app-header
       :headerTitle="pageCnt === 0 ? '로그인' : '회원가입'"
     ></app-header>
-    <ion-content>
+    <ion-content scrollY="false">
       <login-to-email v-if="pageCnt === 0" @emitPage="pageCnt++">
       </login-to-email>
       <register-input-email
@@ -36,7 +36,7 @@
           @click="clickCnBtn"
         >
           계속하기</ion-button
-        >                             
+        >
       </div>
     </ion-content>
     <teleport to="body">
@@ -66,11 +66,11 @@ import RegisterInputAuth from "@/views/Register/register-input-auth.vue";
 import userAPI from "@/assets/api/userAPI";
 import AppHeader from "@/components/AppHeader.vue";
 import AppPopover from "@/components/AppPopover.vue";
-
+import { useStore } from "@/store/index";
 export default defineComponent({
   setup(props) {
     //이메일이 중복되었는지 서버에서 확인합니다.
-
+    const store = useStore();
     const email = ref(""); //이메일
     const password = ref(""); //비밀번호
     const auth = ref("");
@@ -131,6 +131,10 @@ export default defineComponent({
             pageCnt.value++;
             activeCnBtn.value = false;
             popDisabled.value = true;
+            store.dispatch("frige/frizeAdd", {
+              email: email.value,
+              frizeName: "냉장고",
+            });
           });
       }
     };

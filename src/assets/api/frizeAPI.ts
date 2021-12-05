@@ -1,5 +1,5 @@
 //lol-request-controller
-import { FrizeIngreModify, FrizeOnlyEmail, FrizeUser } from "@/types/request-types/frize-request-types";
+import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser } from "@/types/request-types/frize-request-types";
 import requestApi from "./requestApi";
 
 export default {
@@ -7,7 +7,7 @@ export default {
    * /api/service/frize/ingredientGet
    *냉장고 재료 검색
    */
-  SearchIngredientInFrize(reqData: FrizeOnlyEmail) {
+  SearchIngredientInFrize(reqData: FrizeOnlyId) {
     return requestApi({
       url: "/api/service/frize/ingredientGet",
       method: "post",
@@ -31,7 +31,7 @@ export default {
    * /api/service/frize/AllFrizeGet
    *유저 냉장고 검색
    */
-  SearchUserFrizes(reqData: FrizeUser) {
+  SearchUserFrizes(reqData: FrizeOnlyEmail) {
     return requestApi({
       url: "/api/service/frize/AllFrizeGet",
       method: "post",

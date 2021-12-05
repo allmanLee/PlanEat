@@ -1,25 +1,30 @@
 <template>
   <swiper ref="swiper" :slides-per-view="1" @slideChange="onSlideChange">
     <swiper-slide value="Today">
-      <tab-2-content-card
-        v-for="(item, index) in 3"
-        :key="index"
-        @click="openModal(true)"
-      ></tab-2-content-card>
+      <ion-grid>
+        <tab-2-content-card
+          v-for="(item, index) in 3"
+          :key="index"
+          @click="openModal(true)"
+        ></tab-2-content-card>
+      </ion-grid>
     </swiper-slide>
     <swiper-slide value="Total">
-      <tab-2-content-card
-        v-for="(item, index) in 3"
-        :key="index"
-        @click="openModal(true)"
-      ></tab-2-content-card
+      <ion-grid>
+        <tab-2-content-card
+          v-for="(item, index) in 3"
+          :key="index"
+          @click="openModal(true)"
+        ></tab-2-content-card> </ion-grid
     ></swiper-slide>
     <swiper-slide value="MyRecipe">
-      <tab-2-content-card
-        v-for="(item, index) in 3"
-        :key="index"
-        @click="openModal(true)"
-      ></tab-2-content-card>
+      <ion-grid>
+        <tab-2-content-card
+          v-for="(item, index) in 3"
+          :key="index"
+          @click="openModal(true)"
+        ></tab-2-content-card
+      ></ion-grid>
     </swiper-slide>
   </swiper>
   <!-- <teleport to="#tab2"> -->

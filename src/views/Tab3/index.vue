@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <app-header :headerTitle="'MY 냉장고'"></app-header>
-    <ion-content>
+    <app-header :headerTitle="'냉장고'"></app-header>
+    <ion-content scrollY="false">
       <ion-router-outlet></ion-router-outlet>
     </ion-content>
   </ion-page>

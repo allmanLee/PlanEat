@@ -73,7 +73,9 @@ export default defineComponent({
           email: loginEmail.value,
           password: loginPassword.value,
         })
-        .then(() => {
+        .then((res) => {
+          localStorage.setItem("act", res.data.returnObj.token);
+          localStorage.setItem("reft", res.data.returnObj.ref_token);
           router.push({
             path: "/tabs/",
           });

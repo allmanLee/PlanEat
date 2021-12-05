@@ -1,11 +1,12 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
-import { FrigeType } from "@/types/frige";
+import { FrigeCate, FrigeType } from "@/types/frige";
 import frizeAPI from "@/assets/api/frizeAPI";
-import { FrizeIngreModify, FrizeOnlyEmail, FrizeUser } from "@/types/request-types/frize-request-types";
+import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser } from "@/types/request-types/frize-request-types";
 
 
 export interface FrigeModuleState {
+  frizeCate: FrigeCate[];
   items: FrigeType[];
   itemsBeAdd: FrigeType[];
   itemsBeDeleted: FrigeType[];
@@ -22,7 +23,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       id: "20210904strawberry", name: "딸기", updatedDate: new Date(5), amount: "충분"
     },
     { id: "20210906kimchi", name: "김치", updatedDate: new Date(-4), amount: "충분" },],
-
+    frizeCate: [],
     itemsBeAdd: [],
     itemsBeDeleted: [],
   }),
@@ -36,6 +37,15 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     }
   },
   mutations: {
+    fetchFrizeCate(state, payload) {
+      state.frizeCate.push(...payload);
+    },
+    fetchFrizeCateDelete(state, payload) {
+      state.frizeCate = state.frizeCate.filter((el) => el.frizeId !== payload.frizeId);
+    },
+    fetchFrizeIngredients(state, payload) {
+      state.items = payload;
+    },
     fetchItemsBeAdd(state, payload) {
       const selectedItems: FrigeType[] = [];
       const date = new Date();
@@ -76,13 +86,13 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     }
   },
   actions: {
-    async frizeIngredientGet(context, payload: FrizeOnlyEmail) {
-      const reqData: FrizeOnlyEmail = {
-        email: "muenzz119@naver.com",
-        frizeCate: undefined,
+    async frizeIngredientGet(context, payload: FrizeOnlyId) {
+      const reqData: FrizeOnlyId = {
+        frizeId: payload.frizeId
       };
-      const res = await frizeAPI.SearchIngredientInFrize(reqData);
-      console.log(res);
+      await frizeAPI.SearchIngredientInFrize(reqData).then((res) => {
+        context.commit("fetchFrizeIngredients", res.data.datObj);
+      });
     },
     async frizeIngredient(context, payload: FrizeIngreModify) {
       const reqData: FrizeIngreModify = {
@@ -91,31 +101,35 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         ingredientAdd: null,
       };
       const res = await frizeAPI.ModifyIngredientInFrize(reqData);
-      console.log(res);
     },
-    async frizeAdd(constext, payload: FrizeUser) {
+    async frizeAdd(context, payload: FrizeUser) {
       const reqData = {
         email: payload.email,
         frizeName: payload.frizeName,
       };
-      const res = await frizeAPI.AddUserFrize(reqData);
-      console.log(res);
+
+      return await frizeAPI.AddUserFrize(reqData).then((res) =>
+        context.commit("fetchFrizeCate", [res.data.dataObj])
+      ).catch((err) => console.log(err));
     },
     async frizeDelete(constext, payload: FrizeUser) {
       const reqData = {
         email: payload.email,
         frizeName: payload.frizeName
       };
-      const res = await frizeAPI.DeleteUserFrize(reqData);
-      console.log(res);
+      return await frizeAPI.DeleteUserFrize(reqData).then((res) => {
+        const frizeCates = res.data.dataObj;
+        constext.commit("fetchFrizeCateDelete", frizeCates);
+      });
     },
-    async AllFrizeGet(constext, payload: FrizeUser) {
+    async AllFrizeGet(constext, payload: FrizeOnlyEmail) {
       const reqData = {
         email: payload.email,
-        frizeName: payload.frizeName
       };
-      const res = await frizeAPI.SearchUserFrizes(reqData);
-      console.log(res);
+      return await frizeAPI.SearchUserFrizes(reqData).then((res) => {
+        const frizeCates = res.data.dataObj;
+        constext.commit("fetchFrizeCate", frizeCates);
+      });
     }
 
   }
