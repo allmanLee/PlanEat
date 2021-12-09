@@ -52,11 +52,13 @@
         </ion-button>
       </div>
     </app-popover>
+    <fab-button-add :propFrizeId="frizeSeletedId"> </fab-button-add>
   </ion-page>
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from "vue";
 import AppPopover from "@/components/AppPopover.vue";
+import FabButtonAdd from "@/components/FabButtonAdd.vue";
 import {
   IonPage,
   IonContent,
@@ -120,6 +122,7 @@ export default defineComponent({
         })
         .then(() => {
           testMock.value = store.state.frige.frizeCate;
+          cateIndex.value = 0;
         });
     };
     //간편 알람 설정
@@ -176,6 +179,7 @@ export default defineComponent({
     IonToolbar,
     IonText,
     FrizeCateThumbnail,
+    FabButtonAdd,
     Tab3ListButtons,
     AppPopover,
     IonRow,

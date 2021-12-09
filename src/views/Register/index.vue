@@ -67,6 +67,7 @@ import userAPI from "@/assets/api/userAPI";
 import AppHeader from "@/components/AppHeader.vue";
 import AppPopover from "@/components/AppPopover.vue";
 import { useStore } from "@/store/index";
+import router from "@/router";
 export default defineComponent({
   setup(props) {
     //이메일이 중복되었는지 서버에서 확인합니다.
@@ -134,6 +135,22 @@ export default defineComponent({
             store.dispatch("frige/frizeAdd", {
               email: email.value,
               frizeName: "냉장고",
+            });
+          });
+      }
+      if (pageCnt.value === 3) {
+        //로그인부분
+        userAPI
+          .LoginToEmail({
+            email: email.value,
+            password: password.value,
+          })
+          .then((res) => {
+            localStorage.setItem("act", res.data.returnObj.token);
+            localStorage.setItem("reft", res.data.returnObj.ref_token);
+            localStorage.setItem("email", email.value);
+            router.push({
+              path: "/tabs/",
             });
           });
       }

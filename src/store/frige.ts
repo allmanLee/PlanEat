@@ -32,7 +32,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       return state.frizeCate[index].frizeId;
     },
     fetchIngredients: (state) => {
-      if (state.items.length !== 0) {
+      if (state.items.length !== 0 || state.items !== undefined) {
         return state.items.reduce((acc: any, item: any): any => {
           return {
             ...acc,
@@ -45,6 +45,9 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
   mutations: {
     fetchFrizeCate(state, payload) {
       state.frizeCate = [...payload];
+    },
+    fetchFrizeCateAdd(state, payload) {
+      state.frizeCate.push(payload);
     },
     fetchFrizeCateDelete(state, payload) {
       state.frizeCate = state.frizeCate.filter((el) => el.frizeId !== payload.frizeId);
@@ -117,7 +120,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       };
 
       return await frizeAPI.AddUserFrize(reqData).then((res) =>
-        context.commit("fetchFrizeCate", [res.data.dataObj])
+        context.commit("fetchFrizeCateAdd", res.data.dataObj)
       ).catch((err) => console.log(err));
     },
     async frizeDelete(constext, payload: FrizeUser) {

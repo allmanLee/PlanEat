@@ -49,5 +49,8 @@ export default defineComponent({
 .event--disable {
   pointer-events: none;
 }
+ion-chip {
+  margin-left: 0;
+}
 </style>
 

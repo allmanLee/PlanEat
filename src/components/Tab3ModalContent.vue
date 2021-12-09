@@ -1,5 +1,5 @@
 <template>
-  <ion-header mode="ios" translucent>
+  <ion-header>
     <ion-searchbar
       @input="searchInput"
       placeholder="재료를 검색하세요"
@@ -8,28 +8,34 @@
       @ionFocus="focusSearch"
       @ionBlur="blurSearch"
     ></ion-searchbar>
-    <tab-3-search-item-chips
-      :propAddItems="selectedItems"
-      @emitCancleItem="cancleChip"
-    ></tab-3-search-item-chips>
   </ion-header>
-  <ion-content fullscreen>
+  <ion-content>
     <ion-list ref="searchList">
-      <ion-button
-        mode="ios"
-        :id="`button-${item.name}`"
-        class="list-button"
-        fill="solid"
-        expand="full"
-        v-for="(item, index) in ArrMock || []"
-        :key="index"
-        @click="clickItem"
-        :ref="setButtonRef"
-        :value="JSON.stringify(item)"
-        >{{ item.name }}
-      </ion-button>
+      <ion-item v-for="(item, index) in ArrMock || []" :key="index">
+        <ion-button
+          color="dark"
+          mode="ios"
+          :id="`button-${item.name}`"
+          fill="clear"
+          expand="full"
+          @click="clickItem"
+          :ref="setButtonRef"
+          :value="JSON.stringify(item)"
+          >{{ item.name }}
+        </ion-button>
+      </ion-item>
     </ion-list>
   </ion-content>
+  <ion-footer mode="md">
+    <div class="added-item-container">
+      <h5>선택한 재료</h5>
+      <tab-3-search-item-chips
+        :propAddItems="selectedItems"
+        @emitCancleItem="cancleChip"
+      ></tab-3-search-item-chips>
+      <ion-button expand="block" @click="submit()">확인</ion-button>
+    </div>
+  </ion-footer>
 </template>
 <script lang="ts">
 import {
@@ -39,30 +45,22 @@ import {
   onUpdated,
   computed,
   onBeforeUpdate,
-  Ref,
   onMounted,
 } from "vue";
 import Tab3SearchItemChips from "./Tab3SearchItemChips.vue";
 import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
-import {
-  IonContent,
-  IonList,
-  IonButton,
-  IonSearchbar,
-  IonHeader,
-} from "@ionic/vue";
+import { IonContent, IonList, IonButton, IonSearchbar } from "@ionic/vue";
 import { IngredientType } from "@/types/frige";
 
 export default defineComponent({
-  emits: ["emitUpdatedItemsBeAdd"],
+  emits: ["emitUpdatedItemsBeAdd", "emitSubmit"],
   components: {
     Tab3SearchItemChips,
     IonContent,
     IonList,
     IonButton,
     IonSearchbar,
-    IonHeader,
   },
 
   setup(props, { emit }) {
@@ -97,6 +95,7 @@ export default defineComponent({
     const ItemNamesBeAdd = computed(() => {
       return store.state.frige.itemsBeAdd;
     });
+    const submit = () => emit("emitSubmit");
 
     onMounted(() => {
       if (ItemNamesBeAdd.value) {
@@ -173,6 +172,7 @@ export default defineComponent({
       clearSearch,
       focusSearch,
       blurSearch,
+      submit,
       selectedItems, //vuex에서 관리 필요
       clickItem,
       cancleChip,
@@ -181,13 +181,45 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.list-button {
-  --background: white;
+ion-header {
+  padding: {
+    left: 16px;
+    right: 16px;
+  }
 }
-.list-button:active {
-  --background: white;
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
 }
-.list-button-checked {
-  --background: white;
+ion-item {
+  --padding-end: 0px;
+  --padding-start: 0px;
+  ion-button {
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+  }
+}
+
+ion-searchbar {
+  width: 100%;
+  padding: 0px;
+}
+ion-footer {
+  background: white;
+  box-shadow: 0x -3px 6px rgba(0, 0, 0, 0.16%) !important;
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  h5 {
+    margin-top: 0;
+  }
+  .added-item-container {
+    padding: 16px;
+  }
+  ion-button {
+    margin-top: 16px;
+    min-height: rem-calc(48px);
+  }
 }
 </style>

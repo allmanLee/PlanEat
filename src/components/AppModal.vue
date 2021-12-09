@@ -2,41 +2,27 @@
   <ion-header>
     <ion-toolbar>
       <ion-title class="header-title">{{ headerTitle }}</ion-title>
-      <ion-buttons slot="end">
-        <ion-button class="button-submit" color="primary" @click="submit">
-          확인
-        </ion-button>
-      </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding">
-    <slot></slot>
-  </ion-content>
+  <slot></slot>
 </template>
 
 <script>
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-  IonButtons
-} from "@ionic/vue";
+import { IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
 import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   name: "Modal",
   props: {
-    title: { type: String, default: "Super Modal" }
+    title: { type: String, default: "Super Modal" },
   },
   components: {
-    IonContent,
+    // IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonButton,
-    IonButtons
+    // IonButton,
+    // IonButtons,
   },
 
   emits: ["submit"],
@@ -49,7 +35,7 @@ export default defineComponent({
       console.log("보내기");
     };
     return { headerTitle, submit };
-  }
+  },
 });
 </script>
 <style>
