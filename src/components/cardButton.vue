@@ -36,9 +36,6 @@
   >
     <ion-list>
       <ion-item button lines="none" class="pop-item">재료 설정</ion-item>
-      <ion-item button lines="none" class="pop-item" @click="DeleteItems">
-        삭제
-      </ion-item>
     </ion-list>
   </app-popover>
 </template>
@@ -92,7 +89,7 @@ export default defineComponent({
       default: "nomal",
     },
   },
-  emits: ["emitAddItems", "emitDeleteItems"],
+  emits: ["emitAddItems"],
   setup(props, { emit }) {
     const buttonMode = computed(() => props.propMode);
     const ingredient = computed(() => props.propIngredient);
@@ -103,16 +100,8 @@ export default defineComponent({
     const AddItems = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       emit("emitAddItems", "why");
     };
-    const DeleteItems = (event: VueEvent.Mouse<HTMLButtonElement>) => {
-      closePopover.value = false;
-      emit("emitDeleteItems", ingredient.value.id);
-    };
     const ClickButton = (event: VueEvent.Mouse<HTMLButtonElement>) => {
-      if (buttonMode.value == "nomal") {
-        closePopover.value = true;
-      } else if (buttonMode.value === "addActive") {
-        AddItems(event);
-      } else emit("emitDeleteItems", ingredient.value.id);
+      if (buttonMode.value == "nomal") closePopover.value = true;
     };
 
     return {
@@ -120,7 +109,6 @@ export default defineComponent({
       buttonMode,
       closePopover,
       AddItems,
-      DeleteItems,
       ClickButton,
       formatDate,
     };
@@ -131,6 +119,13 @@ export default defineComponent({
 #buttonCard {
   margin-left: 0;
   margin-right: 0;
+}
+ion-card {
+  min-width: 100%;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
+  border: var(--custom-gray-04) 1px solid;
+  margin-bottom: 8px;
+  margin-top: 8px;
 }
 .list-buton {
   margin-left: 0;

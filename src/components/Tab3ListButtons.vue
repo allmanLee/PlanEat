@@ -16,22 +16,32 @@
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-col size="12">
-              <button-item-list
+              <ion-item-sliding
                 v-for="(ingredient, index) in item || []"
                 :key="index"
-                :propIngredient="ingredient"
-                :ref="setCardRef"
-                :propMode="buttomMode"
-                @emitDeleteItems="deleteItems"
               >
-                <!-- <ion-checkbox
-                  v-if="deletePannelShow"
-                  @update:modelValue="checkBeCancledId(ingredient.id)"
-                  :modelValue="checkBeCancledId(ingredient.id)"
-                  class="checkbox-delete"
+                <ion-item lines="none">
+                  <button-item-list
+                    :propIngredient="ingredient"
+                    :ref="setCardRef"
+                    :propMode="buttomMode"
+                  >
+                  </button-item-list>
+                </ion-item>
+                <ion-item-options
+                  lines="none"
+                  side="end"
+                  class="delete-btn-container"
                 >
-                </ion-checkbox> -->
-              </button-item-list>
+                  <ion-button
+                    type="button"
+                    color="danger"
+                    @click="SubmitDeleteItem(ingredient.id)"
+                  >
+                    <ion-icon :icon="trash"></ion-icon>
+                  </ion-button>
+                </ion-item-options>
+              </ion-item-sliding>
             </ion-col>
           </ion-row>
         </ion-col>
@@ -43,15 +53,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div v-if="deletePannelShow" class="delete-footer">
-    <ion-button
-      expand="full"
-      class="delte-footer-button"
-      color="danger"
-      @click="SubmitDeleteItems"
-      >삭제하기</ion-button
-    >
-  </div>
   <teleport to="body">
     <ion-modal
       :is-open="isOpenRef"
@@ -92,6 +93,7 @@ import Modal from "./AppModal.vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 import { useStore } from "@/store/index";
 import { VueEvent } from "@/types/event";
+import { trash } from "ionicons/icons";
 
 export default defineComponent({
   components: {
@@ -106,7 +108,15 @@ export default defineComponent({
     Tab3ModalContent,
     Modal,
   },
-  setup() {
+  props: {
+    propFrizeId: {
+      type: String,
+      default: () => {
+        return "d22f323f";
+      },
+    },
+  },
+  setup(prop) {
     const store = useStore(); //스토어
     const addButtonShow = computed(() => {
       return store.state.ui.addButton;
@@ -140,27 +150,6 @@ export default defineComponent({
     const addItems = function (val: any) {
       openModal(true);
     };
-    //삭제버튼 눌렀을때 삭제내용 선택 할 수 있도록
-    //좌측 checkbox 생성 및 다음 버튼 부턴 삭제
-    const ItemsBeDeleted: Ref<string[]> = ref([]);
-    const deleteItems = function (val: string) {
-      const includeId = ItemsBeDeleted.value.includes(val);
-      if (!deletePannelShow.value) {
-        store.commit("ui/fetchStateDelete");
-      }
-
-      if (includeId) {
-        ItemsBeDeleted.value.splice(ItemsBeDeleted.value.indexOf(val), 1);
-      } else {
-        ItemsBeDeleted.value.push(val);
-      }
-
-      buttomMode.value = "disable";
-    };
-    const checkBeCancledId = (val: string): boolean => {
-      const includeId = ItemsBeDeleted.value.includes(val);
-      return includeId;
-    };
 
     // 모달 데이터 emit 받아오고 업데이트 한다.
     // 확인버튼을 선택했을 때 vuex에서 ItemsBeAdd가 업데이트 된다.
@@ -175,10 +164,12 @@ export default defineComponent({
       store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
     };
 
-    const SubmitDeleteItems = (event: VueEvent.Mouse<HTMLElement>) => {
-      store.commit("ui/fetchStateAdd");
-      store.commit("frige/fetchItemsBeDelete", ItemsBeDeleted.value);
-      ItemsBeDeleted.value = [];
+    const SubmitDeleteItem = (itemId: string) => {
+      store.dispatch("frige/frizeIngredient", {
+        frizeId: prop.propFrizeId,
+        ingredientAdd: [],
+        ingredientDelete: [itemId],
+      });
     };
 
     return {
@@ -190,13 +181,13 @@ export default defineComponent({
       isOpenRef,
       openModal,
       addItems,
-      deleteItems,
+
       updatedItemsBeAdd,
       setCardRef,
-      checkBeCancledId,
-      ItemsBeDeleted,
+
       SubmitAddItems,
-      SubmitDeleteItems,
+      SubmitDeleteItem,
+      trash,
     };
   },
 });
@@ -208,10 +199,23 @@ li {
 .tab3-list-content {
   --ion-grid-columns: 6;
 }
-.checkbox-delete {
-  --size: 20px;
-  align-content: center;
-  pointer-events: none;
+ion-item {
+  width: 100%;
+  height: 100%;
+  --inner-padding-start: 0;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-end: 0;
+}
+ion-item-options {
+  border: none;
+  ion-button {
+    margin: {
+      top: auto;
+      bottom: auto;
+      left: 16px;
+    }
+  }
 }
 .header-delete-item {
   position: fixed;

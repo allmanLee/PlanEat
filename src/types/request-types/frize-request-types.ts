@@ -15,9 +15,9 @@ export interface FrizeOnlyId {
   frizeId: string;
   frizeCate?: string | undefined;
 }
-export interface FrizeIngreModify extends FrizeUser {
+export interface FrizeIngreModify extends FrizeOnlyId {
   ingredientDelete?: string[];
-  ingredientAdd: FrigeType[] | null;
+  ingredientAdd: FrigeType[];
 }
 
 

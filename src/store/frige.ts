@@ -16,7 +16,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
   namespaced: true,
   state: () => ({
     items: [],
-    frizeCate: [],
+    frizeCate: [{ frizeId: "test", frizeName: "테스트" }],
     itemsBeAdd: [],
     itemsBeDeleted: [],
   }),
@@ -28,24 +28,28 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       });
       return itemNames;
     },
+    getCateId: (state) => (index: number) => {
+      return state.frizeCate[index].frizeId;
+    },
     fetchIngredients: (state) => {
-      return state.items.reduce((acc: any, item: any): any => {
-        return {
-          ...acc,
-          [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
-        };
-      }, {});
+      if (state.items.length !== 0) {
+        return state.items.reduce((acc: any, item: any): any => {
+          return {
+            ...acc,
+            [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
+          };
+        }, {});
+      }
     }
   },
   mutations: {
     fetchFrizeCate(state, payload) {
-      state.frizeCate.push(...payload);
+      state.frizeCate = [...payload];
     },
     fetchFrizeCateDelete(state, payload) {
       state.frizeCate = state.frizeCate.filter((el) => el.frizeId !== payload.frizeId);
     },
     fetchFrizeIngredients(state, payload) {
-      console.log(payload);
       state.items = payload;
     },
     fetchItemsBeAdd(state, payload) {
@@ -75,7 +79,6 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     fetchItemsBeDelete(state, payload) {
       const selectedItems: FrigeType[] = [];
-      console.log(payload);
       payload.forEach((id: string) => {
         state.items.forEach((el: FrigeType) => {
           if (el.id === id) {
@@ -98,11 +101,14 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     async frizeIngredient(context, payload: FrizeIngreModify) {
       const reqData: FrizeIngreModify = {
-        email: payload.email,
-        frizeName: payload.frizeName,
-        ingredientAdd: null,
+        frizeId: payload.frizeId,
+        ingredientAdd: payload.ingredientAdd,
+        ingredientDelete: payload.ingredientDelete
       };
-      const res = await frizeAPI.ModifyIngredientInFrize(reqData);
+      await frizeAPI.ModifyIngredientInFrize(reqData).then((res) => {
+        context.commit("fetchFrizeIngredients", res.data.dataObj);
+      }
+      ).catch((err) => { console.log(err); });
     },
     async frizeAdd(context, payload: FrizeUser) {
       const reqData = {

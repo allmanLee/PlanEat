@@ -27,7 +27,7 @@
 
     <!--컨텐츠-->
     <ion-content>
-      <tab-3-list-buttons></tab-3-list-buttons>
+      <tab-3-list-buttons :propFrizeId="frizeSeletedId"></tab-3-list-buttons>
     </ion-content>
     <app-popover :propOpenPopover="popStatus">
       <div class="remove-cate-popover">
@@ -95,8 +95,8 @@ export default defineComponent({
       () => testMock.value[cateIndex.value].frizeName
     );
     //냉장고 아이디
-    const frizeSeletedId = computed(
-      () => testMock.value[cateIndex.value].frizeId
+    const frizeSeletedId = computed(() =>
+      store.getters["frige/getCateId"](cateIndex.value)
     );
 
     //냉장고 [이름, 아이디] 가져오기
