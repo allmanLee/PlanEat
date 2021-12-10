@@ -122,7 +122,6 @@ export default defineComponent({
         })
         .then(() => {
           testMock.value = store.state.frige.frizeCate;
-          cateIndex.value = 0;
         });
     };
     //간편 알람 설정

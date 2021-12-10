@@ -63,11 +63,12 @@ export default defineComponent({
 /* outline-input-text-box */
 .input-outline > input {
   border-radius: 4px !important;
-  border: 2px solid #9e9e9e !important;
+  border: 2px solid var(--custom-gray-04) !important;
   background-color: #f5f5f5 !important;
   &:focus {
     background-color: #ffffff !important;
     border: 2px solid #f79503 !important;
+    transition: border 0.15s ease;
   }
 }
 </style>

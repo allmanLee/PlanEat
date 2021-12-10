@@ -3,7 +3,12 @@
     <swiper-slide value="add">
       <ion-col size="auto">
         <ion-thumbnail>
-          <ion-button color="dark" fill="clear" @click="openPop(true)">
+          <ion-button
+            mode="ios"
+            color="dark"
+            fill="clear"
+            @click="openPop(true)"
+          >
             <ion-icon :icon="addOutline"></ion-icon>
           </ion-button>
           <app-popover :propOpenPopover="popStatus">
@@ -188,7 +193,9 @@ export default defineComponent({
         ion-button {
           --padding-start: 0;
           --padding-end: 0;
-
+          height: rem-calc(48px);
+          line-height: rem-calc(48px);
+          vertical-align: middle !important;
           .thumbnail-none {
             line-height: rem-calc(48px);
             vertical-align: middle;

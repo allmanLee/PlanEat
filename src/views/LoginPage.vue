@@ -114,6 +114,7 @@ ion-footer {
 }
 
 .email-login-button {
+  font-weight: 400;
   width: 100%;
   margin: 0px;
 }
