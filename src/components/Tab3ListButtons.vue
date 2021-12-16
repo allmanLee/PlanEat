@@ -14,7 +14,7 @@
               ></tag-updated-date> -->
             </ion-col>
           </ion-row>
-          <ion-row class="ion-justify-content-center">
+          <ion-row class="ion-justify-content-center card-row-container">
             <ion-col size="12">
               <ion-item-sliding
                 v-for="(ingredient, index) in item || []"
@@ -22,9 +22,10 @@
               >
                 <ion-item lines="none">
                   <button-item-list
+                    :propFrizeId="propFrizeId"
                     :propIngredient="ingredient"
                     :ref="setCardRef"
-                    :propMode="buttomMode"
+                    :propMemoDisabled="propMemoDisabled"
                   >
                   </button-item-list>
                 </ion-item>
@@ -75,7 +76,6 @@ import {
   defineComponent,
   onBeforeUpdate,
   reactive,
-  Ref,
   ref,
 } from "vue";
 import {
@@ -92,7 +92,6 @@ import Tab3ModalContent from "./Tab3ModalContent.vue";
 import Modal from "./AppModal.vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 import { useStore } from "@/store/index";
-import { VueEvent } from "@/types/event";
 import { trash } from "ionicons/icons";
 
 export default defineComponent({
@@ -114,6 +113,10 @@ export default defineComponent({
       default: () => {
         return "d22f323f";
       },
+    },
+    propMemoDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(prop) {
@@ -154,16 +157,13 @@ export default defineComponent({
     // 모달 데이터 emit 받아오고 업데이트 한다.
     // 확인버튼을 선택했을 때 vuex에서 ItemsBeAdd가 업데이트 된다.
     let itemsBeAdd: any = reactive([]);
-
     const updatedItemsBeAdd = (items: IngredientType[]) => {
       itemsBeAdd = items;
     };
-
     const SubmitAddItems = () => {
       openModal(false);
       store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
     };
-
     const SubmitDeleteItem = (itemId: string) => {
       store.dispatch("frige/frizeIngredient", {
         frizeId: prop.propFrizeId,
@@ -181,10 +181,8 @@ export default defineComponent({
       isOpenRef,
       openModal,
       addItems,
-
       updatedItemsBeAdd,
       setCardRef,
-
       SubmitAddItems,
       SubmitDeleteItem,
       trash,
@@ -199,8 +197,10 @@ li {
 .tab3-list-content {
   --ion-grid-columns: 6;
 }
-ion-item {
+.card-row-container {
   width: 100%;
+}
+ion-item {
   height: 100%;
   --inner-padding-start: 0;
   --padding-start: 0;

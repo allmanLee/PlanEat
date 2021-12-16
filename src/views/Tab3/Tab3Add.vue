@@ -21,13 +21,22 @@
         </ion-button>
       </ion-col>
       <ion-col class="memo-btn-container"
-        ><ion-button class="memotoggle-btn">메모 끄기</ion-button></ion-col
+        ><ion-button
+          color="dark"
+          fill="clear"
+          class="memotoggle-btn"
+          @click="memoDisabled = !memoDisabled"
+          >{{ memoDisabled ? "메모 끄기" : "메모 켜기" }}</ion-button
+        ></ion-col
       >
     </ion-row>
 
     <!--컨텐츠-->
     <ion-content>
-      <tab-3-list-buttons :propFrizeId="frizeSeletedId"></tab-3-list-buttons>
+      <tab-3-list-buttons
+        :propFrizeId="frizeSeletedId"
+        :propMemoDisabled="memoDisabled"
+      ></tab-3-list-buttons>
     </ion-content>
     <app-popover :propOpenPopover="popStatus">
       <div class="remove-cate-popover">
@@ -56,7 +65,7 @@
   </ion-page>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import AppPopover from "@/components/AppPopover.vue";
 import FabButtonAdd from "@/components/FabButtonAdd.vue";
 import {
@@ -150,6 +159,9 @@ export default defineComponent({
       return string.slice(0, 2);
     };
 
+    //메모 표시하기
+    const memoDisabled = ref(false);
+
     return {
       testMock,
       toolBtnItems,
@@ -167,6 +179,7 @@ export default defineComponent({
       popStatus,
       frizeSeletedName,
       frizeSeletedId,
+      memoDisabled,
     };
   },
   components: {
@@ -216,7 +229,6 @@ export default defineComponent({
     }
     height: 36px;
     font: {
-      weight: 500;
       size: 14px;
     }
   }

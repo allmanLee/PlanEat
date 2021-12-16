@@ -53,12 +53,17 @@ export default defineComponent({
       const toDate = today.getDate();
       const updatedDate = `${toYear}-${toMount}-${toDate}`;
       const dateForId = `${toYear}${toMount}${toDate}`;
+
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7);
+
       addItems.value = val.map((el) => {
         if (el !== undefined) {
           return {
             id: `${dateForId}${el.engName}`,
             name: el.name,
             engName: el.engName,
+            expirationDate: `${expirationDate.getFullYear()}-${expirationDate.getMonth()}-${expirationDate.getDate()}`,
             updatedDate: updatedDate,
           } as FrigeType;
         }

@@ -4,6 +4,8 @@ export interface IngredientType {
 }
 export interface FrigeType extends IngredientType {
   updatedDate?: string;
+  expirationDate?: string;
+  memo?: string;
   amount?: "충분" | "보통" | "소량";
   id: string;  //영문이름+날짜 (apple20210802)
 }

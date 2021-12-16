@@ -2,7 +2,7 @@ import { Module } from 'vuex';
 import { RootState } from ".";
 import { FrigeCate, FrigeType } from "@/types/frige";
 import frizeAPI from "@/assets/api/frizeAPI";
-import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser } from "@/types/request-types/frize-request-types";
+import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser, IngredientModify } from "@/types/request-types/frize-request-types";
 
 
 export interface FrigeModuleState {
@@ -60,15 +60,21 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth();
-      const day = date.getDay();
+      const day = date.getDate();
+
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7);
+
 
       if (payload) {
         payload.forEach((element: FrigeType) => {
           const ItemId = String(year) + String(month) + String(day) + element.engName;
           const ItemObject: FrigeType = {
             name: element.name,
+            memo: element.memo,
             amount: "보통",
             id: ItemId,
+            expirationDate: `${expirationDate.getFullYear()}-${expirationDate.getMonth()}-${expirationDate.getDate()}`,
             updatedDate: `${year}-${month}-${day}`,
           };
           selectedItems.push(ItemObject);
@@ -109,6 +115,17 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         ingredientDelete: payload.ingredientDelete
       };
       await frizeAPI.ModifyIngredientInFrize(reqData).then((res) => {
+        context.commit("fetchFrizeIngredients", res.data.dataObj);
+      }
+      ).catch((err) => { console.log(err); });
+    },
+    async frizeIngredientModify(context, payload: IngredientModify) {
+      const reqData: IngredientModify = {
+        frizeId: payload.frizeId,
+        ingredientId: payload.ingredientId,
+        frizeModifyData: payload.frizeModifyData
+      };
+      await frizeAPI.ModifyIngredient(reqData).then((res) => {
         context.commit("fetchFrizeIngredients", res.data.dataObj);
       }
       ).catch((err) => { console.log(err); });

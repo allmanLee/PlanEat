@@ -1,7 +1,11 @@
 <template>
   <teleport to="body">
     <transition name="fade">
-      <div v-if="openPopover" class="popover-background" @click="ClickOutside">
+      <div
+        v-if="openPopover"
+        class="popover-background"
+        v-on:click.self="ClickOutside"
+      >
         <ion-card mode="ios" class="popover-content">
           <slot></slot>
         </ion-card>
@@ -11,19 +15,19 @@
 </template>
 
 <script>
-import { computed, defineComponent, onUpdated, ref } from "vue";
+import { computed, defineComponent, onMounted, onUpdated, ref } from "vue";
 import { IonCard } from "@ionic/vue";
 
 export default defineComponent({
   name: "Popover",
   components: {
-    IonCard
+    IonCard,
   },
   props: {
     propOpenPopover: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ["closePopover"],
   setup(props, { emit }) {
@@ -36,7 +40,7 @@ export default defineComponent({
       emit("closePopover");
     };
     return { openPopover, ClickOutside };
-  }
+  },
 });
 </script>
 <style scoped>

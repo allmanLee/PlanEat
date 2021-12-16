@@ -19,5 +19,14 @@ export interface FrizeIngreModify extends FrizeOnlyId {
   ingredientDelete?: string[];
   ingredientAdd: FrigeType[];
 }
-
+export interface IngredientModify {
+  frizeId: string;
+  ingredientId: string;
+  frizeModifyData: object;
+}
+export interface IngredientBeModifyed {
+  updatedDate?: string;
+  expirationDate?: string;
+  memo?: string;
+}
 
