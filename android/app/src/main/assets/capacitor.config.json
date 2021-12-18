@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.planeat",
+	"appName": "planeat-app",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
