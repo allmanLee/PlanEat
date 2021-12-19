@@ -1,6 +1,7 @@
 <template>
-  <ion-header>
+  <ion-header mode="ios">
     <ion-searchbar
+      mode="ios"
       @input="searchInput"
       placeholder="재료를 검색하세요"
       animated
@@ -50,7 +51,15 @@ import {
 import Tab3SearchItemChips from "./Tab3SearchItemChips.vue";
 import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
-import { IonContent, IonList, IonButton, IonSearchbar } from "@ionic/vue";
+import {
+  IonContent,
+  IonList,
+  IonButton,
+  IonSearchbar,
+  IonFooter,
+  IonHeader,
+  IonItem,
+} from "@ionic/vue";
 import { IngredientType } from "@/types/frige";
 
 export default defineComponent({
@@ -61,6 +70,9 @@ export default defineComponent({
     IonList,
     IonButton,
     IonSearchbar,
+    IonFooter,
+    IonHeader,
+    IonItem,
   },
 
   setup(props, { emit }) {

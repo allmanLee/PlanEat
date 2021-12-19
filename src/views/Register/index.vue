@@ -57,7 +57,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from "vue";
-import { IonPage } from "@ionic/vue";
+import { IonPage, IonButton, IonContent, IonSpinner } from "@ionic/vue";
 import LoginToEmail from "@/views/Register/login-to-email.vue";
 import RegisterInputEmail from "@/views/Register/register-input-email.vue";
 import RegisterInputPw from "@/views/Register/register-input-pw.vue";
@@ -201,6 +201,9 @@ export default defineComponent({
   },
   components: {
     IonPage,
+    IonButton,
+    IonContent,
+    IonSpinner,
     LoginToEmail,
     AppHeader,
     AppPopover,

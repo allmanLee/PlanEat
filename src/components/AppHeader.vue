@@ -1,10 +1,12 @@
 <template>
-  <ion-header mode="md" v-if="header" class="ion-no-border">
-    <ion-toolbar>
+  <ion-header mode="ios" v-if="header" class="ion-no-border">
+    <ion-toolbar mode="ios">
       <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
       </ion-buttons>
-      <ion-title class="app-header-title">{{ headerTitle }}</ion-title>
+      <ion-title mode="ios" class="app-header-title">{{
+        headerTitle
+      }}</ion-title>
     </ion-toolbar>
   </ion-header>
 </template>

@@ -46,14 +46,8 @@
 </template>
 <script lang="ts">
 import { VueEvent } from "@/types/event";
-import {
-  defineComponent,
-  onBeforeUpdate,
-  onMounted,
-  onUpdated,
-  Ref,
-  ref,
-} from "vue";
+import { IonCol, IonRow, IonGrid, IonButton } from "@ionic/vue";
+import { defineComponent, onMounted, onUpdated, Ref, ref } from "vue";
 
 export default defineComponent({
   emits: ["emitCloseModal"],
@@ -83,6 +77,12 @@ export default defineComponent({
       VideoShow,
       ClickBackButton,
     };
+  },
+  components: {
+    IonCol,
+    IonRow,
+    IonGrid,
+    IonButton,
   },
 });
 </script>

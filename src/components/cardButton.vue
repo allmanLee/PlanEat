@@ -1,11 +1,5 @@
 <template>
-  <ion-card
-    ios="add"
-    mode="ios"
-    Expand="block"
-    :color="buttonMode === 'addActive' ? 'primary' : ''"
-    @click="ClickButton"
-  >
+  <ion-card ios="add" mode="ios" Expand="block" @click="ClickButton">
     <ion-card-header>
       <ion-card-title class="card-title">
         <ion-grid class="buttonCard-grid">
@@ -94,6 +88,13 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonList,
+  IonListHeader,
+  IonLabel,
+  IonButton,
+  IonToolbar,
+  IonFooter,
+  IonTitle,
+  IonTextarea,
   IonItem,
 } from "@ionic/vue";
 import AppPopover from "./AppPopover.vue";
@@ -110,8 +111,15 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonList,
+    IonListHeader,
+    IonTitle,
     IonItem,
     IonCardContent,
+    IonLabel,
+    IonToolbar,
+    IonFooter,
+    IonButton,
+    IonTextarea,
     IonBadge,
     AppPopover,
     AppInput,

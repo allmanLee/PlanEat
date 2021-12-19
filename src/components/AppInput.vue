@@ -51,7 +51,7 @@ export default defineComponent({
         if (Autofocus.value == true) {
           setTimeout(() => {
             test.value.$el.children[0].focus();
-          }, 200);
+          }, 2000);
         }
       }
     });

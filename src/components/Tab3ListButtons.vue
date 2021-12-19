@@ -84,6 +84,10 @@ import {
   IonCol,
   IonModal,
   IonButton,
+  IonItem,
+  IonIcon,
+  IonItemOptions,
+  IonItemSliding,
   // IonCheckbox,
 } from "@ionic/vue";
 import ButtonItemList from "./cardButton.vue";
@@ -105,6 +109,11 @@ export default defineComponent({
     ButtonItemList,
     // TagUpdatedDate,
     Tab3ModalContent,
+
+    IonItem,
+    IonIcon,
+    IonItemOptions,
+    IonItemSliding,
     Modal,
   },
   props: {

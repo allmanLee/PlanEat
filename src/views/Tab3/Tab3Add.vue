@@ -82,6 +82,7 @@ import {
 } from "@ionic/vue";
 import FrizeCateThumbnail from "@/components/FrizeCateThumbnail.vue";
 import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
+import ingredientAPI from "@/assets/api/ingredientAPI";
 import { useStore } from "@/store/index";
 import {
   addOutline,
@@ -109,7 +110,10 @@ export default defineComponent({
     const frizeSeletedId = computed(() =>
       store.getters["frige/getCateId"](cateIndex.value)
     );
-
+    //재료 데이터 가져오기
+    ingredientAPI.GetIngredientData().then((data) => {
+      console.log(data);
+    });
     //냉장고 [이름, 아이디] 가져오기
     store
       .dispatch("frige/AllFrizeGet", {

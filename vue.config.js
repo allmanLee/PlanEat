@@ -13,4 +13,14 @@ module.exports = {
       },
     },
   },
+  devServer: {
+    proxy: {
+      "^/api": {
+        target: "http://openapi.foodsafetykorea.go.kr/api",
+        // pathRewrite: { "^/": "" },
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 };
