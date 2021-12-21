@@ -42,9 +42,7 @@ export default defineComponent({
       return props.propType;
     });
     const test = ref();
-    const header = computed(() => {
-      return store.state.ui.header;
-    });
+
     onMounted(() => {
       if (test.value !== null) {
         //null체크
@@ -55,7 +53,7 @@ export default defineComponent({
         }
       }
     });
-    return { valueText, test, arrowBack, type, header };
+    return { valueText, test, arrowBack, type };
   },
 });
 </script>

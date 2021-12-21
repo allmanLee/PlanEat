@@ -1,10 +1,7 @@
 <template>
   <ion-page>
     <ion-row>
-      <frize-cate-thumbnail
-        :propCates="testMock"
-        @emitCateIndex="emitedCateIndex"
-      ></frize-cate-thumbnail>
+      <frize-cate-thumbnail :propCates="testMock"></frize-cate-thumbnail>
     </ion-row>
     <ion-row
       justify-content-center
@@ -33,10 +30,7 @@
 
     <!--컨텐츠-->
     <ion-content>
-      <tab-3-list-buttons
-        :propFrizeId="frizeSeletedId"
-        :propMemoDisabled="memoDisabled"
-      ></tab-3-list-buttons>
+      <tab-3-list-buttons :propMemoDisabled="memoDisabled"></tab-3-list-buttons>
     </ion-content>
     <app-popover :propOpenPopover="popStatus">
       <div class="remove-cate-popover">
@@ -102,24 +96,25 @@ export default defineComponent({
       popStatus.value = state;
     };
 
-    //냉장고 이름
-    const frizeSeletedName = computed(
-      () => testMock.value[cateIndex.value].frizeName
-    );
-    //냉장고 아이디
-    const frizeSeletedId = computed(() =>
-      store.getters["frige/getCateId"](cateIndex.value)
-    );
-    //재료 데이터 가져오기
+    //냉장고 아이디로
+    const frizeSeletedId = computed(() => store.state.frige.selectedCateId);
+    //재료 데이터 가져오기(식약처 API)
     ingredientAPI.GetIngredientData().then((data) => {
       console.log(data);
     });
+
+    //냉장고 이름
+    const frizeSeletedName = computed(() =>
+      store.getters["frige/getCateName"](frizeSeletedId.value)
+    );
+
     //냉장고 [이름, 아이디] 가져오기
     store
       .dispatch("frige/AllFrizeGet", {
         email: localStorage.getItem("email"),
       })
       .then((data) => {
+        store.commit("frige/initFrizeCateselected");
         testMock.value = store.state.frige.frizeCate;
         store.dispatch("frige/frizeIngredientGet", {
           frizeId: frizeSeletedId.value,
@@ -143,14 +138,6 @@ export default defineComponent({
       return undefined;
     };
 
-    //EIMT cateIndex -> 해당 냉장고의 인덱스를 가지고 온다.
-    const emitedCateIndex = (val: any) => {
-      cateIndex.value = val.value;
-      store.dispatch("frige/frizeIngredientGet", {
-        frizeId: frizeSeletedId.value,
-      });
-    };
-
     //툴바 버튼
     const toolBtnItems = [
       { icon: trashOutline, clickEvent: openPop },
@@ -169,10 +156,10 @@ export default defineComponent({
     return {
       testMock,
       toolBtnItems,
-      cateIndex,
+
       slideOpts,
       addOutline,
-      emitedCateIndex,
+
       closeOutline,
       deleteCate,
       trashOutline,

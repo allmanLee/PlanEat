@@ -2,7 +2,7 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar v-if="footer">
+      <ion-tab-bar>
         <ion-tab-button tab="tab2" href="/tabs/tab2">
           <ion-icon :icon="homeOutline" />
           <ion-label>홈</ion-label>
@@ -49,11 +49,11 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const footer = computed(() => {
-      return store.state.ui.footer;
-    });
+    // const footer = computed(() => {
+    //   return store.state.ui.footer;
+    // });
     return {
-      footer,
+      // footer,
       homeOutline,
       notificationsOutline,
       fishOutline,

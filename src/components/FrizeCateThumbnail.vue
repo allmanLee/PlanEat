@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from "vue";
+import { defineComponent, ref, PropType, computed, watch } from "vue";
 import {
   IonIcon,
   IonText,
@@ -73,11 +73,9 @@ import {
 import SwiperCore from "swiper";
 import { IonicSwiper } from "@ionic/vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-// import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
 import AppInput from "@/components/AppInput.vue";
 import AppPopover from "@/components/AppPopover.vue";
 import { useStore } from "@/store/index";
-
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 import {
@@ -96,17 +94,35 @@ export default defineComponent({
       require: true,
     },
   },
-  emit: ["emitCateIndex"],
   setup(prop, { emit }) {
     const store = useStore();
     //카테고리 목 아이템배열
     const cateItems = computed(() => prop.propCates);
     const cateIndex = ref(0);
+    const cateId = computed(() => {
+      return store.state.frige.selectedCateId;
+    });
+
+    watch(cateId, (id: any, oldId: any) => {
+      if (cateItems.value !== undefined && cateId.value !== undefined) {
+        cateItems.value.forEach((el, index) => {
+          if (el.frizeId === cateId.value) cateIndex.value = index;
+        });
+      }
+    });
 
     //선택 카테고리 변경
     const changeCateBtn = (index: number) => {
       cateIndex.value = index;
-      emit("emitCateIndex", cateIndex);
+      if (cateItems.value !== undefined) {
+        store.commit(
+          "frige/fetchFrizeCateSelected",
+          cateItems.value[index].frizeId
+        );
+        store.dispatch("frige/frizeIngredientGet", {
+          frizeId: cateItems.value[index].frizeId,
+        });
+      }
     };
     //팝업 열기/닫기
     const popStatus = ref(false);
@@ -116,10 +132,12 @@ export default defineComponent({
     //카테고리 추가
     const inputedName = ref("");
     const addCateBtn = () => {
-      store.dispatch("frige/frizeAdd", {
-        email: localStorage.getItem("email"),
-        frizeName: inputedName.value,
-      });
+      if (inputedName.value.length >= 2) {
+        store.dispatch("frige/frizeAdd", {
+          email: localStorage.getItem("email"),
+          frizeName: inputedName.value,
+        });
+      } else alert("두자리 이상의 값을 입력해주세요");
     };
 
     //문자열 자르기

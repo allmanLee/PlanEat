@@ -1,12 +1,14 @@
 import { Module } from 'vuex';
 import { RootState } from ".";
-import { FrigeCate, FrigeType } from "@/types/frige";
+import { AlaramIngredientType, FrigeCate, FrigeType } from "@/types/frige";
 import frizeAPI from "@/assets/api/frizeAPI";
 import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser, IngredientModify } from "@/types/request-types/frize-request-types";
 
 
 export interface FrigeModuleState {
   frizeCate: FrigeCate[];
+  selectedCateId: string;
+  frizeAlaram: AlaramIngredientType[];
   items: FrigeType[];
   itemsBeAdd: FrigeType[];
   itemsBeDeleted: FrigeType[];
@@ -17,6 +19,8 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
   state: () => ({
     items: [],
     frizeCate: [{ frizeId: "test", frizeName: "테스트" }],
+    frizeAlaram: [],
+    selectedCateId: "",
     itemsBeAdd: [],
     itemsBeDeleted: [],
   }),
@@ -28,18 +32,33 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
       });
       return itemNames;
     },
-    getCateId: (state) => (index: number) => {
-      return state.frizeCate[index].frizeId;
+
+    //특정 냉장고 이름만 가져오기(아이디-> 이름)
+    getCateName: (state) => (id: string) => {
+      return state.frizeCate.filter(el =>
+        el.frizeId === id).map(el => el.frizeName).join("");
+    },
+
+
+    //특정 냉장고 아이디만 가져오기
+    // getCateId: (state) => (id: number) => {
+    //   return state.frizeCate.indexOf(id);
+    // },
+    //냉장고 아이디만 전체 가져오기
+    getAllCateId: (state) => {
+      const itemNames: string[] = [];
+      state.frizeCate.forEach((item) => {
+        itemNames.push(item.frizeId);
+      });
+      return itemNames;
     },
     fetchIngredients: (state) => {
-      if (state.items.length !== 0 || state.items !== undefined) {
-        return state.items.reduce((acc: any, item: any): any => {
-          return {
-            ...acc,
-            [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
-          };
-        }, {});
-      }
+      return state.items.reduce((acc: any, item: any): any => {
+        return {
+          ...acc,
+          [item.updatedDate]: (acc[item.updatedDate] || []).concat(item),
+        };
+      }, {});
     }
   },
   mutations: {
@@ -55,15 +74,21 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     fetchFrizeIngredients(state, payload) {
       state.items = payload;
     },
+    initFrizeCateselected(state) {
+      state.selectedCateId = state.frizeCate[0].frizeId;
+    },
+    fetchFrizeCateSelected(state, id) {
+      state.selectedCateId = id;
+    },
     fetchItemsBeAdd(state, payload) {
       const selectedItems: FrigeType[] = [];
       const date = new Date();
       const year = date.getFullYear();
-      const month = date.getMonth();
+      const month = date.getMonth() + 1;
       const day = date.getDate();
 
       const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      expirationDate.setDate(expirationDate.getDate() + 10);
 
 
       if (payload) {
@@ -97,6 +122,9 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         });
       });
       state.itemsBeDeleted = selectedItems;
+    },
+    fetchAlaramIngredient(state, payload) {
+      state.frizeAlaram = payload;
     }
   },
   actions: {
@@ -118,6 +146,11 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         context.commit("fetchFrizeIngredients", res.data.dataObj);
       }
       ).catch((err) => { console.log(err); });
+    },
+    async alaramFrizeIngredientGet(context, payload: any) {
+      await frizeAPI.AlaramIngredientInFrize(payload).then((res) => {
+        context.commit("fetchAlaramIngredient", res.data.dataObj);
+      });
     },
     async frizeIngredientModify(context, payload: IngredientModify) {
       const reqData: IngredientModify = {

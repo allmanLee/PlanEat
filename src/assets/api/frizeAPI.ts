@@ -16,6 +16,18 @@ export default {
   },
 
   /*POST
+ * /api/service/frize/alaramIngredient
+ *냉장고 재료 검색
+ */
+  AlaramIngredientInFrize(reqData: any) {
+    return requestApi({
+      url: "/api/service/frize/alaramIngredient",
+      method: "post",
+      data: reqData
+    });
+  },
+
+  /*POST
    * /api/service/frize/ingredient
    *냉장고 재료 추가 및 삭제
    */

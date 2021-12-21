@@ -1,10 +1,10 @@
 <template>
-  <ion-header mode="ios" v-if="header" class="ion-no-border">
-    <ion-toolbar mode="ios">
-      <ion-buttons slot="start">
+  <ion-header mode="md" class="ion-no-border">
+    <ion-toolbar mode="md">
+      <!-- <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
-      </ion-buttons>
-      <ion-title mode="ios" class="app-header-title">{{
+      </ion-buttons> -->
+      <ion-title mode="md" class="app-header-title">{{
         headerTitle
       }}</ion-title>
     </ion-toolbar>
@@ -13,14 +13,12 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import {
-  IonButtons,
-  IonBackButton,
+  // IonButtons,
+  // IonBackButton,
   IonHeader,
   IonToolbar,
   IonTitle,
 } from "@ionic/vue";
-import { arrowBack } from "ionicons/icons";
-import { useStore } from "@/store/index";
 export default defineComponent({
   props: {
     headerTitle: String,
@@ -29,15 +27,8 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonButtons,
-    IonBackButton,
-  },
-  setup() {
-    const store = useStore();
-    const header = computed(() => {
-      return store.state.ui.header;
-    });
-    return { arrowBack, header };
+    // IonButtons,
+    // IonBackButton,
   },
 });
 </script>

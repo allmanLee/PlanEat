@@ -59,6 +59,7 @@
         <ion-textarea
           autoGrow="true"
           :disabled="modifyMode"
+          :placeholder="ingreMemo"
           :value="ingreMemo"
           maxlength="100"
           @ionInput="inputedModifyMemo = $event.target.value"
@@ -208,6 +209,7 @@ export default defineComponent({
         })
         .then(() => {
           closePopover.value = false;
+          modifyMode.value = false;
         });
     };
     return {

@@ -22,7 +22,7 @@
               >
                 <ion-item lines="none">
                   <button-item-list
-                    :propFrizeId="propFrizeId"
+                    :propFrizeId="frizeId"
                     :propIngredient="ingredient"
                     :ref="setCardRef"
                     :propMemoDisabled="propMemoDisabled"
@@ -88,7 +88,6 @@ import {
   IonIcon,
   IonItemOptions,
   IonItemSliding,
-  // IonCheckbox,
 } from "@ionic/vue";
 import ButtonItemList from "./cardButton.vue";
 // import TagUpdatedDate from "./TagUpdatedDate.vue";
@@ -103,13 +102,10 @@ export default defineComponent({
     IonButton,
     IonGrid,
     IonCol,
-    // IonCheckbox,
     IonRow,
     IonModal,
     ButtonItemList,
-    // TagUpdatedDate,
     Tab3ModalContent,
-
     IonItem,
     IonIcon,
     IonItemOptions,
@@ -117,24 +113,15 @@ export default defineComponent({
     Modal,
   },
   props: {
-    propFrizeId: {
-      type: String,
-      default: () => {
-        return "d22f323f";
-      },
-    },
     propMemoDisabled: {
       type: Boolean,
       default: false,
     },
   },
-  setup(prop) {
+  setup() {
     const store = useStore(); //스토어
-    const addButtonShow = computed(() => {
-      return store.state.ui.addButton;
-    });
-    const deletePannelShow = computed(() => {
-      return store.state.ui.deletePannel;
+    const frizeId = computed(() => {
+      return store.state.frige.selectedCateId;
     });
     const buttomMode = ref("nomal");
     let cardRefs: HTMLElement[] = [];
@@ -155,7 +142,9 @@ export default defineComponent({
     const sortedItems = computed(() => {
       return store.getters["frige/fetchIngredients"];
     });
-
+    const selectedCateId = computed(() => {
+      return store.state.frige.selectedCateId;
+    });
     //버튼에서 emit 을 받온다.
     const isOpenRef = ref(false);
     const openModal = (state: boolean) => (isOpenRef.value = state);
@@ -175,7 +164,7 @@ export default defineComponent({
     };
     const SubmitDeleteItem = (itemId: string) => {
       store.dispatch("frige/frizeIngredient", {
-        frizeId: prop.propFrizeId,
+        frizeId: selectedCateId.value,
         ingredientAdd: [],
         ingredientDelete: [itemId],
       });
@@ -183,12 +172,11 @@ export default defineComponent({
 
     return {
       ArrMock,
-      addButtonShow,
-      deletePannelShow,
       buttomMode,
       sortedItems,
       isOpenRef,
       openModal,
+      frizeId,
       addItems,
       updatedItemsBeAdd,
       setCardRef,
