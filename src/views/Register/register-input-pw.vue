@@ -104,7 +104,8 @@ export default defineComponent({
         isSame = false;
         subLable.value = "비밀번호가 일치하지 않습니다.";
       }
-      emit("emitPw", { password: inputedPw.value, isSame: isSame });
+      if (isPassword(password))
+        emit("emitPw", { password: inputedPw.value, isSame: isSame });
     };
     const focus = () => {
       setTimeout(() => {

@@ -7,9 +7,10 @@
       @click="test"
       fill="clear"
       expand="full"
+      color="dark"
       :disabled="AthReBtndisabled"
       class="auth-re-button"
-      >인증번호 다시요청</ion-button
+      >재요청</ion-button
     >
     <ion-item lines="none">
       <app-input
@@ -32,6 +33,9 @@
       </ion-button>
     </ion-item>
     <p class="sub-lable">{{ propAuthSubLable }}</p>
+    <ion-label class="countdown-label"
+      ><p>{{ count }}초 남음</p></ion-label
+    >
   </div>
 </template>
 <script lang="ts">
@@ -50,6 +54,20 @@ export default defineComponent({
     const authInputType = ref("password");
     const authVisiable = ref(false);
 
+    //20초(인증번호 재요청 카운트)
+    const count = ref(120);
+    const countdown = function () {
+      count.value = 120;
+      const interval = setInterval(() => {
+        if (count.value > 0) {
+          count.value--;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
+    };
+    countdown();
+
     //비밀번호 보이기/안보이게
     const managePassword = () => {
       authVisiable.value = !authVisiable.value;
@@ -66,6 +84,7 @@ export default defineComponent({
           alert("해당 이메일로 인증코드가 전송되었습니다.");
         });
       AthReBtndisabled.value = true;
+      countdown();
       setTimeout(() => {
         //20초 후에 다시 인증코드 전송 가능
         AthReBtndisabled.value = false;
@@ -84,6 +103,7 @@ export default defineComponent({
       emitAuth,
       managePassword,
       focus,
+      count,
     };
   },
   components: {
@@ -119,5 +139,9 @@ ion-icon {
 
 .auth-re-button {
   right: rem-calc(12px);
+}
+.countdown-label {
+  margin: rem-calc(2px);
+  text-align: right;
 }
 </style>

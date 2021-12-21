@@ -79,6 +79,9 @@ export default defineComponent({
           router.push({
             path: "/tabs/",
           });
+        })
+        .catch(() => {
+          alert("아이디 또는 비밀번호가 틀렸습니다.");
         });
     };
     const AthReBtndisabled = ref(false);
