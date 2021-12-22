@@ -60,9 +60,8 @@ export default defineComponent({
       addItems.value = val.map((el) => {
         if (el !== undefined) {
           return {
-            id: `${dateForId}${el.engName}`,
+            id: `${dateForId}${el.name}`,
             name: el.name,
-            engName: el.engName,
             expirationDate: `${expirationDate.getFullYear()}-${expirationDate.getMonth()}-${expirationDate.getDate()}`,
             updatedDate: updatedDate,
           } as FrigeType;

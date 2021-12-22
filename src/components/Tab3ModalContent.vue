@@ -79,10 +79,10 @@ export default defineComponent({
     const store = useStore();
 
     const ArrMock: IngredientType[] = [
-      { name: "파", engName: "GreenOnion" },
-      { name: "마늘", engName: "Garlic" },
-      { name: "돼지고기", engName: "Pork" },
-      { name: "간장", engName: "SoySauce" },
+      { name: "파" },
+      { name: "마늘" },
+      { name: "돼지고기" },
+      { name: "간장" },
     ];
 
     //ref setting/////////////////////

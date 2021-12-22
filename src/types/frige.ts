@@ -11,7 +11,7 @@ export interface FrigeType extends IngredientType {
 }
 export interface AlaramIngredientType extends FrigeType {
   frizeId: string;
-  
+
 }
 export interface FrigeCate {
   frizeName: string;

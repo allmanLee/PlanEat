@@ -93,7 +93,8 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
 
       if (payload) {
         payload.forEach((element: FrigeType) => {
-          const ItemId = String(year) + String(month) + String(day) + element.engName;
+          console.log(element.name);
+          const ItemId = String(year) + String(month) + String(day) + element.name;
           const ItemObject: FrigeType = {
             name: element.name,
             memo: element.memo,

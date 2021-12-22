@@ -132,7 +132,6 @@ export default defineComponent({
         return {
           id: "errId",
           name: "errName",
-          engName: "ingredient name",
           updatedDate: new Date(),
           amount: "보통",
         };
