@@ -123,14 +123,19 @@ export default defineComponent({
 
     //카테고리 삭제
     const deleteCate = () => {
-      store
-        .dispatch("frige/frizeDelete", {
-          email: localStorage.getItem("email"),
-          frizeName: frizeSeletedName.value,
-        })
-        .then(() => {
-          testMock.value = store.state.frige.frizeCate;
-        });
+      if (testMock.value.length > 1) {
+        store
+          .dispatch("frige/frizeDelete", {
+            email: localStorage.getItem("email"),
+            frizeName: frizeSeletedName.value,
+          })
+          .then(() => {
+            testMock.value = store.state.frige.frizeCate;
+          });
+      } else
+        alert(
+          "냉장고를 삭제할 수 없습니다. 최소 한개의 냉장고가 있어야합니다."
+        );
     };
     //간편 알람 설정
     const toggleAlarm = () => {

@@ -1,20 +1,18 @@
 <template>
-  <ion-chip class="chip-date">
-    <ion-label>{{ fetchDate }}</ion-label>
-  </ion-chip>
+  <hr />
+  <ion-label>{{ fetchDate }}</ion-label>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { IonLabel, IonChip } from "@ionic/vue";
+import { IonLabel } from "@ionic/vue";
 export default defineComponent({
   components: {
     IonLabel,
-    IonChip,
   },
   props: {
     propDate: {
-      type: Date,
-      default: Date,
+      type: String,
+      default: "0000-00-00",
     },
   },
   setup(props) {
@@ -29,12 +27,12 @@ export default defineComponent({
         "금요일",
         "토요일",
       ];
-
-      const year = UpdatedDate.getFullYear();
-      const month = UpdatedDate.getMonth() + 1;
-      const day = UpdatedDate.getDate();
-      const dayLabel = week[UpdatedDate.getDay()];
-      return `${year}년 ${month}월 ${day}일 ${dayLabel}`;
+      const splitedDate = UpdatedDate.split("-");
+      const updatedDay = new Date(
+        `${splitedDate[0]}/${splitedDate[1]}/${splitedDate[2]}`
+      );
+      const dayLabel = week[updatedDay.getDay()];
+      return `${splitedDate[0]}년 ${splitedDate[1]}월 ${splitedDate[2]}일 ${dayLabel}`;
     });
     return {
       fetchDate,
@@ -43,9 +41,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.chip-date {
-  --background: #2e2e2e;
-  --color: white;
-  font-size: 12px;
+ion-label {
+  color: var(--custom-gray-02);
 }
 </style>

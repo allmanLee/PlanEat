@@ -7,11 +7,16 @@
             <ion-col class="ion-align-self-center" size="auto">{{
               ingredient.name
             }}</ion-col>
-            <ion-col class="badge-container" size="auto"
-              ><ion-badge color="primary">경고</ion-badge></ion-col
+            <ion-col
+              v-if="expirationDateTag < 3"
+              class="badge-container"
+              size="auto"
+              ><ion-badge :color="expirationDateTagColor">{{
+                expirationDateTagName
+              }}</ion-badge></ion-col
             >
             <ion-col class="text-date ion-align-self-center">
-              {{ ingredient.updatedDate }}
+              {{ ingredient.expirationDate }}
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -27,11 +32,11 @@
     :propOpenPopover="closePopover"
     @closePopover="(closePopover = false), ingreModify(false)"
   >
-    <ion-list class="modify-popup">
+    <ion-list v-if="!propAddMode" class="modify-popup">
       <ion-list-header>
         <ion-toolbar>
           <ion-title mode="md">{{ ingredient.name }}</ion-title>
-          <ion-button color="dark" slot="end" @click="ingreModify(true)">{{
+          <ion-button color="dar  k" slot="end" @click="ingreModify(true)">{{
             modifyMode ? "수정하기" : "취소"
           }}</ion-button>
         </ion-toolbar>
@@ -74,6 +79,10 @@
           편집완료
         </ion-button>
       </ion-footer>
+    </ion-list>
+    <ion-list v-if="propAddMode">
+      <ion-list-header>{{ ingredient.name }}</ion-list-header>
+      <ion-item button @click="deleteIngredient()">삭제</ion-item>
     </ion-list>
   </app-popover>
 </template>
@@ -132,12 +141,16 @@ export default defineComponent({
         return {
           id: "errId",
           name: "errName",
-          updatedDate: new Date(),
+          updatedDate: "errDate",
           amount: "보통",
         };
       },
     },
     propMemoDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    propAddMode: {
       type: Boolean,
       default: false,
     },
@@ -148,7 +161,7 @@ export default defineComponent({
       },
     },
   },
-  emits: ["emitAddItems"],
+  emits: ["emitAddItems", "emitDelete"],
   setup(props, { emit }) {
     const store = useStore();
     const ingredient = computed(() => props.propIngredient);
@@ -167,7 +180,6 @@ export default defineComponent({
 
     //팝업 편집 버튼
     const modifyMode = ref(true);
-
     ////수정될 업데이트 날짜
     const inputedModifyUpdatedDate = ref();
     const ingreUpdatedDate = computed(() => {
@@ -187,6 +199,50 @@ export default defineComponent({
       else return inputedModifyMemo.value;
     });
 
+    //유통기한-보관날짜 (11일이상: 보통 / 10일이하 경고 / 4일이하 위험)
+    const expirationDateTag = computed(() => {
+      let upDate = new Date();
+      let exDate = new Date();
+      if (
+        ingredient.value.expirationDate !== undefined &&
+        ingredient.value.updatedDate !== undefined
+      ) {
+        const exDateArr = ingredient.value.expirationDate
+          .split("-")
+          .map((el) => Number(el));
+        const upDateArr = ingredient.value.updatedDate
+          .split("-")
+          .map((el) => Number(el));
+        upDate = new Date(
+          `${upDateArr[0]}/${upDateArr[1]}/${upDateArr[2] + 1}`
+        );
+        exDate = new Date(
+          `${exDateArr[0]}/${exDateArr[1]}/${exDateArr[2] + 1}`
+        );
+      }
+      const dateDifference =
+        (exDate.getTime() - upDate.getTime()) / (1000 * 60 * 60 * 24);
+      if (dateDifference < 0) return 0;
+      else if (dateDifference === 0) return 1;
+      else if (dateDifference <= 7) return 2;
+      else return 3;
+    });
+    const expirationDateTagName = computed(() => {
+      const tagValue = expirationDateTag.value;
+      if (tagValue === 0) return "지남";
+      else if (tagValue === 1) return "오늘";
+      else if (tagValue === 2) return "경고";
+      else return "보통";
+    });
+    const expirationDateTagColor = computed(() => {
+      const tagValue = expirationDateTag.value;
+      console.log(tagValue);
+      if (tagValue === 0) return "medium";
+      else if (tagValue === 1) return "danger";
+      else if (tagValue === 2) return "warning";
+      else return "success";
+    });
+
     const ingreModify = (toggle: boolean) => {
       if (toggle) modifyMode.value = !modifyMode.value;
       else modifyMode.value = true;
@@ -195,6 +251,7 @@ export default defineComponent({
       inputedModifyExpirationDate.value = undefined;
       inputedModifyMemo.value = undefined;
     };
+    //수정 버튼 클릭
     const Modifyingredient = () => {
       store
         .dispatch("frige/frizeIngredientModify", {
@@ -202,7 +259,7 @@ export default defineComponent({
           ingredientId: ingredient.value.id,
           frizeModifyData: {
             updatedDate: inputedModifyUpdatedDate.value,
-            expirationDate: inputedModifyUpdatedDate.value,
+            expirationDate: inputedModifyExpirationDate.value,
             memo: inputedModifyMemo.value,
           },
         })
@@ -210,6 +267,10 @@ export default defineComponent({
           closePopover.value = false;
           modifyMode.value = false;
         });
+    };
+    //삭제 버튼 클릭(재료 추가)
+    const deleteIngredient = () => {
+      emit("emitDelete", ingredient.value.id);
     };
     return {
       modifyMode,
@@ -228,6 +289,10 @@ export default defineComponent({
       inputedModifyMemo,
       inputedModifyExpirationDate,
       inputedModifyUpdatedDate,
+      deleteIngredient,
+      expirationDateTag,
+      expirationDateTagName,
+      expirationDateTagColor,
     };
   },
 });
@@ -236,7 +301,6 @@ export default defineComponent({
 ion-card {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
   width: 100%;
-  max-width: 375px;
   border: var(--custom-gray-04) 1px solid;
   margin-bottom: 8px;
   margin-top: 8px;
@@ -257,6 +321,7 @@ ion-card-content {
 .badge-container {
   height: 100%;
   line-height: 100%;
+  padding-top: 2px;
   vertical-align: middle;
   padding-left: 8px;
 }

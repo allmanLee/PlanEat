@@ -82,26 +82,25 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     fetchItemsBeAdd(state, payload) {
       const selectedItems: FrigeType[] = [];
-      const date = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
+      // const date = new Date();
+      // const year = date.getFullYear();
+      // const month = date.getMonth() + 1;
+      // const day = date.getDate();
 
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 10);
+      // const expirationDate = new Date();
+      // expirationDate.setDate(expirationDate.getDate() + 10);
 
 
       if (payload) {
         payload.forEach((element: FrigeType) => {
-          console.log(element.name);
-          const ItemId = String(year) + String(month) + String(day) + element.name;
+          const ItemId = element.updatedDate + element.name;
           const ItemObject: FrigeType = {
             name: element.name,
             memo: element.memo,
             amount: "보통",
             id: ItemId,
-            expirationDate: `${expirationDate.getFullYear()}-${expirationDate.getMonth()}-${expirationDate.getDate()}`,
-            updatedDate: `${year}-${month}-${day}`,
+            expirationDate: element.expirationDate,
+            updatedDate: element.updatedDate,
           };
           selectedItems.push(ItemObject);
           state.items.push(ItemObject);

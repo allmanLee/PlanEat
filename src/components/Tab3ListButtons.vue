@@ -2,11 +2,7 @@
   <ion-grid>
     <ion-row class="ion-justify-content-center">
       <ion-col>
-        <ion-col
-          size="auto"
-          v-for="(item, index) in sortedItems || []"
-          :key="index"
-        >
+        <ion-col size="auto" v-for="(item, index) of sortedItems" :key="index">
           <ion-row class="ion-justify-content-center">
             <ion-col size="auto">
               <!-- <tag-updated-date
@@ -46,11 +42,6 @@
             </ion-col>
           </ion-row>
         </ion-col>
-        <!-- <button-item-list
-          v-if="addButtonShow"
-          @emitAddItems="addItems"
-          :propMode="'addActive'"
-        ></button-item-list> -->
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -61,7 +52,7 @@
       :swipe-to-close="true"
       @didDismiss="openModal(false)"
     >
-      <Modal :title="'냉장고를 부탁해'" @submit="SubmitAddItems"
+      <Modal :title="'냉장고를 부탁해'"
         ><tab-3-modal-content
           @emitUpdatedItemsBeAdd="updatedItemsBeAdd"
         ></tab-3-modal-content
@@ -106,6 +97,7 @@ export default defineComponent({
     IonModal,
     ButtonItemList,
     Tab3ModalContent,
+    // TagUpdatedDate,
     IonItem,
     IonIcon,
     IonItemOptions,
@@ -116,6 +108,10 @@ export default defineComponent({
     propMemoDisabled: {
       type: Boolean,
       default: false,
+    },
+    propMode: {
+      type: Boolean,
+      dafault: false,
     },
   },
   setup() {
@@ -160,7 +156,6 @@ export default defineComponent({
     };
     const SubmitAddItems = () => {
       openModal(false);
-      store.commit("frige/fetchItemsBeAdd", itemsBeAdd);
     };
     const SubmitDeleteItem = (itemId: string) => {
       store.dispatch("frige/frizeIngredient", {
