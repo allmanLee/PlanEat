@@ -1,5 +1,6 @@
 //api를 보내기전 오류를 공통으로 처리합니다.
 
+import { config } from "@ionic/core";
 import axios from "axios";
 
 
@@ -8,40 +9,46 @@ const instance = axios.create({
 });
 
 // 인텀셉터를 활용하여 헤더에서 accessToken을 받아오거나 기능 사용시 헤더에 accessToken을 넣어 사용한다.
-// instance.interceptors.request.use(function(config) {
-//   const userInfo = sessionStorage.getItem("userAuthToken");
-//   const accessToken = userInfo ? sessionStorage.getItem("userAuthToken") : null;
-//   config.headers = { "X-AUTH-TOKEN": accessToken };
-//   return config;
-// });
+instance.interceptors.request.use(function (config) {
+  const acToken = localStorage.getItem("act");
+  // const userInfo = sessionStorage.getItem("userAuthToken");
+  // const accessToken = userInfo ? sessionStorage.getItem("userAuthToken") : null;
+  config.headers = { ...config.headers, "x-access-token": acToken ? acToken : "has not accessToken" };
+  return config;
+});
 
-// instance.interceptors.response.use(
-//   function(config) {
-//     // 요청 성공 직전 호출됩니다.
-//     // axios 설정값을 넣습니다. (사용자 정의 설정도 추가 가능)
-//     localStorage.setItem("version", "v1.00");
-//     console.log(sessionStorage.getItem("토큰가져옴"));
-//     instance.headers = {
-//       "X-AUTH-TOKEN": sessionStorage.getItem("userAuthToken"),
-//     };
-//     // this.$loading.hide();
-//     return config;
-//   },
-//   function(error) {
-//     //요청 에러 직전 호출됩니다.
-//     if (error.response.status === 403) {
-//       console.log("재로그인");
-//       userController.auth().then((res) => {
-//         alert("다시 시도해 보세요.");
-//         //window.location = '/main';
-//         //window.location.reload(true);
-//         //window.location();
-//         return res;
-//       });
-//     }
+instance.interceptors.response.use(
+  function (config) {
+    // 요청 성공 직전 호출됩니다.
+    // this.$loading.hide();
+    return config;
+  },
+  function (error) {
+    //토큰에러시
+    const err = error.response.data.message;
+    //요청 에러 직전 호출됩니다.
+    if (err === "jwt expired") {
+      const refreshToken = localStorage.getItem("reft");
+      instance({
+        headers: {
+          "x-refresh-token": refreshToken ? refreshToken : "has not refreshToken"
+        },
+        url: "/api/auth/refresh",
+        method: "get"
+      }).then((token) => {
+        localStorage.setItem("act", token.data.accessToken);
+        const newAccessToken = token.data.accessToken;
+        const reRequestConfig = error.response.config;
+        reRequestConfig.headers = {
+          ...reRequestConfig.headers
+          , "x-access-token": newAccessToken
+        };
+        axios.request(reRequestConfig);
+      });
+    }
 
-//   return Promise.reject(error);
-// }
-//);
+    return Promise.reject(error);
+  }
+);
 
 export default instance;

@@ -5,7 +5,7 @@
         <ion-thumbnail>
           <ion-button
             mode="ios"
-            color="dark"
+            color="dark" 
             fill="clear"
             @click="openPop(true)"
           >
@@ -97,7 +97,7 @@ export default defineComponent({
   setup(prop, { emit }) {
     const store = useStore();
     //카테고리 목 아이템배열
-    const cateItems = computed(() => prop.propCates);
+    const cateItems = computed(() => store.state.frige.frizeCate);
     const cateIndex = ref(0);
     const cateId = computed(() => {
       return store.state.frige.selectedCateId;

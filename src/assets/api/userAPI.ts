@@ -4,14 +4,14 @@ import requestApi from "./requestApi";
 
 export default {
   /*POST
- * /api/auth/register
- * 회원가입
+ * /api/auth/login
+ * 로그인
  */
   LoginToEmail(data: RegisterUser) {
     return requestApi({
       url: "/api/auth/login",
       method: "post",
-      data: data
+      data: data,
     });
   },
   /*POST

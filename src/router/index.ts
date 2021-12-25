@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "",
-        redirect: "/tabs/tab1",
+        redirect: "/tabs/tab3/tab3Add",
       },
       {
         path: "tab1",
@@ -43,10 +43,6 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: "tab3Add",
             component: () => import("@/views/Tab3/Tab3Add.vue"),
-          },
-          {
-            path: "tab3Remove",
-            component: () => import("@/views/Tab3/Tab3Remove.vue"),
           },
         ],
       },

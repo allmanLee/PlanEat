@@ -87,7 +87,6 @@ import {
 export default defineComponent({
   setup() {
     const store = useStore();
-    const cateIndex = ref(0);
     const testMock = ref(store.state.frige.frizeCate);
 
     //팝업 열기/닫기
@@ -113,7 +112,7 @@ export default defineComponent({
       .dispatch("frige/AllFrizeGet", {
         email: localStorage.getItem("email"),
       })
-      .then((data) => {
+      .then(() => {
         store.commit("frige/initFrizeCateselected");
         testMock.value = store.state.frige.frizeCate;
         store.dispatch("frige/frizeIngredientGet", {
@@ -131,22 +130,23 @@ export default defineComponent({
           })
           .then(() => {
             testMock.value = store.state.frige.frizeCate;
+            store.commit("frige/initFrizeCateselected");
           });
       } else
         alert(
-          "냉장고를 삭제할 수 없습니다. 최소 한개의 냉장고가 있어야합니다."
+          "냉장고를 삭제할 수 없습니다.\n최소 한 개의 냉장고가 있어야 합니다."
         );
     };
     //간편 알람 설정
-    const toggleAlarm = () => {
-      console.log("알람 설정");
-      return undefined;
-    };
+    // const toggleAlarm = () => {
+    //   console.log("알람 설정");
+    //   return undefined;
+    // };
 
     //툴바 버튼
     const toolBtnItems = [
       { icon: trashOutline, clickEvent: openPop },
-      { icon: notificationsOutline, clickEvent: toggleAlarm },
+      // { icon: notificationsOutline, clickEvent: toggleAlarm },
     ];
     const slideOpts = {
       slidesPerView: 5.5,
@@ -168,7 +168,6 @@ export default defineComponent({
       closeOutline,
       deleteCate,
       trashOutline,
-      toggleAlarm,
       notificationsOutline,
       stringSlice,
       openPop,

@@ -5,9 +5,9 @@
       <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content
           :pulling-icon="chevronDownCircleOutline"
-          pulling-text="Pull to refresh"
+          pulling-text="당겨서 새로고침!"
           refreshing-spinner="circles"
-          refreshing-text="Refreshing..."
+          refreshing-text="불러오는중..."
         >
         </ion-refresher-content>
       </ion-refresher>
@@ -19,6 +19,13 @@
         >
         </alaram-list-item>
       </ion-list>
+      <div v-if="showLogo" id="content" class="login-background">
+        <img
+          class="logo-img"
+          src="../../src/assets/img/logo/logo.svg"
+          alt="planeat logo"
+        />
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -37,12 +44,19 @@ import { defineComponent, ref } from "vue";
 import { fishOutline, chevronDownCircleOutline } from "ionicons/icons";
 import { useStore } from "@/store/index";
 import AlaramListItem from "@/components/AlaramListItem.vue";
+import { AlaramIngredientType } from "@/types/frige";
 export default defineComponent({
   setup() {
     const store = useStore();
 
     //냉장고 알람 아이템 배열
-    const frizeAlaram = ref();
+    const frizeAlaram = ref<AlaramIngredientType[]>();
+    const showLogo = ref(false);
+    if (frizeAlaram.value !== undefined) {
+      if (frizeAlaram.value.length === 0) {
+        showLogo.value = true;
+      }
+    }
 
     //냉장고 알람 아이템 GET
     const getFrizeAlaramItems = async () => {
@@ -57,6 +71,13 @@ export default defineComponent({
             })
             .then((data) => {
               frizeAlaram.value = store.state.frige.frizeAlaram;
+              if (frizeAlaram.value !== undefined) {
+                if (frizeAlaram.value.length === 0) {
+                  showLogo.value = true;
+                } else {
+                  showLogo.value = false;
+                }
+              }
             });
         });
     };
@@ -71,7 +92,13 @@ export default defineComponent({
       });
     };
 
-    return { fishOutline, frizeAlaram, doRefresh, chevronDownCircleOutline };
+    return {
+      fishOutline,
+      showLogo,
+      frizeAlaram,
+      doRefresh,
+      chevronDownCircleOutline,
+    };
   },
   components: {
     AppHeader,
@@ -85,4 +112,15 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+ion-content {
+  position: relative;
+  text-align: center;
+  .logo-img {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -70%);
+    filter: grayscale(100%);
+    opacity: 0.42;
+  }
+}
 </style>

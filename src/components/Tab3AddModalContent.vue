@@ -1,26 +1,31 @@
 <template>
   <ion-content scroll-y="false">
-    <ion-item lines="none">
-      <ion-label>재료 이름</ion-label>
+    <ion-list>
+      <ion-list-header>재료 이름</ion-list-header>
+
       <app-input
+        :propAutofocus="true"
         :propType="'text'"
         :propValue="inputedModifyName"
         @ionInput="inputedModifyName = $event.target.value"
       ></app-input>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>유통 기한</ion-label>
+    </ion-list>
+    <ion-list>
+      <ion-list-header>유통기한</ion-list-header>
       <app-input
         :type="'date'"
         :value="inputedModifyExpirationDate"
         @ionInput="inputedModifyExpirationDate = $event.target.value"
       ></app-input>
-    </ion-item>
-    <ion-button color="medium" expand="block" @click="pushItem()">
-      재료 담기
-    </ion-button>
-    <!-- 내용 확인하기 -->
-    <h5>추가될 재료</h5>
+    </ion-list>
+    <ion-list class="button-container">
+      <ion-button @click="pushItem()"> 재료 담기 </ion-button>
+      <!-- 내용 확인하기 -->
+    </ion-list>
+    <ion-list>
+      <hr />
+      <h5>추가될 재료</h5>
+    </ion-list>
     <ion-content>
       <card-button
         :propFrizeId="frizeId"
@@ -42,13 +47,7 @@
 import { computed, defineComponent, ref } from "vue";
 import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
-import {
-  IonContent,
-  IonButton,
-  IonFooter,
-  IonLabel,
-  IonItem,
-} from "@ionic/vue";
+import { IonContent, IonButton, IonFooter } from "@ionic/vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 import AppInput from "./AppInput.vue";
 import CardButton from "./cardButton.vue";
@@ -59,8 +58,7 @@ export default defineComponent({
     IonContent,
     IonButton,
     IonFooter,
-    IonItem,
-    IonLabel,
+
     AppInput,
     CardButton,
   },
@@ -122,8 +120,10 @@ export default defineComponent({
       );
       if (nameLengthCheck(inputedModifyName.value)) {
         if (selectedItems.value !== undefined)
-          if (hasName.length === 0) selectedItems.value.push(resultData);
-          else alert("이미 재료를 추가했습니다. 재료이름을 바꿔입력하세요.");
+          if (hasName.length === 0) {
+            inputedModifyName.value = "";
+            selectedItems.value.push(resultData);
+          } else alert("이미 재료를 추가했습니다. 재료이름을 바꿔입력하세요.");
       }
     };
     //추가하기
@@ -133,6 +133,7 @@ export default defineComponent({
         ingredientAdd: selectedItems.value,
       };
       emit("emitAddItem");
+      inputedModifyName.value = "";
       store.dispatch("frige/frizeIngredient", reqData);
     };
     //삭제
@@ -156,25 +157,33 @@ export default defineComponent({
 ion-content {
   --padding-start: 16px;
   --padding-end: 16px;
+  ion-list {
+    hr {
+      background-color: var(--custom-gray-04);
+      width: 100%;
+      height: 2px;
+    }
+    ion-list-header {
+      padding-left: 0px;
+      padding-bottom: 10px;
+      font-size: rem-calc(16px);
+    }
+  }
+  ion-list.button-container {
+    text-align: center;
+    ion-button {
+      --background: var(--custom-gray-02);
+      --background-activated: var(--custom-gray-01);
+      --padding-start: 32px;
+      --padding-end: 32px;
+      --box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.24) !important;
+      margin-top: 26px;
+      margin-bottom: 26px;
+    }
+  }
   h5 {
-    margin-top: 40px;
-    margin-bottom: 0px;
-  }
-  ion-item {
-    --padding-top: 4px;
-    --padding-bottom: 4px;
-    ion-label {
-      font-weight: 600;
-      font-size: rem-calc(16px);
-    }
-    ion-label {
-      font-weight: 600;
-      min-width: 80px;
-      font-size: rem-calc(16px);
-    }
-  }
-  ion-button {
     margin-top: 12px;
+    margin-bottom: 0px;
   }
 
   ion-content {

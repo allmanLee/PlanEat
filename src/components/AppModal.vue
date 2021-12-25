@@ -1,7 +1,7 @@
 <template>
   <ion-header mode="ios">
     <ion-toolbar>
-      <ion-title class="header-title">{{ headerTitle }}</ion-title>
+      <ion-title mode="md" class="header-title">{{ headerTitle }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <slot></slot>
