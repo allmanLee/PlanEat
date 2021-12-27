@@ -1,11 +1,9 @@
 //api를 보내기전 오류를 공통으로 처리합니다.
-
-import { config } from "@ionic/core";
 import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: "http://172.31.168.14:3001",
+  baseURL: "http://54.95.145.25:3001",
 });
 
 // 인텀셉터를 활용하여 헤더에서 accessToken을 받아오거나 기능 사용시 헤더에 accessToken을 넣어 사용한다.
@@ -28,7 +26,7 @@ instance.interceptors.request.use(async function (config) {
         ...config.headers,
         "x-refresh-token": refreshToken ? refreshToken : "has not refreshToken"
       },
-      url: "http://172.31.168.14:3001/api/auth/refresh",
+      url: "http://54.95.145.25:3001/api/auth/refresh",
       method: "get"
     }).then((token) => {
       localStorage.setItem("act", token.data.accessToken);
