@@ -18,7 +18,7 @@
         ></ion-icon
         >카카오 로그인</ion-button
       >
-      <ion-button mode="ios" class="button-naver"
+      <ion-button mode="ios" class="button-naver" @click="onClickNaverLogin()"
         ><ion-icon
           class="naver-login-button-icon"
           slot="start"
@@ -101,8 +101,11 @@ export default defineComponent({
         },
       });
     };
+    const onClickNaverLogin = () => {
+      alert("네이버 로그인 준비중입니다.");
+    };
 
-    return { onClickLogin };
+    return { onClickLogin, onClickNaverLogin };
   },
   components: {
     IonPage,
