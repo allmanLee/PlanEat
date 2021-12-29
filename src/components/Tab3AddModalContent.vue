@@ -47,7 +47,13 @@
 import { computed, defineComponent, ref } from "vue";
 import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
-import { IonContent, IonButton, IonFooter } from "@ionic/vue";
+import {
+  IonContent,
+  IonButton,
+  IonFooter,
+  IonList,
+  IonListHeader,
+} from "@ionic/vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 import AppInput from "./AppInput.vue";
 import CardButton from "./cardButton.vue";
@@ -58,7 +64,8 @@ export default defineComponent({
     IonContent,
     IonButton,
     IonFooter,
-
+    IonList,
+    IonListHeader,
     AppInput,
     CardButton,
   },

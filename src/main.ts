@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import { store, key } from './store';
 import { IonicVue } from "@ionic/vue";
+import { createVueKakaoSdk } from 'vue3-kakao-sdk';
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
@@ -24,10 +25,11 @@ import "@/theme/variables.css";
 import "@/assets/css/globle.scss";
 import "@/assets/css/custom.scss";
 import "@/assets/css/base.scss";
-/* youtube player api plugin */
-import YoutubeIframe from '@techassi/vue-youtube-iframe';
 
-const app = createApp(App).use(store, key).use(IonicVue).use(router).use(YoutubeIframe);
+
+
+
+const app = createApp(App).use(store, key).use(IonicVue).use(router).use(createVueKakaoSdk('a4c31b869ad4d106aac99ef115f4be70'));
 
 router.isReady().then(() => {
   app.mount("#app");

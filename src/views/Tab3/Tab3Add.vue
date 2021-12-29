@@ -97,10 +97,6 @@ export default defineComponent({
 
     //냉장고 아이디로
     const frizeSeletedId = computed(() => store.state.frige.selectedCateId);
-    //재료 데이터 가져오기(식약처 API)
-    ingredientAPI.GetIngredientData().then((data) => {
-      console.log(data);
-    });
 
     //냉장고 이름
     const frizeSeletedName = computed(() =>

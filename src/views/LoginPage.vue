@@ -10,7 +10,7 @@
       </div>
     </ion-content>
     <ion-footer class="footer-container">
-      <ion-button class="button-kakao"
+      <ion-button mode="ios" class="button-kakao" @click="onClickLogin()"
         ><ion-icon
           class="kakao-login-button-icon"
           slot="start"
@@ -18,7 +18,7 @@
         ></ion-icon
         >카카오 로그인</ion-button
       >
-      <ion-button class="button-naver"
+      <ion-button mode="ios" class="button-naver"
         ><ion-icon
           class="naver-login-button-icon"
           slot="start"
@@ -28,12 +28,13 @@
       >
 
       <ion-button
+        mode="ios"
         class="email-login-button"
         color="dark"
         size="small"
         fill="clear"
-        ><ion-router-link color="black" href="/register">
-          이메일로 로그인 / 회원가입</ion-router-link
+        ><router-link color="black" to="/register">
+          이메일로 로그인 / 회원가입</router-link
         ></ion-button
       >
     </ion-footer>
@@ -41,13 +42,74 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonPage, IonContent, IonFooter } from "@ionic/vue";
+import { IonPage, IonContent, IonFooter, IonIcon, IonButton } from "@ionic/vue";
+import { useKakao } from "vue3-kakao-sdk";
+import { useRouter } from "vue-router";
+import { useStore } from "@/store/index";
+import snsAPI from "@/assets/api/snsAPI";
+import { AuthSNSOption } from "@/types/request-types/auth-request-types";
 
 export default defineComponent({
+  setup() {
+    const router = useRouter();
+    const { kakao } = useKakao();
+    const store = useStore();
+    //카카오 회원정보 불러오기(DB에 저장합니다.)
+    const getKakaouUserInfo = async () => {
+      kakao.value.API.request({
+        url: "/v2/user/me",
+        success: function (res) {
+          const reqData: AuthSNSOption = {
+            email: res.kakao_account.email,
+            snsType: "kakao",
+          };
+          snsAPI.ControllerSNS(reqData).then((res) => {
+            localStorage.setItem("act", res.data.dataObj.acToken);
+            localStorage.setItem("ref", res.data.dataObj.refToken);
+            if (res.data.dataObj.method === "register")
+              store.dispatch("frige/frizeAdd", {
+                email: reqData.email,
+                frizeName: "냉장고",
+              });
+            router.push("/tabs");
+          });
+        },
+        fail: function (err) {
+          alert(
+            "login success, but failed to request user information: " +
+              JSON.stringify(err)
+          );
+        },
+      });
+    };
+
+    //카카오 로그인
+    const onClickLogin = async () => {
+      // console.log("카카오 로그인")
+      await kakao.value.Auth.login({
+        async success(resData) {
+          const acToken = resData.access_token;
+          const refToken = resData.refresh_token;
+          kakao.value.Auth.setAccessToken(acToken);
+          localStorage.setItem("kakao_ac", acToken);
+          localStorage.setItem("kakao_ref", refToken);
+
+          await getKakaouUserInfo();
+        },
+        fail(err) {
+          alert(err);
+        },
+      });
+    };
+
+    return { onClickLogin };
+  },
   components: {
     IonPage,
     IonContent,
     IonFooter,
+    IonIcon,
+    IonButton,
   },
 });
 </script>

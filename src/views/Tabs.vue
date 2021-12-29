@@ -3,19 +3,13 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar>
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
-          <ion-icon :icon="homeOutline" />
-          <ion-label>홈</ion-label>
-        </ion-tab-button>
-
-        <ion-tab-button tab="tab1" href="/tabs/tab1">
-          <ion-icon :icon="notificationsOutline" />
-          <ion-label>알림</ion-label>
-        </ion-tab-button>
-
         <ion-tab-button tab="tab3" href="/tabs/tab3">
           <ion-icon :icon="fishOutline"></ion-icon>
           <ion-label>냉장고</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="tab1" href="/tabs/tab1">
+          <ion-icon :icon="notificationsOutline" />
+          <ion-label>알림</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

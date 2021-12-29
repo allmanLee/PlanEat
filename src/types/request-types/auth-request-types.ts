@@ -9,3 +9,10 @@ export interface AuthUser extends Email {
 export interface RegisterUser extends Email {
   password: string;
 }
+
+export interface AuthSNSOption {
+  email: string;
+  snsType: string;
+  acToken?: string;
+  refToken?: string;
+}
