@@ -18,5 +18,9 @@
 	{
 		"pkg": "@capacitor/status-bar",
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
+	},
+	{
+		"pkg": "capacitor3-kakao-login",
+		"classpath": "com.fumi.capacitor3_kakao_login.Capacitor3KakaoLoginPlugin"
 	}
 ]

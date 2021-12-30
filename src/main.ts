@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import { store, key } from './store';
 import { IonicVue } from "@ionic/vue";
-import { createVueKakaoSdk } from 'vue3-kakao-sdk';
+import { createVueKakaoSdk, Kakao } from 'vue3-kakao-sdk';
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
@@ -25,9 +25,11 @@ import "@/theme/variables.css";
 import "@/assets/css/globle.scss";
 import "@/assets/css/custom.scss";
 import "@/assets/css/base.scss";
+import { KakaoENV } from "../kakao-key";
+import { Capacitor3KakaoLogin } from 'capacitor3-kakao-login';
 
-
-
+// eslint-disable-next-line @typescript-eslint/camelcase
+Capacitor3KakaoLogin.initializeKakao({ web_key: "a4c31b869ad4d106aac99ef115f4be70", app_key: "533c1f3f6722eb148d22c636cf843e3e" });
 
 const app = createApp(App).use(store, key).use(IonicVue).use(router).use(createVueKakaoSdk('a4c31b869ad4d106aac99ef115f4be70'));
 

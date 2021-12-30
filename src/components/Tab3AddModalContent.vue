@@ -153,6 +153,7 @@ export default defineComponent({
       inputedModifyUpdatedDate,
       inputedModifyExpirationDate,
       pushItem,
+      frizeId,
       emitedDelete,
       selectedItems,
       addItems,

@@ -41,68 +41,67 @@
   </ion-page>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { IonPage, IonContent, IonFooter, IonIcon, IonButton } from "@ionic/vue";
 import { useKakao } from "vue3-kakao-sdk";
 import { useRouter } from "vue-router";
 import { useStore } from "@/store/index";
 import snsAPI from "@/assets/api/snsAPI";
 import { AuthSNSOption } from "@/types/request-types/auth-request-types";
-
+import { Capacitor3KakaoLogin } from "capacitor3-kakao-login";
 export default defineComponent({
   setup() {
     const router = useRouter();
     const { kakao } = useKakao();
     const store = useStore();
+
+    if (localStorage.getItem("reft")) {
+      router.push("/tabs");
+    }
     //카카오 회원정보 불러오기(DB에 저장합니다.)
-    const getKakaouUserInfo = async () => {
-      kakao.value.API.request({
-        url: "/v2/user/me",
-        success: function (res) {
-          const reqData: AuthSNSOption = {
-            email: res.kakao_account.email,
-            snsType: "kakao",
-          };
-          snsAPI.ControllerSNS(reqData).then((res) => {
-            localStorage.setItem("act", res.data.dataObj.acToken);
-            localStorage.setItem("ref", res.data.dataObj.refToken);
-            if (res.data.dataObj.method === "register")
-              store.dispatch("frige/frizeAdd", {
-                email: reqData.email,
-                frizeName: "냉장고",
-              });
-            router.push("/tabs");
+    const createServiceMember = async (email: string) => {
+      const reqData: AuthSNSOption = {
+        email: email,
+        snsType: "kakao",
+      };
+      snsAPI.ControllerSNS(reqData).then((res) => {
+        localStorage.setItem("act", res.data.dataObj.acToken);
+        localStorage.setItem("reft", res.data.dataObj.refToken);
+        if (res.data.dataObj.method === "register")
+          store.dispatch("frige/frizeAdd", {
+            email: reqData.email,
+            frizeName: "냉장고",
           });
-        },
-        fail: function (err) {
-          alert(
-            "login success, but failed to request user information: " +
-              JSON.stringify(err)
-          );
-        },
+        router.push("/tabs");
       });
+    };
+    //사용자 정보 가져오기
+    const getKakaoUserInfo = async () => {
+      return await Capacitor3KakaoLogin.kakaoRequestMe()
+        .then((res: any) => {
+          if (!res.value.kakao_account) {
+            if (!res.value.id) {
+              return res.value;
+            }
+            return res.value.id;
+          } else return res.value.kakao_account.email;
+        })
+        .catch((err: any) => alert(err));
     };
 
     //카카오 로그인
     const onClickLogin = async () => {
-      // console.log("카카오 로그인")
-      await kakao.value.Auth.login({
-        async success(resData) {
-          const acToken = resData.access_token;
-          const refToken = resData.refresh_token;
-          kakao.value.Auth.setAccessToken(acToken);
-          localStorage.setItem("kakao_ac", acToken);
-          localStorage.setItem("kakao_ref", refToken);
-
-          await getKakaouUserInfo();
-        },
-        fail(err) {
-          alert(err);
-        },
-      });
+      Capacitor3KakaoLogin.kakaoLogin()
+        .then(() => {
+          setTimeout(() => {
+            getKakaoUserInfo().then((data: any) => createServiceMember(data));
+          }, 1000);
+        })
+        .catch((err: any) => console.log(err));
     };
     const onClickNaverLogin = () => {
-      alert("네이버 로그인 준비중입니다.");
+      alert("로그아웃");
+      Capacitor3KakaoLogin.kakaoUnlink();
     };
 
     return { onClickLogin, onClickNaverLogin };

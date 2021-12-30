@@ -1,5 +1,6 @@
 import { AuthSNSOption } from "@/types/request-types/auth-request-types";
 import requestApi from "./requestApi";
+import { KakaoCordovaSDK, AuthTypes } from 'kakao-sdk';
 export default {
   /*POST
  * /api/auth/login
@@ -11,5 +12,8 @@ export default {
       method: "post",
       data: data
     }).then(data => data).catch(err => err);
-  }
+  },
+
 };
+
+
