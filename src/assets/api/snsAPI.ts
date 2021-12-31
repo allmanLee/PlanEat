@@ -11,7 +11,14 @@ export default {
       url: "/api/auth/controllerToSNS",
       method: "post",
       data: data
-    }).then(data => data).catch(err => err);
+    }).then((res) => {
+      const exDate = new Date();
+      exDate.setMinutes(exDate.getMinutes() + 20);
+      localStorage.setItem("actExTime", String(exDate));
+      localStorage.setItem("act", res.data.dataObj.acToken);
+      localStorage.setItem("reft", res.data.dataObj.refToken);
+      return res;
+    }).catch(err => err);
   },
 
 };

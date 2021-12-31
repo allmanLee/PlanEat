@@ -8,7 +8,7 @@
   ></ion-input>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, toRefs } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { IonInput } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 import { useStore } from "@/store/index";
@@ -31,7 +31,6 @@ export default defineComponent({
   },
   components: { IonInput },
   setup(props) {
-    const store = useStore();
     const Autofocus = computed(() => {
       return props.propAutofocus;
     });

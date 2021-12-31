@@ -54,7 +54,7 @@ import { useRouter, useRoute } from "vue-router";
 export default defineComponent({
   emits: ["emitPage"],
   setup(props, { emit }) {
-    const subLable = ref(""); // 회원가입 경고 라벨
+    const sublabel = ref(""); // 회원가입 경고 라벨
     const loginEmail = ref(""); //이메일
     const loginPassword = ref(""); // 비밀번호
     const pwInputType = ref("password");
@@ -72,10 +72,7 @@ export default defineComponent({
           email: loginEmail.value,
           password: loginPassword.value,
         })
-        .then((res) => {
-          localStorage.setItem("act", res.data.returnObj.token);
-          localStorage.setItem("reft", res.data.returnObj.ref_token);
-          localStorage.setItem("email", loginEmail.value);
+        .then(() => {
           router.push({
             path: "/tabs/",
           });
@@ -89,7 +86,7 @@ export default defineComponent({
       emit("emitPage");
     };
     return {
-      subLable,
+      sublabel,
       loginEmail,
       loginPassword,
       pwInputType,

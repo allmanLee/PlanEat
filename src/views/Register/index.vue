@@ -8,7 +8,7 @@
       </login-to-email>
       <register-input-email
         v-if="pageCnt === 1"
-        :propEmailSubLable="EmailSubLable"
+        :propEmailSublabel="EmailSublabel"
         @emitEmail="emitedEmail"
       ></register-input-email>
       <register-input-pw
@@ -18,7 +18,7 @@
       <register-input-auth
         v-if="pageCnt === 3"
         :propEmail="email"
-        :propAuthSubLable="authSubLable"
+        :propAuthSublabel="authSublabel"
         @emitAuth="emitedAuth"
       ></register-input-auth>
       <div v-if="pageCnt !== 0">
@@ -78,6 +78,8 @@ export default defineComponent({
     const activeAthBtn = ref(false);
     const activeCnBtn = ref(false); //버튼 활성화 여부
     const pageCnt = ref(0); //[이메일입력(0)-> 비밀번호 입력(1) -> 이메일 인증(2) -> 홈으로(3)]
+    const popDisabled = ref(false); //팝업
+
     //올바른 이메일의 형식인지 검사합니다.
     const isEmail = (email: string) => {
       const EMAIL_PATTERN =
@@ -109,10 +111,25 @@ export default defineComponent({
         activeAthBtn.value = true;
       } else activeAthBtn.value = false;
     };
-    const EmailSubLable = ref("");
-    const authSubLable = ref("");
-    //계속하기
-    const popDisabled = ref(false);
+    const EmailSublabel = ref("");
+    const authSublabel = ref("");
+    //로그인
+    const loginAPI = () => {
+      return userAPI.LoginToEmail({
+        email: email.value,
+        password: password.value,
+      });
+    };
+
+    //회원가입
+    const regestAPI = () => {
+      return userAPI.RegisterToEmail({
+        email: email.value,
+        password: password.value,
+      });
+    };
+
+    //계속하기(비즈니스 로직)
     const clickCnBtn = () => {
       if (pageCnt.value === 1)
         userAPI
@@ -122,37 +139,26 @@ export default defineComponent({
             pageCnt.value++;
             return data;
           })
-          .catch((err) => {
-            EmailSubLable.value = "이미 존재하는 이메일입니다.";
+          .catch(() => {
+            EmailSublabel.value = "이미 존재하는 이메일입니다.";
           });
       if (pageCnt.value === 2) {
-        userAPI
-          .RegisterToEmail({ email: email.value, password: password.value })
-          .then(() => {
-            pageCnt.value++;
-            activeCnBtn.value = false;
-            popDisabled.value = true;
+        regestAPI().then(() => {
+          pageCnt.value++;
+          activeCnBtn.value = false;
+          popDisabled.value = true;
+          loginAPI().then(() =>
             store.dispatch("frige/frizeAdd", {
               email: email.value,
               frizeName: "냉장고",
-            });
-          });
+            })
+          );
+        });
       }
       if (pageCnt.value === 3) {
-        //로그인부분
-        userAPI
-          .LoginToEmail({
-            email: email.value,
-            password: password.value,
-          })
-          .then((res) => {
-            localStorage.setItem("act", res.data.returnObj.token);
-            localStorage.setItem("reft", res.data.returnObj.ref_token);
-            localStorage.setItem("email", email.value);
-            router.push({
-              path: "/tabs/",
-            });
-          });
+        router.push({
+          path: "/tabs/",
+        });
       }
     };
 
@@ -165,11 +171,12 @@ export default defineComponent({
           activeAthBtn.value = false;
         })
         .catch(() => {
-          authSubLable.value = "인증코드가 올바르지 않습니다.";
+          authSublabel.value = "인증코드가 올바르지 않습니다.";
         });
     };
-    const spinnerShow = ref(false);
+
     //popover disable
+    const spinnerShow = ref(false);
     const popoverOff = () => {
       spinnerShow.value = true;
       userAPI.SendAuthEmail({ email: email.value }).then(() => {
@@ -180,12 +187,12 @@ export default defineComponent({
     };
 
     return {
-      EmailSubLable,
+      EmailSublabel,
       emitedEmail,
       emitedAuth,
       spinnerShow,
       clickAthBtn,
-      authSubLable,
+      authSublabel,
       email,
       emitedPw,
       auth,

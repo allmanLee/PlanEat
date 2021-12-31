@@ -32,7 +32,7 @@
         <ion-icon :icon="authVisiable ? eye : eyeOff"></ion-icon>
       </ion-button>
     </ion-item>
-    <p class="sub-lable">{{ propAuthSubLable }}</p>
+    <p class="sub-label">{{ propAuthSublabel }}</p>
     <ion-label class="countdown-label"
       ><p>{{ count }}초 남음</p></ion-label
     >
@@ -41,15 +41,15 @@
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from "vue";
 import { eye, eyeOff } from "ionicons/icons";
-import { IonText, IonIcon, IonItem, IonButton } from "@ionic/vue";
+import { IonText, IonIcon, IonItem, IonButton, IonLabel } from "@ionic/vue";
 import userAPI from "@/assets/api/userAPI";
 import AppInput from "@/components/AppInput.vue";
 
 export default defineComponent({
-  props: { propEmail: String, propAuthSubLable: String },
+  props: { propEmail: String, propAuthSublabel: String },
   emits: ["emitAuth"],
   setup(props, { emit }) {
-    const subLable = ref(""); // 회원가입 경고 라벨
+    const sublabel = ref(""); // 회원가입 경고 라벨
     const inputedAuth = ref(""); // 비밀번호
     const authInputType = ref("password");
     const authVisiable = ref(false);
@@ -92,7 +92,7 @@ export default defineComponent({
     };
 
     return {
-      subLable,
+      sublabel,
       authInputType,
       inputedAuth,
       eye,
@@ -111,6 +111,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
     IonItem,
+    IonLabel,
     AppInput,
   },
 });

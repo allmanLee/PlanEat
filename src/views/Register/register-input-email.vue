@@ -9,7 +9,7 @@
       :propType="'email'"
       @ionInput="emitEmail($event.target.value)"
     ></app-input>
-    <p color="black" class="sub-lable">{{ propEmailSubLable }}</p>
+    <p color="black" class="sub-label">{{ propEmailSublabel }}</p>
   </div>
 </template>
 <script lang="ts">
@@ -19,22 +19,21 @@ import userAPI from "@/assets/api/userAPI";
 import AppInput from "@/components/AppInput.vue";
 
 export default defineComponent({
-  props: ["propEmailSubLable"],
+  props: ["propEmailSublabel"],
   emits: ["emitEmail"],
   setup(props, { emit }) {
-    const subLable = ref(""); // 회원가입 경고 라벨
+    const sublabel = ref(""); // 회원가입 경고 라벨
     const inputedEmail = ref(); // 이메일
 
     const emitEmail = (input: any) => {
       inputedEmail.value = input;
       emit("emitEmail", inputedEmail);
-      console.log(input);
     };
 
     return {
       emitEmail,
       inputedEmail,
-      subLable,
+      sublabel,
     };
   },
   components: {

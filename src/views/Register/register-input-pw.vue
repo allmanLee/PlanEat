@@ -36,7 +36,7 @@
         <ion-icon :icon="pwVisiable2 ? eye : eyeOff"></ion-icon>
       </ion-button>
     </ion-item>
-    <p color="black" class="sub-lable">{{ subLable }}</p>
+    <p color="black" class="sub-label">{{ sublabel }}</p>
   </div>
 </template>
 <script lang="ts">
@@ -49,7 +49,7 @@ import AppInput from "@/components/AppInput.vue";
 export default defineComponent({
   emits: ["emitPw"],
   setup(props, { emit }) {
-    const subLable = ref(""); // 회원가입 경고 라벨
+    const sublabel = ref(""); // 회원가입 경고 라벨
     const inputedPw = ref(""); // 비밀번호
     const inputedPwRe = ref(""); //비밀번호 재입력
     const pwInputType = ref("password");
@@ -69,21 +69,21 @@ export default defineComponent({
       const eng = password.search(/[a-z]/gi);
       const spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
       if (password.length < 10 || password.length > 20) {
-        subLable.value = "10자리 ~ 20자리 이내로 입력해주세요.";
+        sublabel.value = "10자리 ~ 20자리 이내로 입력해주세요.";
         return false;
       } else if (password.search(/\s/) != -1) {
-        subLable.value = "비밀번호는 공백 없이 입력해주세요.";
+        sublabel.value = "비밀번호는 공백 없이 입력해주세요.";
         return false;
       } else if (
         (num < 0 && eng < 0) ||
         (eng < 0 && spe < 0) ||
         (spe < 0 && num < 0)
       ) {
-        subLable.value =
+        sublabel.value =
           "영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
         return false;
       } else {
-        subLable.value = "";
+        sublabel.value = "";
         return true;
       }
     };
@@ -99,10 +99,10 @@ export default defineComponent({
       let isSame = false;
       if (inputedPw.value === inputedPwRe.value) {
         isSame = true;
-        subLable.value = "";
+        sublabel.value = "";
       } else {
         isSame = false;
-        subLable.value = "비밀번호가 일치하지 않습니다.";
+        sublabel.value = "비밀번호가 일치하지 않습니다.";
       }
       if (isPassword(password))
         emit("emitPw", { password: inputedPw.value, isSame: isSame });
@@ -120,7 +120,7 @@ export default defineComponent({
       isPassword,
       emitPassword,
       emitRePassword,
-      subLable,
+      sublabel,
       pwInputType,
       inputedPw,
       eye,

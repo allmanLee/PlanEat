@@ -20,6 +20,7 @@ instance.interceptors.request.use(async function (config) {
   const nowDate = new Date();
   if (date <= nowDate) {
     const refreshToken = localStorage.getItem("reft");
+    console.log("requestAPi: 토큰 만료");
     //access 토큰 받아옴
     await axios.request({
       headers: {
@@ -40,7 +41,7 @@ instance.interceptors.request.use(async function (config) {
 
       return token;
     }).catch((err) => err);
-  } else console.log("안지남");
+  }
 
 
 

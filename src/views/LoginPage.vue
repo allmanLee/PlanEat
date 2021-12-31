@@ -18,14 +18,6 @@
         ></ion-icon
         >카카오 로그인</ion-button
       >
-      <ion-button mode="ios" class="button-naver" @click="onClickNaverLogin()"
-        ><ion-icon
-          class="naver-login-button-icon"
-          slot="start"
-          name="naver"
-        ></ion-icon>
-        네이버 아이디로 로그인</ion-button
-      >
 
       <ion-button
         mode="ios"
@@ -65,16 +57,16 @@ export default defineComponent({
         snsType: "kakao",
       };
       snsAPI.ControllerSNS(reqData).then((res) => {
-        localStorage.setItem("act", res.data.dataObj.acToken);
-        localStorage.setItem("reft", res.data.dataObj.refToken);
+        console.log(res);
         if (res.data.dataObj.method === "register")
           store.dispatch("frige/frizeAdd", {
             email: reqData.email,
             frizeName: "냉장고",
           });
-        router.push("/tabs");
+        router.push("/tabs/tab3/tab3Add");
       });
     };
+
     //사용자 정보 가져오기
     const getKakaoUserInfo = async () => {
       return await Capacitor3KakaoLogin.kakaoRequestMe()
@@ -99,12 +91,7 @@ export default defineComponent({
         })
         .catch((err: any) => console.log(err));
     };
-    const onClickNaverLogin = () => {
-      alert("로그아웃");
-      Capacitor3KakaoLogin.kakaoUnlink();
-    };
-
-    return { onClickLogin, onClickNaverLogin };
+    return { onClickLogin };
   },
   components: {
     IonPage,
