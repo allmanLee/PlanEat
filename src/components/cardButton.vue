@@ -220,6 +220,7 @@ export default defineComponent({
           `${exDateArr[0]}/${exDateArr[1]}/${exDateArr[2] + 1}`
         );
       }
+      console.log(upDate);
       const dateDifference =
         (exDate.getTime() - upDate.getTime()) / (1000 * 60 * 60 * 24);
       if (dateDifference < 0) return 0;
@@ -236,7 +237,6 @@ export default defineComponent({
     });
     const expirationDateTagColor = computed(() => {
       const tagValue = expirationDateTag.value;
-      console.log(tagValue);
       if (tagValue === 0) return "medium";
       else if (tagValue === 1) return "danger";
       else if (tagValue === 2) return "warning";

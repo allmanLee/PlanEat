@@ -11,7 +11,6 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { IonInput } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
-import { useStore } from "@/store/index";
 
 export default defineComponent({
   props: {

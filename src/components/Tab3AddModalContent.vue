@@ -1,27 +1,29 @@
 <template>
   <ion-content scroll-y="false">
     <ion-list>
-      <ion-list-header>재료 이름</ion-list-header>
-
-      <app-input
-        :propAutofocus="true"
-        :propType="'text'"
-        :propValue="inputedModifyName"
-        @ionInput="inputedModifyName = $event.target.value"
-      ></app-input>
-    </ion-list>
-    <ion-list>
       <ion-list-header>유통기한</ion-list-header>
       <app-input
         :type="'date'"
+        id="dateInput"
         :value="inputedModifyExpirationDate"
         @ionInput="inputedModifyExpirationDate = $event.target.value"
       ></app-input>
     </ion-list>
-    <ion-list class="button-container">
-      <ion-button @click="pushItem()"> 재료 담기 </ion-button>
-      <!-- 내용 확인하기 -->
+    <ion-list>
+      <ion-list-header>재료 이름</ion-list-header>
+      <app-input
+        :propType="'text'"
+        id="nameInput"
+        :propValue="inputedModifyName"
+        @ionInput="inputedModifyName = $event.target.value"
+        @ionFocus="activeInputFocused()"
+        @ionBlur="unActiveInputFocused()"
+      ></app-input>
     </ion-list>
+
+    <!-- <ion-list class="button-container">
+      <ion-button @click="pushItem()"> 재료 담기 </ion-button>
+    </ion-list> -->
     <ion-list>
       <hr />
       <h5>추가될 재료</h5>
@@ -40,12 +42,20 @@
     </ion-content>
   </ion-content>
   <ion-footer mode="ios">
-    <ion-button expand="full" @click="addItems">추가하기</ion-button>
+    <transition name="fade" mode="out-in">
+      <ion-button
+        :expand="isFocused ? 'full' : 'block'"
+        :class="isFocused ? '' : 'save-button'"
+        v-bind:key="isFocused"
+        :color="isFocused ? 'tertiary' : 'primary'"
+        @click="isFocused ? pushItem() : addItems()"
+        >{{ buttonMessage }}</ion-button
+      >
+    </transition>
   </ion-footer>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
-import { VueEvent } from "@/types/event.js";
 import { useStore } from "@/store/index";
 import {
   IonContent,
@@ -54,7 +64,7 @@ import {
   IonList,
   IonListHeader,
 } from "@ionic/vue";
-import { FrigeType, IngredientType } from "@/types/frige";
+import { FrigeType } from "@/types/frige";
 import AppInput from "./AppInput.vue";
 import CardButton from "./cardButton.vue";
 import { FrizeIngreModify } from "@/types/request-types/frize-request-types";
@@ -73,7 +83,6 @@ export default defineComponent({
   setup(prop, { emit }) {
     const store = useStore();
     const selectedItems = ref<FrigeType[]>([]);
-
     //냉장고 아이디
     const frizeId = computed(() => store.state.frige.selectedCateId);
 
@@ -97,8 +106,27 @@ export default defineComponent({
         )}`;
       inputedModifyUpdatedDate.value = formatDate(date);
       dateEx.setDate(dateEx.getDate() + 10);
-      console.log(formatDate(dateEx));
       inputedModifyExpirationDate.value = formatDate(dateEx);
+    };
+
+    const isFocused = ref(false);
+    //재료 추가(버튼 트렌지션)
+    const buttonMessage = computed(() => {
+      switch (isFocused.value) {
+        case false:
+          return "추가 완료";
+        case true:
+          return `${inputedModifyName.value} 추가`;
+      }
+      return undefined;
+    });
+    const activeInputFocused = () => {
+      isFocused.value = true;
+    };
+    const unActiveInputFocused = () => {
+      setTimeout(() => {
+        isFocused.value = false;
+      }, 200);
     };
 
     //초기 날짜 설정
@@ -135,13 +163,16 @@ export default defineComponent({
     };
     //추가하기
     const addItems = () => {
+      if (selectedItems.value.length === 0) return emit("emitAddItem");
       const reqData: FrizeIngreModify = {
         frizeId: frizeId.value,
         ingredientAdd: selectedItems.value,
       };
       emit("emitAddItem");
       inputedModifyName.value = "";
-      store.dispatch("frige/frizeIngredient", reqData);
+      store
+        .dispatch("frige/frizeIngredient", reqData)
+        .then(() => (selectedItems.value = []));
     };
     //삭제
     const emitedDelete = (id: string) => {
@@ -156,7 +187,11 @@ export default defineComponent({
       frizeId,
       emitedDelete,
       selectedItems,
+      isFocused,
       addItems,
+      activeInputFocused,
+      unActiveInputFocused,
+      buttonMessage,
     };
   },
 });
@@ -169,7 +204,7 @@ ion-content {
     hr {
       background-color: var(--custom-gray-04);
       width: 100%;
-      height: 2px;
+      height: 1px;
     }
     ion-list-header {
       padding-left: 0px;
@@ -213,5 +248,21 @@ ion-footer {
   position: fixed;
   width: 100%;
   bottom: 0px;
+  ion-button {
+    min-height: rem-calc(48px);
+    bottom: 0px;
+  }
+  ion-button.save-button {
+    margin: 16px !important;
+  }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

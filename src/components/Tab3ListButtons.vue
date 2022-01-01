@@ -20,7 +20,6 @@
                   <button-item-list
                     :propFrizeId="frizeId"
                     :propIngredient="ingredient"
-                    :ref="setCardRef"
                     :propMemoDisabled="propMemoDisabled"
                   >
                   </button-item-list>
@@ -45,35 +44,14 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <teleport to="body">
-    <ion-modal
-      :is-open="isOpenRef"
-      css-class="my-custom-class"
-      :swipe-to-close="true"
-      @didDismiss="openModal(false)"
-    >
-      <Modal :title="'냉장고를 부탁해'"
-        ><tab-3-modal-content
-          @emitUpdatedItemsBeAdd="updatedItemsBeAdd"
-        ></tab-3-modal-content
-      ></Modal>
-    </ion-modal>
-  </teleport>
+  <teleport to="body"> </teleport>
 </template>
 <script lang="ts">
-import {
-  computed,
-  ComputedRef,
-  defineComponent,
-  onBeforeUpdate,
-  reactive,
-  ref,
-} from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import {
   IonRow,
   IonGrid,
   IonCol,
-  IonModal,
   IonButton,
   IonItem,
   IonIcon,
@@ -81,10 +59,7 @@ import {
   IonItemSliding,
 } from "@ionic/vue";
 import ButtonItemList from "./cardButton.vue";
-// import TagUpdatedDate from "./TagUpdatedDate.vue";
-import Tab3ModalContent from "./Tab3ModalContent.vue";
-import Modal from "./AppModal.vue";
-import { FrigeType, IngredientType } from "@/types/frige";
+import { FrigeType } from "@/types/frige";
 import { useStore } from "@/store/index";
 import { trash } from "ionicons/icons";
 
@@ -94,15 +69,11 @@ export default defineComponent({
     IonGrid,
     IonCol,
     IonRow,
-    IonModal,
     ButtonItemList,
-    Tab3ModalContent,
-    // TagUpdatedDate,
     IonItem,
     IonIcon,
     IonItemOptions,
     IonItemSliding,
-    Modal,
   },
   props: {
     propMemoDisabled: {
@@ -115,25 +86,24 @@ export default defineComponent({
     },
   },
   setup() {
-    const store = useStore(); //스토어
-    const frizeId = computed(() => {
+    const store = useStore();
+
+    const frizeId: ComputedRef<string> = computed(() => {
       return store.state.frige.selectedCateId;
-    });
-    const buttomMode = ref("nomal");
-    let cardRefs: HTMLElement[] = [];
-    //카드 Dom 설정
-    const setCardRef = (el: any) => {
-      if (el) {
-        cardRefs.push(el.$el);
-      }
-    };
-    onBeforeUpdate(() => {
-      cardRefs = [];
     });
 
     const ArrMock: ComputedRef<FrigeType[]> = computed(() => {
       return store.state.frige.items;
     });
+
+    // let cardRefs: HTMLElement[] = [];
+    // //카드 Dom 설정
+    // const setCardRef = (el: any) => {
+    //   if (el) cardRefs.push(el.$el);
+    // };
+    // onBeforeUpdate(() => {
+    //   cardRefs = [];
+    // });
 
     const sortedItems = computed(() => {
       return store.getters["frige/fetchIngredients"];
@@ -141,22 +111,7 @@ export default defineComponent({
     const selectedCateId = computed(() => {
       return store.state.frige.selectedCateId;
     });
-    //버튼에서 emit 을 받온다.
-    const isOpenRef = ref(false);
-    const openModal = (state: boolean) => (isOpenRef.value = state);
-    const addItems = function (val: any) {
-      openModal(true);
-    };
 
-    // 모달 데이터 emit 받아오고 업데이트 한다.
-    // 확인버튼을 선택했을 때 vuex에서 ItemsBeAdd가 업데이트 된다.
-    let itemsBeAdd: any = reactive([]);
-    const updatedItemsBeAdd = (items: IngredientType[]) => {
-      itemsBeAdd = items;
-    };
-    const SubmitAddItems = () => {
-      openModal(false);
-    };
     const SubmitDeleteItem = (itemId: string) => {
       store.dispatch("frige/frizeIngredient", {
         frizeId: selectedCateId.value,
@@ -167,15 +122,8 @@ export default defineComponent({
 
     return {
       ArrMock,
-      buttomMode,
       sortedItems,
-      isOpenRef,
-      openModal,
       frizeId,
-      addItems,
-      updatedItemsBeAdd,
-      setCardRef,
-      SubmitAddItems,
       SubmitDeleteItem,
       trash,
     };
