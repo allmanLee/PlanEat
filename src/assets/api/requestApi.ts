@@ -28,6 +28,7 @@ instance.interceptors.request.use(async function (config) {
         "x-refresh-token": refreshToken ? refreshToken : "has not refreshToken"
       },
       url: "http://52.192.105.147:3001/api/auth/refresh",
+
       method: "get"
     }).then((token) => {
       localStorage.setItem("act", token.data.accessToken);
@@ -36,48 +37,28 @@ instance.interceptors.request.use(async function (config) {
         "x-access-token": newAccessToken
       };
       const exDate = new Date();
-      exDate.setMinutes(exDate.getMinutes() + 20);
+      exDate.setMinutes(exDate.getMinutes() + 15);
       localStorage.setItem("actExTime", String(exDate));
 
       return token;
-    }).catch((err) => err);
+    }).catch((error) => {
+      //토큰에러시
+      const err = error.response.data.message;
+      //요청 에러 직전 호출됩니다.
+      if (err === "must be re login" || err === "최근 접근 토큰과 해당 토큰이 불일치") {
+        localStorage.clear();
+        alert("다시 로그인해주세요");
+        location.replace("/");
+        return Promise.reject(error);
+      }
+    });
   }
-
-
-
-
   return config;
 });
 
 instance.interceptors.response.use(
   function (config) {
     return config;
-  },
-  function (error) {
-    //토큰에러시
-    // const err = error.response.data.message;
-
-    //요청 에러 직전 호출됩니다.
-    // if (err === "jwt expired") {
-    //   const refreshToken = localStorage.getItem("reft");
-    //   instance({
-    //     headers: {
-    //       "x-refresh-token": refreshToken ? refreshToken : "has not refreshToken"
-    //     },
-    //     url: "/api/auth/refresh",
-    //     method: "get"
-    //   }).then((token) => {
-    //     localStorage.setItem("act", token.data.accessToken);
-    //     const newAccessToken = token.data.accessToken;
-    //     const reRequestConfig = error.response.config;
-    //     reRequestConfig.headers = {
-    //       ...reRequestConfig.headers
-    //       , "x-access-token": newAccessToken
-    //     };
-    //   });
-    // }
-
-    return Promise.reject(error);
   }
 );
 

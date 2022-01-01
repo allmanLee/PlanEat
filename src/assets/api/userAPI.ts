@@ -15,7 +15,7 @@ export default {
     }).then((res) => {
       //엑세스토큰 만료 시간 로컬에 저장
       const exDate = new Date();
-      exDate.setMinutes(exDate.getMinutes() + 20);
+      exDate.setMinutes(exDate.getMinutes() + 15);
       localStorage.setItem("actExTime", String(exDate));
       localStorage.setItem("act", res.data.returnObj.token);
       localStorage.setItem("reft", res.data.returnObj.ref_token);

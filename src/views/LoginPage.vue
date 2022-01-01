@@ -57,7 +57,6 @@ export default defineComponent({
         snsType: "kakao",
       };
       snsAPI.ControllerSNS(reqData).then((res) => {
-        console.log(res);
         if (res.data.dataObj.method === "register")
           store.dispatch("frige/frizeAdd", {
             email: reqData.email,

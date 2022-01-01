@@ -13,7 +13,7 @@ export default {
       data: data
     }).then((res) => {
       const exDate = new Date();
-      exDate.setMinutes(exDate.getMinutes() + 20);
+      exDate.setMinutes(exDate.getMinutes() + 15);
       localStorage.setItem("actExTime", String(exDate));
       localStorage.setItem("act", res.data.dataObj.acToken);
       localStorage.setItem("reft", res.data.dataObj.refToken);
