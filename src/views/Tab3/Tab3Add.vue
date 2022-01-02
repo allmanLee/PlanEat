@@ -7,16 +7,6 @@
       justify-content-center
       class="cate-toolbar ion-padding-start ion-margin-top"
     >
-      <ion-col v-for="(button, index) of toolBtnItems" size="auto" :key="index">
-        <ion-button
-          color="dark"
-          fill="clear"
-          class="cate-tool-btn"
-          @click="button.clickEvent(true)"
-        >
-          <ion-icon :icon="button.icon"></ion-icon>
-        </ion-button>
-      </ion-col>
       <ion-col class="memo-btn-container"
         ><ion-button
           mode="ios"
@@ -25,6 +15,13 @@
           class="memotoggle-btn"
           @click="memoDisabled = !memoDisabled"
           >{{ memoDisabled ? "메모 끄기" : "메모 켜기" }}</ion-button
+        ><ion-button
+          mode="ios"
+          color="dark"
+          fill="clear"
+          class="memotoggle-btn"
+          @click="openPop(true)"
+          >냉장고 삭제</ion-button
         ></ion-col
       >
     </ion-row>
@@ -35,7 +32,7 @@
     </ion-content>
 
     <!--삭제 모달-->
-    <app-popover :propOpenPopover="popStatus">
+    <app-popover :propOpenPopover="popStatus" @closePopover="openPop(false)">
       <div class="remove-cate-popover">
         <ion-toolbar>
           <ion-title> {{ frizeSeletedName }} 삭제 </ion-title>
@@ -57,7 +54,7 @@
         </ion-button>
       </div>
     </app-popover>
-    <fab-button-add :propFrizeId="frizeSeletedId"> </fab-button-add>
+    <fab-button-add :propFrizeId="frizeSeletedId"></fab-button-add>
   </ion-page>
 </template>
 <script lang="ts">
@@ -134,12 +131,6 @@ export default defineComponent({
           "냉장고를 삭제할 수 없습니다.\n최소 한 개의 냉장고가 있어야 합니다."
         );
     };
-
-    //툴바 버튼
-    const toolBtnItems = [
-      { icon: trashOutline, clickEvent: openPop },
-      // { icon: notificationsOutline, clickEvent: toggleAlarm },
-    ];
     const slideOpts = {
       slidesPerView: 5.5,
     };
@@ -148,11 +139,10 @@ export default defineComponent({
     };
 
     //메모 표시하기
-    const memoDisabled = ref(false);
+    const memoDisabled = ref(true);
 
     return {
       testMock,
-      toolBtnItems,
 
       slideOpts,
       addOutline,
@@ -189,6 +179,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-row {
+  padding-left: 0px;
+}
 ion-content {
   --padding-start: 0px;
   --padding-end: 0px;
@@ -212,7 +205,7 @@ ion-content {
     margin: {
       top: 6px;
       bottom: 6px;
-      right: 16px;
+      right: 0px;
     }
     height: 36px;
     font: {

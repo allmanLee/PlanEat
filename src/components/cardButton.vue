@@ -35,10 +35,7 @@
     <ion-list v-if="!propAddMode" class="modify-popup">
       <ion-list-header>
         <ion-toolbar>
-          <ion-title mode="md">{{ ingredient.name }}</ion-title>
-          <ion-button color="dark" slot="end" @click="ingreModify(true)">{{
-            modifyMode ? "수정하기" : "취소"
-          }}</ion-button>
+          <ion-title mode="ios">{{ ingredient.name }}</ion-title>
         </ion-toolbar>
       </ion-list-header>
       <ion-item lines="none">
@@ -84,19 +81,29 @@
       </ion-item>
 
       <ion-footer line="true">
-        <transition name="fade" mode="out-in">
-          <ion-text v-if="modifyMode">
-            수정하기를 눌러 재료를 수정할 수 있습니다.</ion-text
-          >
-          <ion-button
-            v-else
-            expand="block"
-            :disabled="modifyMode"
-            @click="Modifyingredient()"
-          >
-            편집완료
-          </ion-button>
-        </transition>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <transition name="fade">
+              <ion-button
+                v-if="!modifyMode"
+                expand="block"
+                fill="solid"
+                :disabled="modifyMode"
+                @click="Modifyingredient()"
+              >
+                편집완료
+              </ion-button>
+            </transition>
+            <transition name="fade" mode="out-in">
+              <ion-button
+                color="dark"
+                @click="ingreModify(true)"
+                :key="modifyMode"
+                >{{ modifyMode ? "수정하기" : "원래대로" }}</ion-button
+              >
+            </transition>
+          </ion-buttons>
+        </ion-toolbar>
       </ion-footer>
     </ion-list>
     <ion-list v-if="propAddMode">
@@ -126,6 +133,7 @@ import {
   IonText,
   IonTextarea,
   IonItem,
+  IonButtons,
 } from "@ionic/vue";
 import AppPopover from "./AppPopover.vue";
 import { VueEvent } from "@/types/event";
@@ -154,6 +162,7 @@ export default defineComponent({
     IonBadge,
     AppPopover,
     AppInput,
+    IonButtons,
   },
   props: {
     propIngredient: {
@@ -423,6 +432,7 @@ ion-card {
   }
   ion-toolbar {
     ion-title {
+      text-align: left;
       padding-left: 16px;
     }
     ion-button {
@@ -455,11 +465,18 @@ ion-card {
       right: 16px;
       bottom: 16px;
     }
-    ion-button {
-      &.button-disabled {
-        --background: gray !important;
+    ion-toolbar {
+      --border-style: none;
+      ion-buttons {
+        ion-button {
+          height: rem-calc(48px);
+          --padding-start: 16px;
+          --padding-end: 16px;
+          &.button-disabled {
+            --background: gray !important;
+          }
+        }
       }
-      height: rem-calc(48px);
     }
   }
 }

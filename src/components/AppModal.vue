@@ -17,12 +17,9 @@ export default defineComponent({
     title: { type: String, default: "Super Modal" },
   },
   components: {
-    // IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    // IonButton,
-    // IonButtons,
   },
 
   emits: ["submit"],

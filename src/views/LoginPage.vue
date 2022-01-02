@@ -4,7 +4,7 @@
       <div id="content" class="login-background">
         <img
           class="logo-img"
-          src="../../src/assets/img/logo/logo.svg"
+          src="../../src/assets/img/logo/logo-all.png"
           alt="planeat logo"
         />
       </div>

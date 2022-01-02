@@ -10,7 +10,7 @@
               ></tag-updated-date> -->
             </ion-col>
           </ion-row>
-          <ion-row class="ion-justify-content-center card-row-container">
+          <ion-row class="ion-justify-content-center">
             <ion-col size="12">
               <ion-item-sliding
                 v-for="(ingredient, index) in item || []"
@@ -43,12 +43,19 @@
           </ion-row>
         </ion-col>
       </ion-col>
+      <div class="login-background">
+        <img
+          v-if="showImg === true"
+          class="logo-img"
+          src="../../src/assets/img/alaram-empty.png"
+          alt="planeat logo"
+        />
+      </div>
     </ion-row>
   </ion-grid>
-  <teleport to="body"> </teleport>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent } from "vue";
+import { computed, ComputedRef, defineComponent, onMounted, ref } from "vue";
 import {
   IonRow,
   IonGrid,
@@ -89,7 +96,6 @@ export default defineComponent({
     const frizeId: ComputedRef<string> = computed(() => {
       return store.state.frige.selectedCateId;
     });
-
     const ArrMock: ComputedRef<FrigeType[]> = computed(() => {
       return store.state.frige.items;
     });
@@ -99,19 +105,41 @@ export default defineComponent({
     const selectedCateId = computed(() => {
       return store.state.frige.selectedCateId;
     });
-
+    const showEmptyImg = ref(false);
     const SubmitDeleteItem = (itemId: string) => {
-      store.dispatch("frige/frizeIngredient", {
-        frizeId: selectedCateId.value,
-        ingredientAdd: [],
-        ingredientDelete: [itemId],
-      });
+      store
+        .dispatch("frige/frizeIngredient", {
+          frizeId: selectedCateId.value,
+          ingredientAdd: [],
+          ingredientDelete: [itemId],
+        })
+        .then(() => {
+          // if (ArrMock.value !== undefined) {
+          //   if (ArrMock.value.length === 0) {
+          //     showEmptyImg.value = true;
+          //   }
+          // }
+        });
     };
-
+    const showImg = computed(() => {
+      if (ArrMock.value.length > 1) return false;
+      return true;
+    });
+    // watch(
+    //   () => ArrMock.value,
+    //   (value, prevValue) => {
+    //     console.log("변경");
+    //     console.log(value);
+    //     console.log(value.length);
+    //     if (value.length == 0) showEmptyImg.value = true;
+    //     else showEmptyImg.value = false;
+    //   }
+    // );
     return {
       ArrMock,
       sortedItems,
       frizeId,
+      showImg,
       SubmitDeleteItem,
     };
   },
@@ -147,6 +175,20 @@ ion-item-options {
   position: fixed;
   z-index: 2;
 }
+.login-background {
+  position: relative;
+  width: 100vw;
+  height: 50vh;
+
+  .logo-img {
+    position: absolute;
+    width: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .delete-footer {
   box-shadow: 0px -2px 12px 4px rgba(0, 0, 0, 0.2);
   position: fixed;

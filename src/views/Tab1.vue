@@ -19,10 +19,10 @@
         >
         </alaram-list-item>
       </ion-list>
-      <div v-if="showLogo" id="content" class="login-background">
+      <div v-if="showLogo" class="login-background">
         <img
           class="logo-img"
-          src="../../src/assets/img/logo/logo.svg"
+          src="../../src/assets/img/logo/logo-all.png"
           alt="planeat logo"
         />
       </div>

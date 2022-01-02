@@ -32,7 +32,6 @@ instance.interceptors.request.use(async function (config) {
       method: "get"
     }).then((token) => {
       console.log("requstAPI: 토큰 변경 성공");
-      console.log("requstAPI: " + token.data.accessToken);
       localStorage.setItem("act", token.data.accessToken);
       const newAccessToken = token.data.accessToken;
       config.headers = {
