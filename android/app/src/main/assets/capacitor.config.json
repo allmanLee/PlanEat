@@ -1,6 +1,15 @@
 {
 	"appId": "io.ionic.planeat",
-	"appName": "planeat-app",
+	"appName": "PLANEAT",
 	"webDir": "dist",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"androidScaleType": "CENTER_CROP",
+			"splashFullScreen": true,
+			"splashImmersive": false,
+			"backgroundColor": "#ffffff"
+		}
+	}
 }

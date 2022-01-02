@@ -30,6 +30,7 @@ npm-debug.log*
 /plugins
 /www
 /android
+/android/*
 /config
 android
 kakao-key.ts

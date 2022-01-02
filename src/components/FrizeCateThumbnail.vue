@@ -17,7 +17,7 @@
           >
             <div class="add-cate-popover">
               <ion-toolbar>
-                <ion-title>냉장고 추가</ion-title>
+                <ion-title mode="ios">냉장고 추가</ion-title>
                 <ion-buttons slot="end">
                   <ion-button color="dark" @click="openPop(false)">
                     <ion-icon :icon="closeOutline"></ion-icon>
@@ -141,7 +141,7 @@ export default defineComponent({
           frizeName: inputedName.value,
         });
       } else alert("두자리 이상의 값을 입력해주세요");
-      inputedName.value="";
+      inputedName.value = "";
     };
 
     //문자열 자르기

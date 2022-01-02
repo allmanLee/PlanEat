@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">planeat-app</string>
-    <string name="title_activity_main">planeat-app</string>
+    <string name="app_name">PLANEAT</string>
+    <string name="title_activity_main">냉장고파먹는레시피</string>
     <string name="package_name">io.ionic.planeat</string>
     <string name="custom_url_scheme">io.ionic.planeat</string>
     <string name="kakao_app_key">533c1f3f6722eb148d22c636cf843e3e</string>

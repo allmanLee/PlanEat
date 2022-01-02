@@ -60,6 +60,15 @@ instance.interceptors.request.use(async function (config) {
 instance.interceptors.response.use(
   function (config) {
     return config;
+  },
+  function (err) {
+    const errMessage = err.response.data.message;
+    if (errMessage === "jwt expired") {
+      localStorage.clear();
+      alert("다시 로그인해주세요");
+      location.replace("/");
+      return Promise.reject(err.response);
+    }
   }
 );
 

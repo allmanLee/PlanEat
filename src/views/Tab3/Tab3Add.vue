@@ -35,7 +35,7 @@
     <app-popover :propOpenPopover="popStatus" @closePopover="openPop(false)">
       <div class="remove-cate-popover">
         <ion-toolbar>
-          <ion-title> {{ frizeSeletedName }} 삭제 </ion-title>
+          <ion-title mode="ios"> {{ frizeSeletedName }} 삭제 </ion-title>
           <ion-buttons slot="end">
             <ion-button color="dark" @click="openPop(false)">
               <ion-icon :icon="closeOutline"></ion-icon>

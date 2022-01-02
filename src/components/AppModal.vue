@@ -1,7 +1,7 @@
 <template>
   <ion-header mode="ios">
     <ion-toolbar>
-      <ion-title mode="md" class="header-title">{{ headerTitle }}</ion-title>
+      <ion-title mode="ios" class="header-title">{{ headerTitle }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <slot></slot>
@@ -38,7 +38,7 @@ export default defineComponent({
 ion-header {
   height: auto;
   .header-title {
-    font-size: 16px !important;
+    font-size: rem-calc(21px) !important;
     font-weight: 600 !important;
   }
   .button-submit {
