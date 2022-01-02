@@ -2,10 +2,10 @@ import { AuthSNSOption } from "@/types/request-types/auth-request-types";
 import requestApi from "./requestApi";
 import { KakaoCordovaSDK, AuthTypes } from 'kakao-sdk';
 export default {
-  /*POST
- * /api/auth/login
- * 로그인
- */
+  /**POST
+   * /api/auth/login
+   * 로그인
+   */
   ControllerSNS(data: AuthSNSOption) {
     return requestApi({
       url: "/api/auth/controllerToSNS",

@@ -3,7 +3,7 @@ import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser, IngredientMod
 import requestApi from "./requestApi";
 
 export default {
-  /*POST
+  /**POST
    * /api/service/frize/ingredientGet
    *냉장고 재료 검색
    */
@@ -15,7 +15,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
  * /api/service/frize/alaramIngredient
  *냉장고 재료 검색
  */
@@ -27,7 +27,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
    * /api/service/frize/ingredient
    *냉장고 재료 추가 및 삭제
    */
@@ -39,7 +39,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
  * /api/service/frize/ingredient
  *냉장고 재료 수정
  */
@@ -51,7 +51,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
    * /api/service/frize/AllFrizeGet
    *유저 냉장고 검색
    */
@@ -63,7 +63,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
    * /api/service/frize/frizeAdd
    *유저 냉장고 추가
    */
@@ -75,7 +75,7 @@ export default {
     });
   },
 
-  /*Delete
+  /**Delete
    * /api/service/frize/frizeDelete
    *유저 냉장고 삭제
    */

@@ -31,6 +31,8 @@ instance.interceptors.request.use(async function (config) {
 
       method: "get"
     }).then((token) => {
+      console.log("requstAPI: 토큰 변경 성공");
+      console.log("requstAPI: " + token.data.accessToken);
       localStorage.setItem("act", token.data.accessToken);
       const newAccessToken = token.data.accessToken;
       config.headers = {
@@ -39,10 +41,10 @@ instance.interceptors.request.use(async function (config) {
       const exDate = new Date();
       exDate.setMinutes(exDate.getMinutes() + 15);
       localStorage.setItem("actExTime", String(exDate));
-
       return token;
     }).catch((error) => {
       //토큰에러시
+      console.log("requstAPI: 토큰 변경 실패");
       const err = error.response.data.message;
       //요청 에러 직전 호출됩니다.
       if (err === "must be re login" || err === "최근 접근 토큰과 해당 토큰이 불일치") {

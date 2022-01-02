@@ -19,6 +19,7 @@
       </ion-col>
       <ion-col class="memo-btn-container"
         ><ion-button
+          mode="ios"
           color="dark"
           fill="clear"
           class="memotoggle-btn"
@@ -32,24 +33,25 @@
     <ion-content>
       <tab-3-list-buttons :propMemoDisabled="memoDisabled"></tab-3-list-buttons>
     </ion-content>
+
+    <!--삭제 모달-->
     <app-popover :propOpenPopover="popStatus">
       <div class="remove-cate-popover">
         <ion-toolbar>
-          <ion-title> 냉장고 삭제 </ion-title>
+          <ion-title> {{ frizeSeletedName }} 삭제 </ion-title>
           <ion-buttons slot="end">
             <ion-button color="dark" @click="openPop(false)">
               <ion-icon :icon="closeOutline"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
-        <ion-text
-          ><span>{{ frizeSeletedName }}</span
-          ><br />정말로 삭제하시겠습니까?</ion-text
-        >
+
+        <ion-text>해당 냉장고 삭제하시겠습니까?<br /> </ion-text>
         <ion-button
           color="danger"
           expand="block"
           @click="deleteCate(), openPop(false)"
+          @closePopover="openPop(false)"
         >
           삭제하기
         </ion-button>
@@ -76,7 +78,6 @@ import {
 } from "@ionic/vue";
 import FrizeCateThumbnail from "@/components/FrizeCateThumbnail.vue";
 import Tab3ListButtons from "@/components/Tab3ListButtons.vue";
-import ingredientAPI from "@/assets/api/ingredientAPI";
 import { useStore } from "@/store/index";
 import {
   addOutline,
@@ -133,11 +134,6 @@ export default defineComponent({
           "냉장고를 삭제할 수 없습니다.\n최소 한 개의 냉장고가 있어야 합니다."
         );
     };
-    //간편 알람 설정
-    // const toggleAlarm = () => {
-    //   console.log("알람 설정");
-    //   return undefined;
-    // };
 
     //툴바 버튼
     const toolBtnItems = [
@@ -193,9 +189,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.content {
-  margin-left: 16px;
-  margin-right: 16px;
+ion-content {
+  --padding-start: 0px;
+  --padding-end: 0px;
 }
 .cate-toolbar {
   background: var(--custom-gray-05);
@@ -225,7 +221,8 @@ export default defineComponent({
   }
 }
 .remove-cate-popover {
-  padding: 8px;
+  padding: 16px;
+  padding-top: 8px;
   text-align: center;
   ion-toolbar {
     margin-bottom: 4px;
@@ -236,12 +233,6 @@ export default defineComponent({
       ion-button {
         margin-top: 0 !important;
       }
-    }
-  }
-  ion-text {
-    span {
-      font-size: rem-calc(16px);
-      font-weight: 500;
     }
   }
   ion-button {

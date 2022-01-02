@@ -32,19 +32,21 @@ export default defineComponent({
     });
     const submit = () => {
       emit("submit");
-      console.log("보내기");
     };
     return { headerTitle, submit };
   },
 });
 </script>
-<style>
-.header-title {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-}
-.button-submit {
-  font-size: 16px !important;
-  font-weight: 600 !important;
+<style lang="scss">
+ion-header {
+  height: auto;
+  .header-title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+  .button-submit {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
 }
 </style>

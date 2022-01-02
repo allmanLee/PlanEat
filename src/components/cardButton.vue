@@ -1,7 +1,7 @@
 <template>
   <ion-card ios="add" mode="ios" Expand="block" @click="ClickButton">
     <ion-card-header>
-      <ion-card-title class="card-title">
+      <ion-card-title>
         <ion-grid class="buttonCard-grid">
           <ion-row>
             <ion-col class="ion-align-self-center" size="auto">{{
@@ -16,7 +16,7 @@
               }}</ion-badge></ion-col
             >
             <ion-col class="text-date ion-align-self-center">
-              {{ ingredient.expirationDate }}
+              {{ koreanExpirationDate }}
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -36,48 +36,67 @@
       <ion-list-header>
         <ion-toolbar>
           <ion-title mode="md">{{ ingredient.name }}</ion-title>
-          <ion-button color="dar  k" slot="end" @click="ingreModify(true)">{{
+          <ion-button color="dark" slot="end" @click="ingreModify(true)">{{
             modifyMode ? "수정하기" : "취소"
           }}</ion-button>
         </ion-toolbar>
       </ion-list-header>
       <ion-item lines="none">
         <ion-label position="stacked">보관날짜</ion-label>
-        <app-input
-          :propType="'date'"
-          :propValue="ingreUpdatedDate"
-          :disabled="modifyMode"
-          @ionInput="inputedModifyUpdatedDate = $event.target.value"
-        ></app-input>
+        <transition name="fade" mode="out-in">
+          <ion-text v-if="modifyMode">{{ ingreUpdatedDate }}</ion-text>
+          <app-input
+            v-else
+            :propType="'date'"
+            :propValue="ingreUpdatedDate"
+            :disabled="modifyMode"
+            @ionInput="inputedModifyUpdatedDate = $event.target.value"
+          ></app-input>
+        </transition>
       </ion-item>
       <ion-item lines="none">
         <ion-label position="stacked">유통기한</ion-label>
-        <app-input
-          :propType="'date'"
-          :propValue="ingreExpirationDate"
-          :disabled="modifyMode"
-          @ionInput="inputedModifyExpirationDate = $event.target.value"
-        ></app-input>
+        <transition name="fade" mode="out-in">
+          <ion-text v-if="modifyMode">{{ ingreExpirationDate }}</ion-text>
+          <app-input
+            v-else
+            :propType="'date'"
+            :propValue="ingreExpirationDate"
+            :disabled="modifyMode"
+            @ionInput="inputedModifyExpirationDate = $event.target.value"
+          ></app-input>
+        </transition>
       </ion-item>
       <ion-item lines="none" class="memo-input-item">
         <ion-label position="stacked">메모</ion-label>
-        <ion-textarea
-          autoGrow="true"
-          :disabled="modifyMode"
-          :placeholder="ingreMemo"
-          :value="ingreMemo"
-          maxlength="100"
-          @ionInput="inputedModifyMemo = $event.target.value"
-        ></ion-textarea>
+        <transition name="fade" mode="out-in">
+          <ion-text v-if="modifyMode">{{ ingreMemo }}</ion-text>
+          <ion-textarea
+            v-else
+            autoGrow="true"
+            :disabled="modifyMode"
+            :placeholder="ingreMemo"
+            :value="ingreMemo"
+            maxlength="100"
+            @ionInput="inputedModifyMemo = $event.target.value"
+          ></ion-textarea>
+        </transition>
       </ion-item>
+
       <ion-footer line="true">
-        <ion-button
-          expand="block"
-          :disabled="modifyMode"
-          @click="Modifyingredient()"
-        >
-          편집완료
-        </ion-button>
+        <transition name="fade" mode="out-in">
+          <ion-text v-if="modifyMode">
+            수정하기를 눌러 재료를 수정할 수 있습니다.</ion-text
+          >
+          <ion-button
+            v-else
+            expand="block"
+            :disabled="modifyMode"
+            @click="Modifyingredient()"
+          >
+            편집완료
+          </ion-button>
+        </transition>
       </ion-footer>
     </ion-list>
     <ion-list v-if="propAddMode">
@@ -104,6 +123,7 @@ import {
   IonToolbar,
   IonFooter,
   IonTitle,
+  IonText,
   IonTextarea,
   IonItem,
 } from "@ionic/vue";
@@ -129,6 +149,7 @@ export default defineComponent({
     IonToolbar,
     IonFooter,
     IonButton,
+    IonText,
     IonTextarea,
     IonBadge,
     AppPopover,
@@ -168,8 +189,24 @@ export default defineComponent({
 
     const closePopover = ref(false);
     const closeMemo = ref(false);
-    const formatDate = (date: Date) =>
-      `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+    const fillZero = (number: number) => {
+      const toString = String(number);
+      if (String(number).length !== 2) return String(0) + toString;
+      else return toString;
+    };
+
+    const formatDate = (date: string) => {
+      const upDateArr = date.split("-").map((el) => Number(el));
+      const upDate = new Date(
+        `${upDateArr[0]}/${upDateArr[1]}/${upDateArr[2]}`
+      );
+
+      return `${upDate.getFullYear()}-${fillZero(
+        upDate.getMonth() + 1
+      )}-${fillZero(upDate.getDate())}`;
+    };
+
     const memoModify = ref(false);
     const AddItems = (event: VueEvent.Mouse<HTMLButtonElement>) => {
       emit("emitAddItems", "why");
@@ -182,15 +219,28 @@ export default defineComponent({
     const modifyMode = ref(true);
     ////수정될 업데이트 날짜
     const inputedModifyUpdatedDate = ref();
-    const ingreUpdatedDate = computed(() => {
-      if (modifyMode.value) return props.propIngredient.updatedDate;
-      else return inputedModifyUpdatedDate.value;
+
+    const koreanExpirationDate = computed(() => {
+      const expirationDate = props.propIngredient.expirationDate;
+      if (!expirationDate) return;
+      return expirationDate
+        .split("-")
+        .map((el, index) => {
+          if (index === 0) return el + "년";
+          else if (index === 1) return el + "월";
+          else return el + "일";
+        })
+        .join(" ");
     });
-    ////수정될 유통기간 날짜 _(default 유통기간은 업데이트날자에서 1주일 후로 잡혀있다.)
+    const ingreUpdatedDate = computed(() => {
+      if (!props.propIngredient.updatedDate) return;
+      return formatDate(props.propIngredient.updatedDate);
+    });
+    ////수정될 유통기간 날짜 _(default 유통기간은 업데이트날자에서 10일 후로 잡혀있다.)
     const inputedModifyExpirationDate = ref();
     const ingreExpirationDate = computed(() => {
-      if (modifyMode.value === true) return props.propIngredient.expirationDate;
-      else return inputedModifyExpirationDate.value;
+      if (!props.propIngredient.expirationDate) return;
+      return formatDate(props.propIngredient.expirationDate);
     });
     ////수정될 메모내용 _(default undefinded)
     const inputedModifyMemo = ref();
@@ -290,6 +340,7 @@ export default defineComponent({
       inputedModifyExpirationDate,
       inputedModifyUpdatedDate,
       deleteIngredient,
+      koreanExpirationDate,
       expirationDateTag,
       expirationDateTagName,
       expirationDateTagColor,
@@ -299,6 +350,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 ion-card {
+  box-sizing: border-box;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
   width: 100%;
   border: var(--custom-gray-04) 1px solid;
@@ -306,18 +358,23 @@ ion-card {
   margin-top: 8px;
   margin-left: 0;
   margin-right: 0;
-  padding: 14px;
+  padding: 16px;
   --border-width: 1px;
   --background: white;
+  transition: all 0.5px ease;
+  ion-card-header {
+    padding: 0px;
+    ion-card-title {
+      font-size: 16px;
+      padding: 0px;
+    }
+  }
+  ion-card-content {
+    margin-top: 4px;
+    padding: 0px;
+  }
 }
 
-ion-card-header {
-  padding: 0px;
-}
-ion-card-content {
-  margin-top: 4px;
-  padding: 0px;
-}
 .badge-container {
   height: 100%;
   line-height: 100%;
@@ -325,10 +382,7 @@ ion-card-content {
   vertical-align: middle;
   padding-left: 8px;
 }
-.card-title {
-  font-size: 16px;
-  padding: 0px;
-}
+
 .text-date {
   text-align: end;
   font-size: rem-calc(12px);
@@ -348,25 +402,45 @@ ion-card-content {
 #buttonItemList {
   position: relative;
 }
+
+//팝업부분
 .modify-popup {
   ion-list-header {
     padding: 0;
+    padding-top: 16px;
   }
   ion-item {
-    --padding-start: 20px;
-    --padding-end: 20px;
+    --padding-start: 16px;
+    --padding-end: 16px;
     --inner-padding-end: 0;
+    transition: all 0.5s ease;
+    ion-label {
+      min-height: auto;
+    }
+    ion-text {
+      min-height: rem-calc(44px);
+    }
   }
   ion-toolbar {
+    ion-title {
+      padding-left: 16px;
+    }
     ion-button {
       &.button-disabled {
         background-color: gray;
       }
     }
+    --padding-start: 0px;
+    --padding-end: 0px;
+    --padding-top: 0px;
   }
   .memo-input-item {
     --padding-bottom: 20px;
+    ion-text {
+      min-height: rem-calc(72px);
+    }
     ion-textarea {
+      widows: auto;
       border-radius: 4px !important;
       border: 2px solid var(--custom-gray-04) !important;
       --padding-start: 16px;
@@ -377,10 +451,26 @@ ion-card-content {
   }
   ion-footer {
     padding: {
-      left: 20px;
-      right: 20px;
-      bottom: 20px;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+    }
+    ion-button {
+      &.button-disabled {
+        --background: gray !important;
+      }
+      height: rem-calc(48px);
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

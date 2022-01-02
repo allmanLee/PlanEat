@@ -1,5 +1,6 @@
 <template>
   <ion-input
+    mode="ios"
     ref="test"
     :type="type"
     :placeholder="propPlaceholder"

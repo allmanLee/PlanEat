@@ -3,7 +3,7 @@ import { AuthUser, Email, RegisterUser } from "@/types/request-types/auth-reques
 import requestApi from "./requestApi";
 
 export default {
-  /*POST
+  /**POST
  * /api/auth/login
  * 로그인
  */
@@ -22,7 +22,7 @@ export default {
       return res;
     });
   },
-  /*POST
+  /**POST
    * /api/auth/register
    * 회원가입
    */
@@ -34,7 +34,7 @@ export default {
     });
   },
 
-  /*GET
+  /**GET
    * /api/auth/check_email
    * 이메일 중복 확인
    */
@@ -46,7 +46,7 @@ export default {
     });
   },
 
-  /*POST
+  /**POST
    * /api/auth/send_auth_email
    * 인증키 이메일 보내기
    */

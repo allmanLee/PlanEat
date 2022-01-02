@@ -5,7 +5,7 @@
         <ion-thumbnail>
           <ion-button
             mode="ios"
-            color="dark" 
+            color="dark"
             fill="clear"
             @click="openPop(true)"
           >
@@ -186,22 +186,28 @@ export default defineComponent({
   margin-right: 16px;
 }
 .swiper-container {
+  margin-left: 12px;
   width: 100vw;
-  margin-left: 16px;
+  padding-top: 4px;
 }
 .swiper-wrapper {
   .swiper-slide {
     ion-col {
       ion-thumbnail {
         text-align: center;
-        min-width: rem-calc(48px);
-        min-height: rem-calc(48px);
+        box-sizing: content-box !important;
+        min-width: 48px;
+        min-height: 48px;
         border-radius: 12px;
+        margin-top: 0;
         margin: 0 auto;
         border: 1.4px solid var(--custom-gray-04);
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.16);
         &.cate-focus {
+          margin-top: -2px;
           border: 1.4px solid var(--ion-color-primary);
+          box-shadow: 0px 1px 3px rgba(187, 159, 0, 0.16);
+          transition: all 0.3s ease;
           ion-button {
             .thumbnail-none {
               color: black;
@@ -211,6 +217,8 @@ export default defineComponent({
         ion-button {
           --padding-start: 0;
           --padding-end: 0;
+          box-sizing: content-box !important;
+          width: rem-calc(48px);
           height: rem-calc(48px);
           line-height: rem-calc(48px);
           vertical-align: middle !important;
@@ -249,7 +257,8 @@ export default defineComponent({
   }
 }
 .add-cate-popover {
-  padding: 8px;
+  padding: 16px;
+  padding-top: 8px;
 
   ion-toolbar {
     margin-bottom: 16px;

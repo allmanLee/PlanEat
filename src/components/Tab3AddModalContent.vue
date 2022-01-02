@@ -1,5 +1,5 @@
 <template>
-  <ion-content scroll-y="false">
+  <ion-list class="input-content" mode="ios" scroll-y="false">
     <ion-list>
       <ion-list-header>유통기한</ion-list-header>
       <app-input
@@ -20,26 +20,21 @@
         @ionBlur="unActiveInputFocused()"
       ></app-input>
     </ion-list>
-
-    <!-- <ion-list class="button-container">
-      <ion-button @click="pushItem()"> 재료 담기 </ion-button>
-    </ion-list> -->
     <ion-list>
       <hr />
-      <h5>추가될 재료</h5>
     </ion-list>
-    <ion-content>
-      <card-button
-        :propFrizeId="frizeId"
-        :propIngredient="ingredient"
-        :propMemoDisabled="false"
-        :propAddMode="true"
-        @emitDelete="emitedDelete"
-        v-for="(ingredient, index) of selectedItems"
-        :key="index"
-      >
-      </card-button>
-    </ion-content>
+  </ion-list>
+  <ion-content>
+    <card-button
+      :propFrizeId="frizeId"
+      :propIngredient="ingredient"
+      :propMemoDisabled="false"
+      :propAddMode="true"
+      @emitDelete="emitedDelete"
+      v-for="(ingredient, index) of selectedItems"
+      :key="index"
+    >
+    </card-button>
   </ion-content>
   <ion-footer mode="ios">
     <transition name="fade" mode="out-in">
@@ -197,10 +192,15 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-ion-content {
-  --padding-start: 16px;
-  --padding-end: 16px;
+ion-con.input-content {
+  height: 100% !important;
+}
+ion-list {
+  padding-left: 16px;
+  padding-right: 16px;
   ion-list {
+    padding-left: 0px;
+    padding-right: 0px;
     hr {
       background-color: var(--custom-gray-04);
       width: 100%;

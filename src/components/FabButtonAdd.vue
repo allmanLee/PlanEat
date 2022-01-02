@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab mode="ios" vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button @click="openModal(true)">
         <ion-icon :icon="add"></ion-icon>
       </ion-fab-button>

@@ -16,7 +16,7 @@
                 v-for="(ingredient, index) in item || []"
                 :key="index"
               >
-                <ion-item lines="none">
+                <ion-item mode="ios" class="button-item-contaier" lines="none">
                   <button-item-list
                     :propFrizeId="frizeId"
                     :propIngredient="ingredient"
@@ -30,11 +30,12 @@
                   class="delete-btn-container"
                 >
                   <ion-button
+                    fill="clear"
                     type="button"
-                    color="danger"
+                    color="medium"
                     @click="SubmitDeleteItem(ingredient.id)"
                   >
-                    <ion-icon :icon="trash"></ion-icon>
+                    삭제
                   </ion-button>
                 </ion-item-options>
               </ion-item-sliding>
@@ -54,14 +55,12 @@ import {
   IonCol,
   IonButton,
   IonItem,
-  IonIcon,
   IonItemOptions,
   IonItemSliding,
 } from "@ionic/vue";
 import ButtonItemList from "./cardButton.vue";
 import { FrigeType } from "@/types/frige";
 import { useStore } from "@/store/index";
-import { trash } from "ionicons/icons";
 
 export default defineComponent({
   components: {
@@ -71,7 +70,6 @@ export default defineComponent({
     IonRow,
     ButtonItemList,
     IonItem,
-    IonIcon,
     IonItemOptions,
     IonItemSliding,
   },
@@ -95,16 +93,6 @@ export default defineComponent({
     const ArrMock: ComputedRef<FrigeType[]> = computed(() => {
       return store.state.frige.items;
     });
-
-    // let cardRefs: HTMLElement[] = [];
-    // //카드 Dom 설정
-    // const setCardRef = (el: any) => {
-    //   if (el) cardRefs.push(el.$el);
-    // };
-    // onBeforeUpdate(() => {
-    //   cardRefs = [];
-    // });
-
     const sortedItems = computed(() => {
       return store.getters["frige/fetchIngredients"];
     });
@@ -125,7 +113,6 @@ export default defineComponent({
       sortedItems,
       frizeId,
       SubmitDeleteItem,
-      trash,
     };
   },
 });
@@ -134,26 +121,25 @@ export default defineComponent({
 li {
   list-style-type: none;
 }
-.tab3-list-content {
-  --ion-grid-columns: 6;
-}
-.card-row-container {
-  width: 100%;
-}
 ion-item {
   height: 100%;
-  --inner-padding-start: 0;
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  --padding-end: 0;
+  --inner-padding-start: 0px;
+  --padding-start: 0px;
+  --inner-padding-end: 0px;
+  --padding-end: 0px;
 }
 ion-item-options {
   border: none;
+  width: 20%;
   ion-button {
+    width: 20%;
     margin: {
       top: auto;
       bottom: auto;
       left: 16px;
+    }
+    ion-icon {
+      font-size: rem-calc(40px);
     }
   }
 }
