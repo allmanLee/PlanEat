@@ -16,8 +16,8 @@
             @closePopover="(popStatus = false), (inputedName = '')"
           >
             <div class="add-cate-popover">
-              <ion-toolbar>
-                <ion-title mode="ios">냉장고 추가</ion-title>
+              <ion-toolbar mode="ios">
+                <ion-title>냉장고 추가</ion-title>
                 <ion-buttons slot="end">
                   <ion-button color="dark" @click="openPop(false)">
                     <ion-icon :icon="closeOutline"></ion-icon>
