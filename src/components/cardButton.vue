@@ -35,7 +35,7 @@
     <ion-list v-if="!propAddMode" class="modify-popup">
       <ion-list-header>
         <ion-toolbar>
-          <ion-title mode="ios">{{ ingredient.name }}</ion-title>
+          <ion-title mode="ios">{{ ingredient.name }} </ion-title>
         </ion-toolbar>
       </ion-list-header>
       <ion-item lines="none">
@@ -52,7 +52,13 @@
         </transition>
       </ion-item>
       <ion-item lines="none">
-        <ion-label position="stacked">유통기한</ion-label>
+        <ion-label position="stacked"
+          >유통기한<span v-if="expirationDateTag < 3" class="badge-container"
+            ><ion-badge :color="expirationDateTagColor">{{
+              expirationDateTagName
+            }}</ion-badge></span
+          ></ion-label
+        >
         <transition name="fade" mode="out-in">
           <ion-text v-if="modifyMode">{{ ingreExpirationDate }}</ion-text>
           <app-input
@@ -291,7 +297,7 @@ export default defineComponent({
       const tagValue = expirationDateTag.value;
       if (tagValue === 0) return "지남";
       else if (tagValue === 1) return "오늘";
-      else if (tagValue === 2) return "경고";
+      else if (tagValue === 2) return "주의";
       else return "보통";
     });
     const expirationDateTagColor = computed(() => {
@@ -362,6 +368,7 @@ ion-card {
   box-sizing: border-box;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.16);
   width: 100%;
+  height: auto;
   border: var(--custom-gray-04) 1px solid;
   margin-bottom: 8px;
   margin-top: 8px;
@@ -370,7 +377,7 @@ ion-card {
   padding: 16px;
   --border-width: 1px;
   --background: white;
-  transition: all 0.5px ease;
+  transition: all 0.5s ease;
   ion-card-header {
     padding: 0px;
     ion-card-title {
@@ -381,6 +388,7 @@ ion-card {
   ion-card-content {
     margin-top: 4px;
     padding: 0px;
+    transition: all 0.5s ease;
   }
 }
 
@@ -419,19 +427,24 @@ ion-card {
     padding-top: 16px;
   }
   ion-item {
+    min-height: 79px;
     --padding-start: 16px;
     --padding-end: 16px;
+    margin-top: 10px;
     --inner-padding-end: 0;
     transition: all 0.5s ease;
     ion-label {
-      min-height: auto;
+      min-height: 26px;
     }
     ion-text {
+      font-size: rem-calc(21px);
+      font-weight: 500;
       min-height: rem-calc(44px);
     }
   }
   ion-toolbar {
     ion-title {
+      font-size: rem-calc(24px);
       text-align: left;
       padding-left: 16px;
     }
@@ -469,7 +482,8 @@ ion-card {
       --border-style: none;
       ion-buttons {
         ion-button {
-          height: rem-calc(48px);
+          font-weight: 500;
+          height: rem-calc(42px);
           --padding-start: 16px;
           --padding-end: 16px;
           &.button-disabled {

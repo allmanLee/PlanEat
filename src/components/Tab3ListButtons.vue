@@ -12,50 +12,56 @@
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-col size="12">
-              <ion-item-sliding
-                v-for="(ingredient, index) in item || []"
-                :key="index"
-              >
-                <ion-item mode="ios" class="button-item-contaier" lines="none">
-                  <button-item-list
-                    :propFrizeId="frizeId"
-                    :propIngredient="ingredient"
-                    :propMemoDisabled="propMemoDisabled"
-                  >
-                  </button-item-list>
-                </ion-item>
-                <ion-item-options
-                  lines="none"
-                  side="end"
-                  class="delete-btn-container"
+              <transition-group name="list" tag="p">
+                <ion-item-sliding
+                  v-for="(ingredient, index) in item || []"
+                  :key="index"
                 >
-                  <ion-button
-                    fill="clear"
-                    type="button"
-                    color="medium"
-                    @click="SubmitDeleteItem(ingredient.id)"
+                  <ion-item
+                    mode="ios"
+                    class="button-item-contaier"
+                    lines="none"
                   >
-                    삭제
-                  </ion-button>
-                </ion-item-options>
-              </ion-item-sliding>
+                    <button-item-list
+                      :propFrizeId="frizeId"
+                      :propIngredient="ingredient"
+                      :propMemoDisabled="propMemoDisabled"
+                    >
+                    </button-item-list>
+                  </ion-item>
+                  <ion-item-options
+                    lines="none"
+                    side="end"
+                    class="delete-btn-container"
+                  >
+                    <ion-button
+                      fill="clear"
+                      type="button"
+                      color="medium"
+                      @click="SubmitDeleteItem(ingredient.id)"
+                    >
+                      삭제
+                    </ion-button>
+                  </ion-item-options>
+                </ion-item-sliding></transition-group
+              >
             </ion-col>
           </ion-row>
         </ion-col>
       </ion-col>
-      <div class="login-background">
-        <img
-          v-if="showImg === true"
-          class="logo-img"
-          src="../../src/assets/img/alaram-empty.png"
-          alt="planeat logo"
-        />
-      </div>
     </ion-row>
+    <transition name="fade" mode="out-in">
+      <img
+        v-if="showImg"
+        class="logo-img"
+        src="../../src/assets/img/empty.png"
+        alt="planeat logo"
+      />
+    </transition>
   </ion-grid>
 </template>
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, ref } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import {
   IonRow,
   IonGrid,
@@ -92,7 +98,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-
+    const showImg: ComputedRef<boolean> = computed(() => {
+      return store.state.ui.frizeEmptyImgShow;
+    });
     const frizeId: ComputedRef<string> = computed(() => {
       return store.state.frige.selectedCateId;
     });
@@ -105,36 +113,14 @@ export default defineComponent({
     const selectedCateId = computed(() => {
       return store.state.frige.selectedCateId;
     });
-    const showEmptyImg = ref(false);
     const SubmitDeleteItem = (itemId: string) => {
-      store
-        .dispatch("frige/frizeIngredient", {
-          frizeId: selectedCateId.value,
-          ingredientAdd: [],
-          ingredientDelete: [itemId],
-        })
-        .then(() => {
-          // if (ArrMock.value !== undefined) {
-          //   if (ArrMock.value.length === 0) {
-          //     showEmptyImg.value = true;
-          //   }
-          // }
-        });
+      store.dispatch("frige/frizeIngredient", {
+        frizeId: selectedCateId.value,
+        ingredientAdd: [],
+        ingredientDelete: [itemId],
+      });
     };
-    const showImg = computed(() => {
-      if (ArrMock.value.length > 1) return false;
-      return true;
-    });
-    // watch(
-    //   () => ArrMock.value,
-    //   (value, prevValue) => {
-    //     console.log("변경");
-    //     console.log(value);
-    //     console.log(value.length);
-    //     if (value.length == 0) showEmptyImg.value = true;
-    //     else showEmptyImg.value = false;
-    //   }
-    // );
+
     return {
       ArrMock,
       sortedItems,
@@ -156,6 +142,9 @@ ion-item {
   --inner-padding-end: 0px;
   --padding-end: 0px;
 }
+P {
+  margin: 0px;
+}
 ion-item-options {
   border: none;
   width: 20%;
@@ -175,18 +164,15 @@ ion-item-options {
   position: fixed;
   z-index: 2;
 }
-.login-background {
-  position: relative;
-  width: 100vw;
-  height: 50vh;
 
-  .logo-img {
-    position: absolute;
-    width: 200px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.logo-img {
+  position: absolute;
+  width: 30%;
+  max-width: 120px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
 }
 
 .delete-footer {
@@ -201,5 +187,26 @@ ion-item-options {
   font-weight: bold;
   margin: 0px;
   height: 46px;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import { RootState } from ".";
+import { RootState, store } from ".";
 import { AlaramIngredientType, FrigeCate, FrigeType } from "@/types/frige";
 import frizeAPI from "@/assets/api/frizeAPI";
 import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser, IngredientModify } from "@/types/request-types/frize-request-types";
@@ -73,6 +73,9 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     fetchFrizeIngredients(state, payload) {
       state.items = payload;
+      if (state.items.length === 0 || state.items.length === 1)
+        store.state.ui.frizeEmptyImgShow = true;
+      else store.state.ui.frizeEmptyImgShow = false;
     },
     initFrizeCateselected(state) {
       state.selectedCateId = state.frizeCate[0].frizeId;
@@ -82,14 +85,6 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     fetchItemsBeAdd(state, payload) {
       const selectedItems: FrigeType[] = [];
-      // const date = new Date();
-      // const year = date.getFullYear();
-      // const month = date.getMonth() + 1;
-      // const day = date.getDate();
-
-      // const expirationDate = new Date();
-      // expirationDate.setDate(expirationDate.getDate() + 10);
-
 
       if (payload) {
         payload.forEach((element: FrigeType) => {
@@ -133,7 +128,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         frizeId: payload.frizeId
       };
       await frizeAPI.SearchIngredientInFrize(reqData).then((res) => {
-        context.commit("fetchFrizeIngredients", res.data.dataObj);
+        context.commit("fetchFrizeIngredients", ...res.data.dataObj);
       });
     },
     async frizeIngredient(context, payload: FrizeIngreModify) {

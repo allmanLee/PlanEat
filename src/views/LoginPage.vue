@@ -4,7 +4,7 @@
       <div id="content" class="login-background">
         <img
           class="logo-img"
-          src="../../src/assets/img/logo/logo-all.png"
+          src="../../src/assets/img/logo-all.png"
           alt="planeat logo"
         />
       </div>
@@ -114,6 +114,8 @@ export default defineComponent({
 
 .logo-img {
   position: absolute;
+  width: 80%;
+  max-width: 200px;
   top: 50%;
   transform: translate(-50%, -50%);
 }

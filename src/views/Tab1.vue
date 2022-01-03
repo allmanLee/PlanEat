@@ -19,13 +19,14 @@
         >
         </alaram-list-item>
       </ion-list>
-      <div v-if="showLogo" class="login-background">
-        <img
-          class="logo-img"
-          src="../../src/assets/img/logo/logo-all.png"
-          alt="planeat logo"
-        />
-      </div>
+      <transition name="fade" mode="out-in">
+        <div v-if="showLogo" class="login-background">
+          <img
+            class="logo-img"
+            src="../../src/assets/img/logo-all.png"
+            alt="planeat logo"
+          /></div
+      ></transition>
     </ion-content>
   </ion-page>
 </template>
@@ -118,9 +119,20 @@ ion-content {
   .logo-img {
     position: absolute;
     top: 50%;
+    width: 80%;
+    max-width: 200px;
     transform: translate(-50%, -70%);
     filter: grayscale(100%);
     opacity: 0.42;
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

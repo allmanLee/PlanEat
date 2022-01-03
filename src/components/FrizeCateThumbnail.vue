@@ -1,7 +1,7 @@
 <template>
   <swiper :slides-per-view="6">
     <swiper-slide value="add">
-      <ion-col size="auto">
+      <ion-col>
         <ion-thumbnail>
           <ion-button
             mode="ios"
@@ -38,6 +38,7 @@
         <ion-text>추가하기</ion-text>
       </ion-col>
     </swiper-slide>
+
     <swiper-slide
       v-for="(item, index) of cateItems"
       :value="index"
@@ -197,6 +198,8 @@ export default defineComponent({
 .swiper-wrapper {
   .swiper-slide {
     ion-col {
+      widows: 60px;
+      max-width: 60px !important;
       ion-thumbnail {
         text-align: center;
         box-sizing: content-box !important;

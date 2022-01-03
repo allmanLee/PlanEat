@@ -9,12 +9,12 @@ import {
 import { InjectionKey } from 'vue';
 import { UserModuleState, userModule as user } from './user';
 import { FrigeModuleState, FrigeModule as frige } from "./frige";
-// import { UIModuleState, UIModule as ui } from "./ui";
+import { UIModuleState, UIModule as ui } from "./ui";
 
 export interface RootState {
   user: UserModuleState;
   frige: FrigeModuleState;
-  // ui: UIModuleState;
+  ui: UIModuleState;
 }
 
 export const key: InjectionKey<Store<RootState>> = Symbol();
@@ -28,7 +28,7 @@ export const store = createStore({
   mutations: {},
   actions: {},
   modules: {
-    user, frige
+    user, frige, ui
   },
   plugins: process.env.NODE_ENV === 'development' ? [createLogger()] : undefined
 });

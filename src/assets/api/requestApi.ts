@@ -46,12 +46,11 @@ instance.interceptors.request.use(async function (config) {
       console.log("requstAPI: 토큰 변경 실패");
       const err = error.response.data.message;
       //요청 에러 직전 호출됩니다.
-      if (err === "must be re login" || err === "최근 접근 토큰과 해당 토큰이 불일치") {
-        localStorage.clear();
-        alert("다시 로그인해주세요");
-        location.replace("/");
-        return Promise.reject(error);
-      }
+      localStorage.clear();
+      alert("다시 로그인해주세요");
+      location.replace("/");
+      return Promise.reject(error);
+
     });
   }
   return config;
