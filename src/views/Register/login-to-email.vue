@@ -30,7 +30,7 @@
       </ion-button>
     </ion-item>
 
-    <ion-button expand="block" class="login-button" @click="login"
+    <ion-button mode="ios" expand="block" class="login-button" @click="login"
       >로그인</ion-button
     >
     <ion-button

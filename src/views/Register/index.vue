@@ -21,8 +21,11 @@
         :propAuthSublabel="authSublabel"
         @emitAuth="emitedAuth"
       ></register-input-auth>
+    </ion-content>
+    <ion-footer>
       <div v-if="pageCnt !== 0">
         <ion-button
+          mode="ios"
           class="button-email-authentication"
           expand="block"
           :disabled="activeAthBtn ? false : true"
@@ -30,6 +33,7 @@
           >이메일 인증</ion-button
         >
         <ion-button
+          mode="ios"
           class="button-continue"
           expand="block"
           :disabled="activeCnBtn ? false : true"
@@ -38,7 +42,7 @@
           계속하기</ion-button
         >
       </div>
-    </ion-content>
+    </ion-footer>
     <teleport to="body">
       <app-popover :propOpenPopover="popDisabled">
         <div>
@@ -57,7 +61,13 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from "vue";
-import { IonPage, IonButton, IonContent, IonSpinner } from "@ionic/vue";
+import {
+  IonPage,
+  IonButton,
+  IonContent,
+  IonSpinner,
+  IonFooter,
+} from "@ionic/vue";
 import LoginToEmail from "@/views/Register/login-to-email.vue";
 import RegisterInputEmail from "@/views/Register/register-input-email.vue";
 import RegisterInputPw from "@/views/Register/register-input-pw.vue";
@@ -69,7 +79,7 @@ import AppPopover from "@/components/AppPopover.vue";
 import { useStore } from "@/store/index";
 import router from "@/router";
 export default defineComponent({
-  setup(props) {
+  setup() {
     //이메일이 중복되었는지 서버에서 확인합니다.
     const store = useStore();
     const email = ref(""); //이메일
@@ -211,6 +221,7 @@ export default defineComponent({
     IonButton,
     IonContent,
     IonSpinner,
+    IonFooter,
     LoginToEmail,
     AppHeader,
     AppPopover,
@@ -227,6 +238,7 @@ ion-button {
   &[disabled] {
     --background: var(--custom-gray-04);
   }
+  transition: all 0.3s ease;
 }
 
 .button-email-authentication {
@@ -248,5 +260,10 @@ ion-button {
     weight: reguler;
   }
   text-align: center;
+}
+ion-footer {
+  padding-left: 16px;
+  padding-right: 16px;
+  border: none;
 }
 </style>

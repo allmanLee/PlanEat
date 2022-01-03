@@ -3,15 +3,7 @@
     <div class="register-input-container">
       <ion-text color="dark" class="register-title">이메일 인증</ion-text>
     </div>
-    <ion-button
-      @click="test"
-      fill="clear"
-      expand="full"
-      color="dark"
-      :disabled="AthReBtndisabled"
-      class="auth-re-button"
-      >재요청</ion-button
-    >
+
     <ion-item lines="none">
       <app-input
         :propAutofocus="true"
@@ -33,6 +25,15 @@
       </ion-button>
     </ion-item>
     <p class="sub-label">{{ propAuthSublabel }}</p>
+    <ion-button
+      @click="test"
+      fill="clear"
+      expand="full"
+      color="dark"
+      :disabled="AthReBtndisabled"
+      class="auth-re-button"
+      >재요청</ion-button
+    >
     <ion-label class="countdown-label"
       ><p>{{ count }}초 남음</p></ion-label
     >
@@ -139,7 +140,7 @@ ion-icon {
 }
 
 .auth-re-button {
-  right: rem-calc(12px);
+  margin-top: rem-calc(32px);
 }
 .countdown-label {
   margin: rem-calc(2px);
