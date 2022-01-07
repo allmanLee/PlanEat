@@ -17,21 +17,31 @@
           >
             <div class="add-cate-popover">
               <ion-toolbar mode="ios">
-                <ion-title>냉장고 추가</ion-title>
-                <ion-buttons slot="end">
-                  <ion-button color="dark" @click="openPop(false)">
-                    <ion-icon :icon="closeOutline"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
+                <ion-title mode="ios">냉장고 추가</ion-title>
               </ion-toolbar>
               <app-input
                 :propPlaceholder="'냉장고 이름'"
                 :propValue="inputedName"
                 @ionInput="inputedName = $event.target.value"
               ></app-input>
-              <ion-button expand="block" @click="addCateBtn(), openPop(false)">
-                추가하기
-              </ion-button>
+              <ion-footer mode="ios">
+                <ion-button
+                  mode="ios"
+                  expand="block"
+                  color="medium"
+                  fill="outline"
+                  @click="openPop(false)"
+                >
+                  닫기
+                </ion-button>
+                <ion-button
+                  mode="ios"
+                  expand="block"
+                  @click="addCateBtn(), openPop(false)"
+                >
+                  추가하기
+                </ion-button>
+              </ion-footer>
             </div>
           </app-popover>
         </ion-thumbnail>
@@ -67,9 +77,9 @@ import { defineComponent, ref, PropType, computed, watch } from "vue";
 import {
   IonIcon,
   IonText,
-  IonButton,
-  IonButtons,
   IonTitle,
+  IonButton,
+  IonFooter,
   IonCol,
   IonToolbar,
   IonThumbnail,
@@ -172,12 +182,11 @@ export default defineComponent({
     AppInput,
     Swiper,
     SwiperSlide,
-    IonToolbar,
     IonThumbnail,
-    // Tab3ListButtons,
-    IonButton,
-    IonButtons,
+    IonToolbar,
+    IonFooter,
     IonTitle,
+    IonButton,
     IonCol,
     IonIcon,
     IonText,
@@ -269,17 +278,22 @@ export default defineComponent({
 
   ion-toolbar {
     margin-bottom: 16px;
-    ion-title {
-      min-width: 120px;
-    }
     ion-buttons {
       ion-button {
+        min-height: rem-calc(44px);
         margin-top: 0 !important;
       }
     }
   }
-  ion-button {
-    margin-top: 16px;
+  ion-footer {
+    margin-top: 60px;
+    ion-button.button-outline {
+      --background-activated: white;
+    }
+
+    ion-button {
+      margin-top: 12px;
+    }
   }
 }
 </style>
