@@ -46,7 +46,7 @@ import { computed, defineComponent, ref, watch } from "vue";
 import { IonicSwiper, IonModal } from "@ionic/vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import Tab2ContentCard from "./Tab2ContentCard.vue";
-import Modal from "./AppModal.vue";
+import Modal from "./AppModalContainer.vue";
 import Tab2ModalContent from "./Tab2ModalContent.vue";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";

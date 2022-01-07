@@ -6,7 +6,6 @@
   </ion-header>
   <slot></slot>
 </template>
-
 <script>
 import { IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
 import { defineComponent, computed } from "vue";

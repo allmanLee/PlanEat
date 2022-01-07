@@ -27,7 +27,7 @@ import { useStore } from "@/store/index";
 import { IonFab, IonIcon, IonFabButton, IonModal } from "@ionic/vue";
 import { computed, ref } from "@vue/reactivity";
 import { defineComponent } from "vue";
-import Modal from "./AppModal.vue";
+import Modal from "./AppModalContainer.vue";
 import Tab3AddModalContent from "@/components/Tab3AddModalContent.vue";
 import { FrigeType, IngredientType } from "@/types/frige";
 export default defineComponent({

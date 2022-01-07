@@ -1,6 +1,6 @@
-//lol-request-controller
 import { AuthUser, Email, RegisterUser } from "@/types/request-types/auth-request-types";
 import requestApi from "./requestApi";
+import { Capacitor3KakaoLogin } from "capacitor3-kakao-login";
 
 export default {
   /**POST
@@ -58,7 +58,36 @@ export default {
     });
   },
 
-  /*GET
+  /**GET
+   * /api/userControll/deleteMember
+   * 회원탈퇴
+   */
+  DeleteMember() {
+    return requestApi({
+      url: "/api/userControll/deleteMember",
+      method: "get"
+    }).then(() => {
+      Capacitor3KakaoLogin.kakaoUnlink();
+      localStorage.clear();
+      alert("로그아웃 되었습니다.");
+      location.replace("/");
+    }).catch(() => {
+      alert("다시 로그인 후 시도해주세요.");
+    });
+  },
+
+  /**Method
+   * 로그아웃
+   */
+  Logout() {
+    // if (localStorage.getItem())
+    localStorage.clear();
+    alert("로그아웃 되었습니다.");
+    location.replace("/");
+  },
+
+
+  /**GET
    * /api/auth/check_authkey
    * 인증키 확인
    */
