@@ -59,12 +59,12 @@ export default {
   },
 
   /**GET
-   * /api/userControll/deleteMember
+   * /api/userController/deleteMember
    * 회원탈퇴
    */
   DeleteMember() {
     return requestApi({
-      url: "/api/userControll/deleteMember",
+      url: "/api/userController/deleteMember",
       method: "get"
     }).then(() => {
       Capacitor3KakaoLogin.kakaoUnlink();

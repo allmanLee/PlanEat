@@ -1,7 +1,7 @@
 <template>
   <div>
     <ion-card mode="ios">
-      <ion-list-header mode="ios">기능</ion-list-header>
+      <ion-list-header mode="ios">기능 설정</ion-list-header>
       <ion-list>
         <ion-item
           lines="full"
@@ -16,7 +16,7 @@
     </ion-card>
 
     <ion-card mode="ios">
-      <ion-list-header mode="ios">앱</ion-list-header>
+      <ion-list-header mode="ios">앱 설정</ion-list-header>
       <ion-list>
         <ion-item
           lines="full"
@@ -31,12 +31,13 @@
     </ion-card>
 
     <ion-card mode="ios">
-      <ion-list-header mode="ios">계정</ion-list-header>
+      <ion-list-header mode="ios">계정 설정</ion-list-header>
       <ion-list>
         <ion-item
           lines="full"
           v-for="(item, index) of cardItems03"
           button
+          :color="index === 1 ? 'light' : 'none'"
           @click="item.method()"
           :key="index"
         >
@@ -98,7 +99,6 @@ export default defineComponent({
     SettingDeleteMember,
     SettingPrivacy,
   },
-  emits: ["submit"],
   setup() {
     const isOpenRef = ref(false);
     const openModal = (state: boolean) => (isOpenRef.value = state);
