@@ -25,11 +25,11 @@ import "@/theme/variables.css";
 import "@/assets/css/globle.scss";
 import "@/assets/css/custom.scss";
 import "@/assets/css/base.scss";
-import { KakaoENV } from "../kakao-key";
+import config from "@/config.env";
 import { Capacitor3KakaoLogin } from 'capacitor3-kakao-login';
 import { SplashScreen } from '@capacitor/splash-screen';
 // eslint-disable-next-line @typescript-eslint/camelcase
-Capacitor3KakaoLogin.initializeKakao({ web_key: "a4c31b869ad4d106aac99ef115f4be70", app_key: "533c1f3f6722eb148d22c636cf843e3e" });
+Capacitor3KakaoLogin.initializeKakao(config.kakao);
 
 const app = createApp(App).use(store, key).use(IonicVue).use(router).use(createVueKakaoSdk('a4c31b869ad4d106aac99ef115f4be70'));
 
