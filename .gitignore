@@ -33,7 +33,8 @@ npm-debug.log*
 /android/*
 /config
 android
-kakao-key.ts
+config.env.ts
+
 #아이콘 및 스플레시 리소스
 resources/android/icon
 resources/android/splash
@@ -41,3 +42,4 @@ resources/ios/icon
 resources/ios/splash
 resources/windows/icon
 resources/windows/splash
+src/config.env.ts
