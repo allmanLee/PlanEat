@@ -11,6 +11,10 @@
           <ion-icon :icon="notificationsOutline" />
           <ion-label>알림</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="tab2" href="/tabs/tab2">
+          <ion-icon :icon="settingsOutline" />
+          <ion-label>MY/설정</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
@@ -28,7 +32,12 @@ import {
   IonRouterOutlet,
 } from "@ionic/vue";
 import { useStore } from "@/store/index";
-import { homeOutline, notificationsOutline, fishOutline } from "ionicons/icons";
+import {
+  homeOutline,
+  notificationsOutline,
+  fishOutline,
+  settingsOutline,
+} from "ionicons/icons";
 
 export default defineComponent({
   name: "Tabs",
@@ -51,6 +60,7 @@ export default defineComponent({
       homeOutline,
       notificationsOutline,
       fishOutline,
+      settingsOutline,
     };
   },
 });

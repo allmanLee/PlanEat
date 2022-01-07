@@ -1,53 +1,36 @@
 <template>
   <ion-page>
-    <app-header :headerTitle="'레시피'"></app-header>
-    <ion-header>
-      <tab-2-segment
-        :propSegmentValue="segmentValue"
-        @emitSegmentValue="fetchSegmentValue"
-      ></tab-2-segment>
-    </ion-header>
-    <ion-content class="b">
-      <app-slider
-        :propSegmentValue="segmentValue"
-        @emitSlideValue="fetchSlideValue"
-      ></app-slider>
+    <app-header :headerTitle="'MY/설정'"></app-header>
+    <ion-content>
+      <setting-card-list></setting-card-list>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { IonPage, IonContent, IonHeader } from "@ionic/vue";
+import { IonPage, IonContent } from "@ionic/vue";
 import AppHeader from "@/components/AppHeader.vue";
-import Tab2Segment from "@/components/Tab2Segment.vue";
-import AppSlider from "@/components/AppSlider.vue";
+import SettingCardList from "@/components/Tab2CardList.vue";
 
 export default defineComponent({
   components: {
     AppHeader,
-    Tab2Segment,
     IonPage,
     IonContent,
-    IonHeader,
-    AppSlider,
+    SettingCardList,
   },
   setup() {
-    const segmentValue = ref(0);
-    const fetchSegmentValue = (val: number) => {
-      segmentValue.value = val;
-      console.log("segment: ", val);
-    };
-    const fetchSlideValue = (val: number) => {
-      console.log("emit: ", val);
-      segmentValue.value = val;
-    };
-
-    return { segmentValue, fetchSegmentValue, fetchSlideValue };
+    return {};
   },
 });
 </script>
 
 
 <style scoped>
+ion-content {
+  --background: var(--custom-gray-05);
+  --padding-start: 0px;
+  --padding-end: 0px;
+}
 </style>
