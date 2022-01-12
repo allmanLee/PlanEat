@@ -16,8 +16,8 @@
             @closePopover="(popStatus = false), (inputedName = '')"
           >
             <div class="add-cate-popover">
-              <ion-toolbar mode="ios">
-                <ion-title mode="ios">냉장고 추가</ion-title>
+              <ion-toolbar mode="md">
+                <ion-title mode="md">카테고리 추가</ion-title>
               </ion-toolbar>
               <app-input
                 :propPlaceholder="'냉장고 이름'"
@@ -278,6 +278,13 @@ export default defineComponent({
 
   ion-toolbar {
     margin-bottom: 16px;
+    ion-title {
+      padding-left: 0px;
+      font-weight: 600;
+      .toolbar-title {
+        min-width: 300px;
+      }
+    }
     ion-buttons {
       ion-button {
         min-height: rem-calc(44px);

@@ -6,8 +6,7 @@
     <ion-label>
       <h2>유통기간 알림</h2>
       <h3>
-        {{ frizeName }}에서 {{ ingredientName }}가 {{ remainingDates }}일
-        남았습니다.
+        [{{ frizeName }}] {{ ingredientName }} {{ remainingDates }}일 남음
       </h3>
       <p>{{ theDate }}</p>
     </ion-label>

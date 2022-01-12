@@ -22,7 +22,7 @@
         @emitAuth="emitedAuth"
       ></register-input-auth>
     </ion-content>
-    <ion-footer>
+    <ion-footer mode="ios">
       <div v-if="pageCnt !== 0">
         <ion-button
           mode="ios"

@@ -21,7 +21,7 @@
           fill="clear"
           class="memotoggle-btn"
           @click="openPop(true)"
-          >냉장고 삭제</ion-button
+          >카테고리 삭제</ion-button
         ></ion-col
       >
     </ion-row>
@@ -34,24 +34,35 @@
     <!--삭제 모달-->
     <app-popover :propOpenPopover="popStatus" @closePopover="openPop(false)">
       <div class="remove-cate-popover">
-        <ion-toolbar>
-          <ion-title mode="ios"> {{ frizeSeletedName }} 삭제 </ion-title>
-          <ion-buttons slot="end">
-            <ion-button color="dark" @click="openPop(false)">
-              <ion-icon :icon="closeOutline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
+        <ion-toolbar mode="md">
+          <ion-title mode="md"> {{ frizeSeletedName }}</ion-title>
         </ion-toolbar>
 
-        <ion-text>해당 냉장고 삭제하시겠습니까?<br /> </ion-text>
-        <ion-button
-          color="danger"
-          expand="block"
-          @click="deleteCate(), openPop(false)"
-          @closePopover="openPop(false)"
+        <ion-text
+          ><span class="main-text">해당 카테고리를 삭제하시겠습니까?</span
+          ><br /><br />
+          카테고리를 삭제하면 이 카테고리에 추가되었던 재료가 모두 삭제되며
+          복원할 수 없습니다.</ion-text
         >
-          삭제하기
-        </ion-button>
+        <ion-footer mode="ios">
+          <ion-button
+            mode="ios"
+            expand="block"
+            color="medium"
+            fill="outline"
+            @click="openPop(false)"
+          >
+            닫기
+          </ion-button>
+          <ion-button
+            color="danger"
+            expand="block"
+            @click="deleteCate(), openPop(false)"
+            @closePopover="openPop(false)"
+          >
+            삭제하기
+          </ion-button>
+        </ion-footer>
       </div>
     </app-popover>
     <fab-button-add :propFrizeId="frizeSeletedId"></fab-button-add>
@@ -64,12 +75,11 @@ import FabButtonAdd from "@/components/FabButtonAdd.vue";
 import {
   IonPage,
   IonContent,
-  IonIcon,
+  IonFooter,
   IonRow,
   IonButton,
   IonCol,
   IonTitle,
-  IonButtons,
   IonToolbar,
   IonText,
 } from "@ionic/vue";
@@ -162,15 +172,14 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonIcon,
     IonTitle,
-    IonButtons,
     IonToolbar,
     IonText,
     FrizeCateThumbnail,
     FabButtonAdd,
     Tab3ListButtons,
     AppPopover,
+    IonFooter,
     IonRow,
     IonButton,
     IonCol,
@@ -216,20 +225,28 @@ ion-content {
 .remove-cate-popover {
   padding: 16px;
   padding-top: 8px;
-  text-align: center;
   ion-toolbar {
-    margin-bottom: 4px;
     ion-title {
-      min-width: 120px;
-    }
-    ion-buttons {
-      ion-button {
-        margin-top: 0 !important;
+      padding-left: 0px;
+      font-weight: 600;
+      .toolbar-title {
+        min-width: 300px;
       }
     }
   }
-  ion-button {
-    margin-top: 16px;
+  .main-text {
+    font-size: 16px;
+    color: black;
+  }
+  ion-footer {
+    margin-top: 60px;
+    ion-button.button-outline {
+      --background-activated: white;
+    }
+
+    ion-button {
+      margin-top: 12px;
+    }
   }
 }
 </style>
