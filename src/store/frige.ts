@@ -73,7 +73,7 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     fetchFrizeIngredients(state, payload) {
       state.items = payload;
-      if (state.items.length === 0 || state.items.length === 1)
+      if (state.items.length === 0)
         store.state.ui.frizeEmptyImgShow = true;
       else store.state.ui.frizeEmptyImgShow = false;
     },
