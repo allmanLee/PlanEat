@@ -1,5 +1,5 @@
 <template>
-  <swiper :slides-per-view="6">
+  <swiper :slides-per-view="6" v-cloak>
     <swiper-slide value="add">
       <ion-col>
         <ion-thumbnail>

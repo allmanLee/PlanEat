@@ -141,27 +141,17 @@ export default defineComponent({
           "냉장고를 삭제할 수 없습니다.\n최소 한 개의 냉장고가 있어야 합니다."
         );
     };
-    const slideOpts = {
-      slidesPerView: 5.5,
-    };
-    const stringSlice = (string: string) => {
-      return string.slice(0, 2);
-    };
 
     //메모 표시하기
     const memoDisabled = ref(true);
 
     return {
       testMock,
-
-      slideOpts,
       addOutline,
-
       closeOutline,
       deleteCate,
       trashOutline,
       notificationsOutline,
-      stringSlice,
       openPop,
       popStatus,
       frizeSeletedName,
