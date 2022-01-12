@@ -37,7 +37,7 @@
                     <ion-button
                       fill="clear"
                       type="button"
-                      color="medium"
+                      color="danger"
                       @click="SubmitDeleteItem(ingredient.id)"
                     >
                       삭제
@@ -154,9 +154,6 @@ ion-item-options {
       top: auto;
       bottom: auto;
       left: 16px;
-    }
-    ion-icon {
-      font-size: rem-calc(40px);
     }
   }
 }

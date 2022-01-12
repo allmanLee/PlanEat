@@ -35,13 +35,20 @@
     <ion-list v-if="!propAddMode" class="modify-popup">
       <ion-list-header>
         <ion-toolbar>
-          <ion-title mode="ios">{{ ingredient.name }} </ion-title>
+          <ion-title mode="ios"
+            >{{ ingredient.name
+            }}<span v-if="expirationDateTag < 3" class="badge-container"
+              ><ion-badge :color="expirationDateTagColor">{{
+                expirationDateTagName
+              }}</ion-badge></span
+            >
+          </ion-title>
         </ion-toolbar>
       </ion-list-header>
       <ion-item lines="none">
         <ion-label position="stacked">보관날짜</ion-label>
         <transition name="fade" mode="out-in">
-          <ion-text v-if="modifyMode">{{ ingreUpdatedDate }}</ion-text>
+          <ion-text v-if="modifyMode">{{ koreanUpdatedDate }}</ion-text>
           <app-input
             v-else
             :propType="'date'"
@@ -52,15 +59,9 @@
         </transition>
       </ion-item>
       <ion-item lines="none">
-        <ion-label position="stacked"
-          >유통기한<span v-if="expirationDateTag < 3" class="badge-container"
-            ><ion-badge :color="expirationDateTagColor">{{
-              expirationDateTagName
-            }}</ion-badge></span
-          ></ion-label
-        >
+        <ion-label position="stacked">유통기한</ion-label>
         <transition name="fade" mode="out-in">
-          <ion-text v-if="modifyMode">{{ ingreExpirationDate }}</ion-text>
+          <ion-text v-if="modifyMode">{{ koreanExpirationDate }}</ion-text>
           <app-input
             v-else
             :propType="'date'"
@@ -141,6 +142,7 @@ import {
   IonItem,
   IonButtons,
 } from "@ionic/vue";
+
 import AppPopover from "./AppPopover.vue";
 import { VueEvent } from "@/types/event";
 import { FrigeType } from "@/types/frige";
@@ -154,21 +156,22 @@ export default defineComponent({
     IonCol,
     IonCardHeader,
     IonCardTitle,
+
+    IonCardContent,
     IonList,
     IonListHeader,
     IonTitle,
     IonItem,
-    IonCardContent,
     IonLabel,
     IonToolbar,
     IonFooter,
     IonButton,
     IonText,
     IonTextarea,
-    IonBadge,
-    AppPopover,
     AppInput,
     IonButtons,
+    IonBadge,
+    AppPopover,
   },
   props: {
     propIngredient: {
@@ -235,10 +238,9 @@ export default defineComponent({
     ////수정될 업데이트 날짜
     const inputedModifyUpdatedDate = ref();
 
-    const koreanExpirationDate = computed(() => {
-      const expirationDate = props.propIngredient.expirationDate;
-      if (!expirationDate) return;
-      return expirationDate
+    const changeKoreanDate = (date: string) => {
+      if (!date) return;
+      return date
         .split("-")
         .map((el, index) => {
           if (index === 0) return el + "년";
@@ -246,7 +248,20 @@ export default defineComponent({
           else return el + "일";
         })
         .join(" ");
+    };
+
+    const koreanExpirationDate = computed(() => {
+      const expirationDate = props.propIngredient.expirationDate;
+      if (!expirationDate) return;
+      return changeKoreanDate(expirationDate);
     });
+
+    const koreanUpdatedDate = computed(() => {
+      const expirationDate = props.propIngredient.expirationDate;
+      if (!expirationDate) return;
+      return changeKoreanDate(expirationDate);
+    });
+
     const ingreUpdatedDate = computed(() => {
       if (!props.propIngredient.updatedDate) return;
       return formatDate(props.propIngredient.updatedDate);
@@ -285,26 +300,28 @@ export default defineComponent({
           `${exDateArr[0]}/${exDateArr[1]}/${exDateArr[2] + 1}`
         );
       }
-      console.log(upDate);
       const dateDifference =
         (exDate.getTime() - upDate.getTime()) / (1000 * 60 * 60 * 24);
-      if (dateDifference < 0) return 0;
-      else if (dateDifference === 0) return 1;
-      else if (dateDifference <= 7) return 2;
-      else return 3;
+      // if (dateDifference < 0) return 0;
+      // else if (dateDifference === 0) return 1;
+      // else if (dateDifference <= 7) return 2;
+      // else return 3;
+
+      return dateDifference;
     });
+
     const expirationDateTagName = computed(() => {
       const tagValue = expirationDateTag.value;
-      if (tagValue === 0) return "지남";
-      else if (tagValue === 1) return "오늘";
-      else if (tagValue === 2) return "주의";
+      if (tagValue < 0) return "지남";
+      else if (tagValue === 0) return "오늘";
+      else if (tagValue <= 7) return `${tagValue}일 남음`;
       else return "보통";
     });
     const expirationDateTagColor = computed(() => {
       const tagValue = expirationDateTag.value;
-      if (tagValue === 0) return "medium";
-      else if (tagValue === 1) return "danger";
-      else if (tagValue === 2) return "warning";
+      if (tagValue < 0) return "medium";
+      else if (tagValue === 0) return "danger";
+      else if (tagValue <= 7) return "warning";
       else return "success";
     });
 
@@ -356,6 +373,7 @@ export default defineComponent({
       inputedModifyUpdatedDate,
       deleteIngredient,
       koreanExpirationDate,
+      koreanUpdatedDate,
       expirationDateTag,
       expirationDateTagName,
       expirationDateTagColor,
@@ -369,13 +387,13 @@ ion-card {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: auto;
-  border: var(--custom-gray-04) 1px solid;
   margin-bottom: 8px;
   margin-top: 8px;
   margin-left: 0;
   margin-right: 0;
   padding: 16px;
-  --border-width: 1px;
+  margin-right: 4px;
+  margin-left: 4px;
   --background: white;
   transition: all 0.5s ease;
   ion-card-header {
@@ -388,7 +406,6 @@ ion-card {
   ion-card-content {
     margin-top: 4px;
     padding: 0px;
-    transition: all 0.5s ease;
   }
 }
 
@@ -399,7 +416,9 @@ ion-card {
   vertical-align: middle;
   padding-left: 8px;
 }
-
+ion-badge {
+  --color: white !important;
+}
 .text-date {
   text-align: end;
   font-size: rem-calc(12px);
@@ -422,25 +441,29 @@ ion-card {
 
 //팝업부분
 .modify-popup {
+  // height: 500px;
   ion-list-header {
     padding: 0;
     padding-top: 16px;
   }
   ion-item {
-    min-height: 79px;
+    min-height: 86px;
     --padding-start: 16px;
     --padding-end: 16px;
     margin-top: 10px;
     --inner-padding-end: 0;
     transition: all 0.5s ease;
     ion-label {
+      font-weight: 600;
+      font-size: rem-calc(18px);
+      color: var(--ion-color-primary-shade);
       min-height: 26px;
     }
     ion-text {
-      font-size: rem-calc(21px);
-      font-weight: 500;
+      font-size: rem-calc(16px);
       min-height: rem-calc(44px);
     }
+    transition: all 2s ease;
   }
   ion-toolbar {
     ion-title {
@@ -458,18 +481,10 @@ ion-card {
     --padding-top: 0px;
   }
   .memo-input-item {
+    min-height: 136px;
     --padding-bottom: 20px;
     ion-text {
       min-height: rem-calc(72px);
-    }
-    ion-textarea {
-      widows: auto;
-      border-radius: 4px !important;
-      border: 2px solid var(--custom-gray-04) !important;
-      --padding-start: 16px;
-      --padding-end: 16px;
-      --padding-top: 16px;
-      --padding-bottom: 16px;
     }
   }
   ion-footer {
@@ -493,6 +508,7 @@ ion-card {
       }
     }
   }
+  transition: all 2s ease;
 }
 
 .fade-enter-active,

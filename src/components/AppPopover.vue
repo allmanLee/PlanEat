@@ -5,6 +5,7 @@
         v-if="openPopover"
         class="popover-background"
         v-on:click.self="ClickOutside"
+        v-cloak
       >
         <ion-card mode="ios" class="popover-content">
           <slot></slot>

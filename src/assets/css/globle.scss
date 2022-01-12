@@ -5,7 +5,12 @@ a {
   color: black;
   text-decoration: none;
 }
-
+[v-cloak]::before {
+  content: '로딩중...'
+}
+[v-cloak] > * {
+  display:none;
+}
 ion-popover {
   div.popover-content {
     top: 50% !important;

@@ -20,6 +20,23 @@ ion-button {
   padding-left: 16px !important;
 }
 
+ion-textarea {
+  //border: 2px solid var(--custom-gray-04) !important;
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+  --padding-top: 16px !important;
+  --padding-bottom: 16px !important;
+  textarea {
+    border-radius: 4px !important;
+    border: 2px solid var(--custom-gray-05) !important;
+    background-color: var(--custom-gray-05) !important;
+  }
+  textarea:focus {
+  background-color: #ffffff !important;
+  border: 2px solid #f79503 !important;
+  transition: border 0.15s ease;
+  }
+}
 ion-input {
   --padding-start: 16px !important;
   --padding-end: 16px !important;

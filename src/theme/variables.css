@@ -49,10 +49,18 @@ http://ionicframework.com/docs/theming/ */
   /** warning **/
   --ion-color-warning: #ffc409;
   --ion-color-warning-rgb: 255, 196, 9;
-  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast: #ffffff;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0ac08;
   --ion-color-warning-tint: #ffca22;
+
+    /** warning **/
+  --ion-color-warning2: #ffc409;
+  --ion-color-warning2-rgb: 255, 196, 9;
+  --ion-color-warning2-contrast: #ffffff;
+  --ion-color-warning2-contrast-rgb: 0, 0, 0;
+  --ion-color-warning2-shade: #e0ac08;
+  --ion-color-warning2-tint: #ffca22;
 
   /** danger **/
   --ion-color-danger: #eb445a;
