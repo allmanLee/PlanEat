@@ -67,6 +67,7 @@ import {
   IonContent,
   IonSpinner,
   IonFooter,
+  loadingController,
 } from "@ionic/vue";
 import LoginToEmail from "@/views/Register/login-to-email.vue";
 import RegisterInputEmail from "@/views/Register/register-input-email.vue";
@@ -123,12 +124,31 @@ export default defineComponent({
     };
     const EmailSublabel = ref("");
     const authSublabel = ref("");
+
+    //로딩 스플레시
+    const loadingSinner = async () => {
+      return await loadingController.create({
+        spinner: "bubbles",
+        mode: "ios",
+        duration: 20000,
+        message: "잠시만 기다려주세요.",
+        translucent: true,
+        cssClass: "custom-class custom-loading",
+        backdropDismiss: false,
+      });
+    };
+
     //로그인
     const loginAPI = () => {
-      return userAPI.LoginToEmail({
-        email: email.value,
-        password: password.value,
-      });
+      loadingSinner().then((data) => data.present());
+      return userAPI
+        .LoginToEmail({
+          email: email.value,
+          password: password.value,
+        })
+        .then(() => {
+          loadingController.dismiss();
+        });
     };
 
     //회원가입

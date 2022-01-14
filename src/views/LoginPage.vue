@@ -34,7 +34,14 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { IonPage, IonContent, IonFooter, IonIcon, IonButton } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  IonFooter,
+  IonIcon,
+  IonButton,
+  loadingController,
+} from "@ionic/vue";
 import { useKakao } from "vue3-kakao-sdk";
 import { useRouter } from "vue-router";
 import { useStore } from "@/store/index";
@@ -50,6 +57,20 @@ export default defineComponent({
     if (localStorage.getItem("reft")) {
       router.push("/tabs");
     }
+
+    //로딩 스플레시
+    const loadingSinner = async () => {
+      return await loadingController.create({
+        spinner: "bubbles",
+        mode: "ios",
+        duration: 20000,
+        message: "잠시만 기다려주세요.",
+        translucent: true,
+        cssClass: "custom-class custom-loading",
+        backdropDismiss: false,
+      });
+    };
+
     //카카오 회원정보 불러오기(DB에 저장합니다.)
     const createServiceMember = async (email: string) => {
       const reqData: AuthSNSOption = {
@@ -62,6 +83,7 @@ export default defineComponent({
             email: reqData.email,
             frizeName: "냉장고",
           });
+        loadingController.dismiss();
         router.push("/tabs/tab3/tab3Add");
       });
     };
@@ -82,6 +104,7 @@ export default defineComponent({
 
     //카카오 로그인
     const onClickLogin = async () => {
+      loadingSinner().then((data) => data.present());
       Capacitor3KakaoLogin.kakaoLogin()
         .then(() => {
           setTimeout(() => {

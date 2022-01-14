@@ -6,7 +6,7 @@
         <ion-refresher-content
           :pulling-icon="chevronDownCircleOutline"
           pulling-text="당겨서 새로고침!"
-          refreshing-spinner="circles"
+          refreshing-spinner="bubbles"
           refreshing-text="불러오는중..."
         >
         </ion-refresher-content>
