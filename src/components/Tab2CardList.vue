@@ -186,6 +186,7 @@ ion-header {
   }
 }
 ion-card {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
   margin: {
     left: 0px;
     right: 0px;

@@ -113,7 +113,7 @@ ion-item {
     vertical-align: middle;
     ion-icon {
       vertical-align: middle;
-      font-size: 28px;
+      font-size: rem-calc(28px);
       margin-top: -2.4px;
     }
   }

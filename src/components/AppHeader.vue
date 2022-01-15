@@ -33,4 +33,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+ion-toolbar {
+  --background: none;
+  background-color: none !important;
+}
 </style>
