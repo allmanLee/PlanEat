@@ -1,106 +1,105 @@
 <template>
-  <swiper :slides-per-view="6" v-cloak>
-    <swiper-slide value="add">
-      <ion-col>
-        <ion-thumbnail>
-          <ion-button
-            mode="ios"
-            color="dark"
-            fill="clear"
-            @click="openPop(true)"
-          >
-            <ion-icon :icon="addOutline"></ion-icon>
-          </ion-button>
-          <app-popover
-            :propOpenPopover="popStatus"
-            @closePopover="(popStatus = false), (inputedName = '')"
-          >
-            <div class="add-cate-popover">
-              <ion-toolbar mode="md">
-                <ion-title mode="md">카테고리 추가</ion-title>
-              </ion-toolbar>
-              <app-input
-                :propPlaceholder="'냉장고 이름'"
-                :propValue="inputedName"
-                @ionInput="inputedName = $event.target.value"
-              ></app-input>
-              <ion-footer mode="ios">
-                <ion-button
-                  mode="ios"
-                  expand="block"
-                  color="medium"
-                  fill="outline"
-                  @click="openPop(false)"
-                >
-                  닫기
-                </ion-button>
-                <ion-button
-                  mode="ios"
-                  expand="block"
-                  @click="addCateBtn(), openPop(false)"
-                >
-                  추가하기
-                </ion-button>
-              </ion-footer>
-            </div>
-          </app-popover>
-        </ion-thumbnail>
-        <ion-text>추가하기</ion-text>
-      </ion-col>
-    </swiper-slide>
-
+  <swiper
+    mode="ios"
+    id="swiper"
+    :slides-per-view="slidePerView"
+    @swiper="onSwiper"
+    @slideChange="onSlideChange"
+    v-cloak
+  >
     <swiper-slide
       v-for="(item, index) of cateItems"
       :value="index"
       :key="item.frizeName"
     >
-      <ion-col size="auto">
-        <ion-thumbnail
-          :class="
-            index === cateIndex ? 'ios hydrated cate-focus' : 'ios hydrated'
-          "
-        >
-          <ion-button color="dark" fill="clear" @click="changeCateBtn(index)">
-            <div class="thumbnail-none">
-              {{ stringSlice(item.frizeName) }}
-            </div>
-          </ion-button>
-        </ion-thumbnail>
-        <ion-text> {{ item.frizeName }} </ion-text>
-      </ion-col>
+      <ion-card button @click.passive.self="changeCateBtn($event, index)">
+        <ion-card-header>
+          <ion-toolbar>
+            <ion-buttons slot="end">
+              <ion-button @click.self="openPop(true)">
+                <ion-icon slot="icon-only" :icon="closeOutline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-text class="cate-name-text"> {{ item.frizeName }} </ion-text>
+          <ion-text> 4개 보관중 </ion-text>
+        </ion-card-content>
+      </ion-card>
     </swiper-slide>
+    <swiper-slide></swiper-slide>
   </swiper>
+  <app-popover :propOpenPopover="popStatus" @closePopover="openPop(false)">
+    <div class="remove-cate-popover">
+      <ion-toolbar mode="md">
+        <ion-title mode="md"> {{ frizeSeletedName }}</ion-title>
+      </ion-toolbar>
+
+      <ion-text
+        ><span class="main-text">해당 카테고리를 삭제하시겠습니까?</span
+        ><br /><br />
+        카테고리를 삭제하면 이 카테고리에 추가되었던 재료가 모두 삭제되며 복원할
+        수 없습니다.</ion-text
+      >
+      <ion-footer mode="ios">
+        <ion-button
+          mode="ios"
+          expand="block"
+          color="medium"
+          fill="outline"
+          @click="openPop(false)"
+        >
+          닫기
+        </ion-button>
+        <ion-button
+          color="danger"
+          expand="block"
+          @click="deleteCate(), openPop(false)"
+          @closePopover="openPop(false)"
+        >
+          삭제하기
+        </ion-button>
+      </ion-footer>
+    </div>
+  </app-popover>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed, watch } from "vue";
 import {
-  IonIcon,
+  defineComponent,
+  ref,
+  PropType,
+  computed,
+  watch,
+  onMounted,
+} from "vue";
+import {
   IonText,
-  IonTitle,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonButtons,
+  IonIcon,
   IonButton,
-  IonFooter,
-  IonCol,
   IonToolbar,
-  IonThumbnail,
+  IonTitle,
+  IonFooter,
 } from "@ionic/vue";
 import SwiperCore from "swiper";
 import { IonicSwiper } from "@ionic/vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import AppInput from "@/components/AppInput.vue";
-import AppPopover from "@/components/AppPopover.vue";
 import { useStore } from "@/store/index";
 import "swiper/swiper.scss";
+import AppPopover from "@/components/AppPopover.vue";
 import "swiper/components/navigation/navigation.scss";
 import {
-  addOutline,
   trashOutline,
   notificationsOutline,
   closeOutline,
 } from "ionicons/icons";
 import { FrigeCate } from "@/types/frige";
 SwiperCore.use([IonicSwiper]);
-
 export default defineComponent({
   props: {
     propCates: {
@@ -117,6 +116,54 @@ export default defineComponent({
       return store.state.frige.selectedCateId;
     });
 
+    //팝업 열기/닫기
+    const popStatus = ref(false);
+    const openPop = (state: boolean) => {
+      popStatus.value = state;
+    };
+    const test = () => {
+      console.log("test");
+      //openPop(true);
+    };
+
+    //렌더링시 스와이퍼 사이즈 조정
+    const slidePerView = ref(2.3);
+    onMounted(() => {
+      window.onload = function () {
+        const slideOneDom = document.getElementsByClassName("swiper-slide")[0];
+        const result = 2 + 31 / slideOneDom.scrollWidth;
+        slidePerView.value = result;
+      };
+    });
+
+    //스와이퍼 초기화
+    const onSwiper = (swiper: any) => {
+      cateIndex.value = swiper.snapIndex;
+      cateItems.value.forEach((el, index) => {
+        if (el.frizeId === cateId.value) cateIndex.value = index;
+      });
+      swiper.slideTo(cateIndex.value);
+    };
+
+    //슬라이드가 바뀔때 1초동안 동작이 없으면 마지막 index 값으로 cate값 실행
+    let changeIdxPrevent = setTimeout(() => {
+      console.log("이벤트");
+    }, 1000);
+
+    const onSlideChange = async (swiper: any) => {
+      clearTimeout(changeIdxPrevent);
+      cateIndex.value = swiper.snapIndex;
+      changeIdxPrevent = setTimeout(() => {
+        store.commit(
+          "frige/fetchFrizeCateSelected",
+          cateItems.value[cateIndex.value].frizeId
+        );
+        store.dispatch("frige/frizeIngredientGet", {
+          frizeId: cateItems.value[cateIndex.value].frizeId,
+        });
+      }, 1000);
+    };
+
     watch(cateId, (id: any, oldId: any) => {
       if (cateItems.value !== undefined && cateId.value !== undefined) {
         cateItems.value.forEach((el, index) => {
@@ -126,70 +173,68 @@ export default defineComponent({
     });
 
     //선택 카테고리 변경
-    const changeCateBtn = (index: number) => {
+    const changeCateBtn = (event: any, index: number) => {
+      const swiper = event.target.parentNode.parentNode.parentNode.swiper;
+      swiper.slideTo(index);
       cateIndex.value = index;
-      if (cateItems.value !== undefined) {
-        store.commit(
-          "frige/fetchFrizeCateSelected",
-          cateItems.value[index].frizeId
+    };
+
+    //냉장고 아이디로
+    const frizeSeletedId = computed(() => store.state.frige.selectedCateId);
+
+    //냉장고 이름
+    const frizeSeletedName = computed(() =>
+      store.getters["frige/getCateName"](frizeSeletedId.value)
+    );
+
+    //카테고리 삭제
+    const deleteCate = () => {
+      const swiperDom = document.getElementById("swiper") as any;
+      if (cateItems.value.length > 1) {
+        store
+          .dispatch("frige/frizeDelete", {
+            frizeName: frizeSeletedName.value,
+          })
+          .then(() => {
+            store.commit("frige/initFrizeCateselected");
+            swiperDom.swiper.slideTo(0);
+          });
+      } else
+        alert(
+          "냉장고를 삭제할 수 없습니다.\n최소 한 개의 냉장고가 있어야 합니다."
         );
-        store.dispatch("frige/frizeIngredientGet", {
-          frizeId: cateItems.value[index].frizeId,
-        });
-      }
     };
-    //팝업 열기/닫기
-    const popStatus = ref(false);
-    const openPop = (state: boolean) => {
-      popStatus.value = state;
-    };
-    //카테고리 추가
-    const inputedName = ref("");
-    const addCateBtn = () => {
-      if (inputedName.value.length >= 2) {
-        store.dispatch("frige/frizeAdd", {
-          email: localStorage.getItem("email"),
-          frizeName: inputedName.value,
-        });
-      } else alert("두자리 이상의 값을 입력해주세요");
-      inputedName.value = "";
-    };
-
-    //문자열 자르기
-    const stringSlice = (string: string) => {
-      if (string) {
-        return string.slice(0, 2);
-      }
-    };
-
     return {
-      popStatus,
-      addOutline,
+      deleteCate,
       cateItems,
       cateIndex,
+      slidePerView,
       trashOutline,
       closeOutline,
       notificationsOutline,
-      stringSlice,
       changeCateBtn,
-      inputedName,
-      addCateBtn,
+      onSlideChange,
+      frizeSeletedName,
+      test,
+      onSwiper,
+      popStatus,
       openPop,
     };
   },
   components: {
-    AppPopover,
-    AppInput,
     Swiper,
     SwiperSlide,
-    IonThumbnail,
     IonToolbar,
-    IonFooter,
-    IonTitle,
     IonButton,
-    IonCol,
-    IonIcon,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonButtons,
     IonText,
+    IonIcon,
+    IonTitle,
+    IonFooter,
+    AppPopover,
   },
 });
 </script>
@@ -200,84 +245,110 @@ export default defineComponent({
   margin-right: 16px;
 }
 .swiper-container {
-  margin-left: 12px;
-  width: 100vw;
   padding-top: 4px;
 }
 .swiper-wrapper {
   .swiper-slide {
-    ion-col {
+    margin-top: 0px;
+    ion-card {
+      background: white;
+      border-radius: 16px;
+      margin: 16px;
+      margin-top: 0px;
+      padding: 0px;
       widows: 60px;
-      max-width: 60px !important;
-      ion-thumbnail {
-        text-align: center;
-        box-sizing: content-box !important;
-        min-width: 48px;
-        min-height: 48px;
-        border-radius: 12px;
-        margin-top: 0;
-        margin: 0 auto;
-        border: 1.4px solid var(--custom-gray-04);
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.16);
-        &.cate-focus {
-          margin-top: -2px;
-          border: 1.4px solid var(--ion-color-primary);
-          box-shadow: 0px 1px 3px rgba(187, 159, 0, 0.16);
-          transition: all 0.3s ease;
+      width: 140px;
+      min-height: rem-calc(112px);
+      transition: all 0.4s ease-in-out;
+    }
+    ion-card-header {
+      display: none;
+      pointer-events: none;
+      padding: 8px;
+      padding-bottom: 0px;
+      ion-toolbar {
+        --padding-bottom: 0px;
+        --padding-top: 0px;
+        --background: none !important;
+        --min-height: 20px;
+        ion-buttons {
           ion-button {
-            .thumbnail-none {
-              color: black;
+            pointer-events: all;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            width: 24px;
+            height: 24px;
+            ion-icon {
+              color: white;
+              font-size: rem-calc(18px);
             }
           }
         }
-        ion-button {
-          --padding-start: 0;
-          --padding-end: 0;
-          box-sizing: content-box !important;
-          width: rem-calc(48px);
-          height: rem-calc(48px);
-          line-height: rem-calc(48px);
-          vertical-align: middle !important;
-          .thumbnail-none {
-            line-height: rem-calc(48px);
-            vertical-align: middle;
-            color: grey;
-          }
-          ion-icon {
-            font-size: 1.6rem;
-          }
-          img {
-            border-radius: 20px;
+      }
+    }
+    ion-card-content {
+      min-height: rem-calc(112px);
+      padding-top: 40px;
+      pointer-events: none;
+      text-align: center;
+      ion-text {
+        display: none;
+        color: black;
+        &.cate-name-text {
+          display: block;
+          font-size: 18px;
+          font-weight: 600;
+        }
+      }
+    }
+    &.swiper-slide-active {
+      ion-card {
+        background: var(--ion-color-primary-shade);
+        border-radius: 16px;
+        margin: 16px;
+        margin-top: -4px;
+        padding: 0px;
+        widows: 60px;
+      }
+      ion-card-header {
+        display: block;
+        padding: 8px;
+        padding-bottom: 0px;
+        ion-toolbar {
+          --padding-bottom: 0px;
+          --padding-top: 0px;
+          --background: none !important;
+          --min-height: 20px;
+          ion-buttons {
+            ion-button {
+              ion-icon {
+                font-size: rem-calc(18px);
+              }
+            }
           }
         }
       }
-      ion-text {
-        display: block;
-        text-align: center;
-        margin-top: rem-calc(4px);
-        margin-left: 0;
-        margin-right: 0;
-        width: 100%;
-        font-size: rem-calc(12px);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      ion-card-content {
+        min-height: rem-calc(0px);
+        padding: 16px;
+        padding-top: 0px;
+        text-align: left;
+        ion-text {
+          display: block;
+          color: white;
+          &.cate-name-text {
+            display: block;
+          }
+        }
       }
     }
   }
-  ion-slide:nth-of-type(1) {
-    ion-col ion-thumbnail {
-      border: none !important;
-      background: var(--custom-gray-05);
-    }
-  }
 }
-.add-cate-popover {
+// 삭제 모달
+.remove-cate-popover {
   padding: 16px;
   padding-top: 8px;
-
   ion-toolbar {
-    margin-bottom: 16px;
     ion-title {
       padding-left: 0px;
       font-weight: 600;
@@ -285,12 +356,10 @@ export default defineComponent({
         min-width: 300px;
       }
     }
-    ion-buttons {
-      ion-button {
-        min-height: rem-calc(44px);
-        margin-top: 0 !important;
-      }
-    }
+  }
+  .main-text {
+    font-size: 16px;
+    color: black;
   }
   ion-footer {
     margin-top: 60px;

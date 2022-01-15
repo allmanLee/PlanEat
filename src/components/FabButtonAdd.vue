@@ -1,6 +1,7 @@
 <template>
   <div>
     <ion-fab mode="ios" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-label>재료추가</ion-label>
       <ion-fab-button @click="openModal(true)">
         <ion-icon :icon="add"></ion-icon>
       </ion-fab-button>
@@ -24,7 +25,7 @@
 <script lang="ts">
 import { add } from "ionicons/icons";
 import { useStore } from "@/store/index";
-import { IonFab, IonIcon, IonFabButton, IonModal } from "@ionic/vue";
+import { IonFab, IonIcon, IonLabel, IonFabButton, IonModal } from "@ionic/vue";
 import { computed, ref } from "@vue/reactivity";
 import { defineComponent } from "vue";
 import Modal from "./AppModalContainer.vue";
@@ -77,6 +78,7 @@ export default defineComponent({
   components: {
     Tab3AddModalContent,
     IonFab,
+    IonLabel,
     IonIcon,
     IonFabButton,
     IonModal,
@@ -84,3 +86,86 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss" scoped>
+ion-fab {
+  text-align: center;
+  ion-label {
+    font-weight: 600;
+    font-size: rem-calc(14px);
+    color: var(--ion-color-primary);
+  }
+  ion-fab-button {
+    animation: sticky_bounce 0.5s 3 ease-out 3s;
+  }
+}
+
+/* animation */
+@keyframes sticky_bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25%,
+  80% {
+    transform: translateY(2px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes sticky_expand_second {
+  0% {
+    transform: translateX(72px);
+  }
+  70% {
+    transform: translateX(-20px);
+  }
+  90% {
+    transform: translateX(-10px);
+  }
+  95% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sticky_expand_third {
+  0% {
+    transform: translateX(144px);
+  }
+  70% {
+    transform: translateX(-25px);
+  }
+  90% {
+    transform: translateX(-10px);
+  }
+  95% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+/* WMG-25789 */
+@keyframes sticky_expand_fourth {
+  0% {
+    transform: translateX(216px);
+  }
+  70% {
+    transform: translateX(-30px);
+  }
+  90% {
+    transform: translateX(-10px);
+  }
+  95% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+/* // WMG-25789 */
+</style>
