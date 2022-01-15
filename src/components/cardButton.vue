@@ -103,7 +103,8 @@
             </transition>
             <transition name="fade" mode="out-in">
               <ion-button
-                color="dark"
+                color="light"
+                fill="solid"
                 @click="ingreModify(true)"
                 :key="modifyMode"
                 >{{ modifyMode ? "수정하기" : "원래대로" }}</ion-button
@@ -156,7 +157,6 @@ export default defineComponent({
     IonCol,
     IonCardHeader,
     IonCardTitle,
-
     IonCardContent,
     IonList,
     IonListHeader,
@@ -302,10 +302,6 @@ export default defineComponent({
       }
       const dateDifference =
         (exDate.getTime() - upDate.getTime()) / (1000 * 60 * 60 * 24);
-      // if (dateDifference < 0) return 0;
-      // else if (dateDifference === 0) return 1;
-      // else if (dateDifference <= 7) return 2;
-      // else return 3;
 
       return dateDifference;
     });

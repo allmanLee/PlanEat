@@ -95,6 +95,7 @@ ion-fab {
     color: var(--ion-color-primary);
   }
   ion-fab-button {
+    margin-top: 8px;
     animation: sticky_bounce 0.5s 3 ease-out 3s;
   }
 }
