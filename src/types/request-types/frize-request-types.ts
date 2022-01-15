@@ -5,12 +5,9 @@
 import { FrigeType } from "../frige";
 
 export interface FrizeUser {
-  email: string;
   frizeName: string;
   frizeCate?: string | undefined;
 }
-
-export type FrizeOnlyEmail = Omit<FrizeUser, 'frizeName'>;
 export interface FrizeOnlyId {
   frizeId: string;
   frizeCate?: string | undefined;

@@ -2,7 +2,7 @@ import { Module } from 'vuex';
 import { RootState, store } from ".";
 import { AlaramIngredientType, FrigeCate, FrigeType } from "@/types/frige";
 import frizeAPI from "@/assets/api/frizeAPI";
-import { FrizeIngreModify, FrizeOnlyEmail, FrizeOnlyId, FrizeUser, IngredientModify } from "@/types/request-types/frize-request-types";
+import { FrizeIngreModify, FrizeOnlyId, FrizeUser, IngredientModify } from "@/types/request-types/frize-request-types";
 
 
 export interface FrigeModuleState {
@@ -160,7 +160,6 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     async frizeAdd(context, payload: FrizeUser) {
       const reqData = {
-        email: payload.email,
         frizeName: payload.frizeName,
       };
 
@@ -170,7 +169,6 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
     },
     async frizeDelete(constext, payload: FrizeUser) {
       const reqData = {
-        email: payload.email,
         frizeName: payload.frizeName
       };
       return await frizeAPI.DeleteUserFrize(reqData).then((res) => {
@@ -178,11 +176,8 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
         constext.commit("fetchFrizeCateDelete", frizeCates);
       });
     },
-    async AllFrizeGet(constext, payload: FrizeOnlyEmail) {
-      const reqData = {
-        email: payload.email,
-      };
-      return await frizeAPI.SearchUserFrizes(reqData).then((res) => {
+    async AllFrizeGet(constext) {
+      return await frizeAPI.SearchUserFrizes().then((res) => {
         const frizeCates = res.data.dataObj;
         constext.commit("fetchFrizeCate", frizeCates);
       });
