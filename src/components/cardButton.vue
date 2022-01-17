@@ -22,9 +22,11 @@
         </ion-grid>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content v-if="propMemoDisabled">
-      {{ ingredient.memo ? ingredient.memo : "메모가 필요하실가요?" }}
-    </ion-card-content>
+    <transition name="fade" mode="in-out">
+      <ion-card-content v-if="propMemoDisabled">
+        {{ ingredient.memo ? ingredient.memo : "메모가 필요하실가요?" }}
+      </ion-card-content>
+    </transition>
   </ion-card>
 
   <!-- 재료 수정부 팝업 -->
@@ -77,7 +79,6 @@
           <ion-text v-if="modifyMode">{{ ingreMemo }}</ion-text>
           <ion-textarea
             v-else
-            autoGrow="true"
             :disabled="modifyMode"
             :placeholder="ingreMemo"
             :value="ingreMemo"
@@ -380,7 +381,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-card {
   box-sizing: border-box;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 6px rgba(116, 69, 0, 0.1);
   width: 100%;
   height: auto;
   margin-bottom: 8px;
@@ -390,7 +391,6 @@ ion-card {
   padding: 16px;
   margin-right: 4px;
   margin-left: 4px;
-  --background: white;
   transition: all 0.5s ease;
   ion-card-header {
     padding: 0px;
@@ -400,8 +400,10 @@ ion-card {
     }
   }
   ion-card-content {
+    border-radius: 10px;
+    background: var(--custom-gray-05);
     margin-top: 4px;
-    padding: 0px;
+    padding: 8px;
   }
 }
 
@@ -479,6 +481,9 @@ ion-badge {
   .memo-input-item {
     min-height: 136px;
     --padding-bottom: 20px;
+    .memo-input-item {
+      height: rem-calc(72px);
+    }
     ion-text {
       min-height: rem-calc(72px);
     }

@@ -41,9 +41,9 @@ export const FrigeModule: Module<FrigeModuleState, RootState> = {
 
 
     //특정 냉장고 아이디만 가져오기
-    // getCateId: (state) => (id: number) => {
-    //   return state.frizeCate.indexOf(id);
-    // },
+    getCateLength: (state) => (index: number) => {
+      return state.items.length;
+    },
     //냉장고 아이디만 전체 가져오기
     getAllCateId: (state) => {
       const itemNames: string[] = [];

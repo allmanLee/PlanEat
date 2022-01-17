@@ -2,7 +2,8 @@
   <swiper
     mode="ios"
     id="swiper"
-    :slides-per-view="slidePerView"
+    :slidesPerView="1.5"
+    :breakpoints="swiperBreakpoints"
     @swiper="onSwiper"
     @slideChange="onSlideChange"
     v-cloak
@@ -24,7 +25,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-text class="cate-name-text"> {{ item.frizeName }} </ion-text>
-          <ion-text> 4개 보관중 </ion-text>
+          <ion-text> {{ frizeItemLength }}개 보관중 </ion-text>
         </ion-card-content>
       </ion-card>
     </swiper-slide>
@@ -66,14 +67,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  PropType,
-  computed,
-  watch,
-  onMounted,
-} from "vue";
+import { defineComponent, ref, PropType, computed, watch } from "vue";
 import {
   IonText,
   IonCard,
@@ -85,6 +79,7 @@ import {
   IonToolbar,
   IonTitle,
   IonFooter,
+  loadingController,
 } from "@ionic/vue";
 import SwiperCore from "swiper";
 import { IonicSwiper } from "@ionic/vue";
@@ -121,20 +116,38 @@ export default defineComponent({
     const openPop = (state: boolean) => {
       popStatus.value = state;
     };
-    const test = () => {
-      console.log("test");
-      //openPop(true);
+
+    //로딩 스플레시
+    const loadingSinner = async () => {
+      return await loadingController.create({
+        spinner: "bubbles",
+        mode: "ios",
+        duration: 20000,
+        message: "보관함을 가져오고 있어요",
+        translucent: true,
+        cssClass: "custom-class custom-loading",
+        backdropDismiss: false,
+      });
     };
 
     //렌더링시 스와이퍼 사이즈 조정
-    const slidePerView = ref(2.3);
-    onMounted(() => {
-      window.onload = function () {
-        const slideOneDom = document.getElementsByClassName("swiper-slide")[0];
-        const result = 2 + 31 / slideOneDom.scrollWidth;
-        slidePerView.value = result;
-      };
-    });
+    const swiperBreakpoints = {
+      // when window width is >= 320px
+      320: {
+        slidesPerView: 2.3,
+        spaceBetween: 10,
+      },
+      // when window width is >= 480px
+      480: {
+        slidesPerView: 3,
+        spaceBetween: 10,
+      },
+      // when window width is >= 640px
+      640: {
+        slidesPerView: 6,
+        spaceBetween: 10,
+      },
+    };
 
     //스와이퍼 초기화
     const onSwiper = (swiper: any) => {
@@ -154,13 +167,18 @@ export default defineComponent({
       clearTimeout(changeIdxPrevent);
       cateIndex.value = swiper.snapIndex;
       changeIdxPrevent = setTimeout(() => {
+        loadingSinner().then((data) => data.present());
         store.commit(
           "frige/fetchFrizeCateSelected",
           cateItems.value[cateIndex.value].frizeId
         );
-        store.dispatch("frige/frizeIngredientGet", {
-          frizeId: cateItems.value[cateIndex.value].frizeId,
-        });
+        store
+          .dispatch("frige/frizeIngredientGet", {
+            frizeId: cateItems.value[cateIndex.value].frizeId,
+          })
+          .then(() => {
+            loadingController.dismiss();
+          });
       }, 1000);
     };
 
@@ -186,18 +204,26 @@ export default defineComponent({
     const frizeSeletedName = computed(() =>
       store.getters["frige/getCateName"](frizeSeletedId.value)
     );
-
+    //냉장고 재료수
+    const frizeItemLength = computed(() =>
+      store.getters["frige/getCateLength"](cateIndex.value)
+    );
     //카테고리 삭제
     const deleteCate = () => {
       const swiperDom = document.getElementById("swiper") as any;
       if (cateItems.value.length > 1) {
+        loadingSinner().then((data) => data.present());
         store
           .dispatch("frige/frizeDelete", {
             frizeName: frizeSeletedName.value,
           })
           .then(() => {
             store.commit("frige/initFrizeCateselected");
-            swiperDom.swiper.slideTo(0);
+            if (cateIndex.value === 0) {
+              onSlideChange(swiperDom.swiper);
+              console.log("frizeCateThumbnail: cateIndex = 0");
+            } else swiperDom.swiper.slideTo(0);
+            loadingController.dismiss();
           });
       } else
         alert(
@@ -208,14 +234,14 @@ export default defineComponent({
       deleteCate,
       cateItems,
       cateIndex,
-      slidePerView,
+      swiperBreakpoints,
       trashOutline,
       closeOutline,
+      frizeItemLength,
       notificationsOutline,
       changeCateBtn,
       onSlideChange,
       frizeSeletedName,
-      test,
       onSwiper,
       popStatus,
       openPop,
@@ -253,6 +279,8 @@ export default defineComponent({
     ion-card {
       background: white;
       border-radius: 16px;
+      border: 1px solid var(--ion-color-primary);
+      box-shadow: none;
       margin: 16px;
       margin-top: 0px;
       padding: 0px;
@@ -294,6 +322,8 @@ export default defineComponent({
       ion-text {
         display: none;
         color: black;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         &.cate-name-text {
           display: block;
           font-size: 18px;
@@ -303,8 +333,9 @@ export default defineComponent({
     }
     &.swiper-slide-active {
       ion-card {
-        background: var(--ion-color-primary-shade);
+        background: var(--ion-color-primary);
         border-radius: 16px;
+        box-shadow: rgb(0 0 0 / 12%) 0px 4px 16px;
         margin: 16px;
         margin-top: -4px;
         padding: 0px;

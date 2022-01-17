@@ -1,6 +1,6 @@
 <template>
   <ion-page mode="ios">
-    <ion-card>
+    <ion-card class="cate-card">
       <ion-card-header>
         <ion-card-title>카테고리</ion-card-title>
         <ion-button @click="openPop(true)">
@@ -10,31 +10,23 @@
       <ion-card-content>
         <frize-cate-thumbnail :propCates="testMock"></frize-cate-thumbnail>
       </ion-card-content>
-      <ion-row
-        justify-content-center
-        class="cate-toolbar ion-padding-start ion-margin-top"
-      >
-        <ion-col class="memo-btn-container"
-          ><ion-button
-            mode="ios"
-            color="dark"
-            fill="clear"
-            class="memotoggle-btn"
-            @click="memoDisabled = !memoDisabled"
-            >{{ memoDisabled ? "메모 끄기" : "메모 켜기" }}</ion-button
-          ><ion-button
-            mode="ios"
-            color="dark"
-            fill="clear"
-            class="memotoggle-btn"
-            @click="openPop(true)"
-            >카테고리 삭제</ion-button
-          ></ion-col
-        >
-      </ion-row>
     </ion-card>
-    <!--컨텐츠-->
-    <ion-content>
+    <ion-card class="content-header-card">
+      <ion-card-header>
+        <ion-card-title>보관함</ion-card-title>
+        <ion-button
+          mode="ios"
+          color="dark"
+          fill="clear"
+          class="memotoggle-btn"
+          @click="memoDisabled = !memoDisabled"
+          >{{ memoDisabled ? "메모 끄기" : "메모 켜기" }}
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content> </ion-card-content>
+    </ion-card>
+
+    <ion-content class="card-list-content">
       <tab-3-list-buttons :propMemoDisabled="memoDisabled"></tab-3-list-buttons>
     </ion-content>
 
@@ -89,9 +81,7 @@ import {
   IonCardContent,
   IonIcon,
   IonFooter,
-  IonRow,
   IonButton,
-  IonCol,
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
@@ -108,7 +98,6 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const testMock = ref(store.state.frige.frizeCate);
-
     //팝업 열기/닫기
     const popStatus = ref(false);
     const openPop = (state: boolean) => {
@@ -176,27 +165,31 @@ export default defineComponent({
     Tab3ListButtons,
     AppPopover,
     IonFooter,
-    IonRow,
     IonButton,
-    IonCol,
   },
 });
 </script>
 
 <style lang="scss" scoped>
 ion-card {
+  border-radius: 0px;
+
   margin: 0px;
   ion-card-header {
     margin: 16px;
     padding: 0px;
     position: relative;
+    ion-card-title {
+      font-size: rem-calc(18px);
+      font-weight: 500;
+    }
     ion-button {
       position: absolute;
       right: 0px;
       top: 0px;
       width: 32px;
       height: 32px;
-      --background: rgb(255, 238, 212);
+      --background: rgb(255, 247, 239);
       --background-activated: rgb(255, 255, 255);
       --padding-start: 0px;
       --padding-end: 0px;
@@ -216,37 +209,20 @@ ion-card {
     padding: 0px;
   }
 }
+.memotoggle-btn {
+  width: auto;
+  margin: {
+    right: 0px;
+  }
+  height: 36px;
+  font: {
+    size: 14px;
+  }
+}
 
-ion-content {
+ion-content.card-list-content {
   --padding-start: 0px;
   --padding-end: 0px;
-}
-.cate-toolbar {
-  border-radius: 0px;
-  .cate-tool-btn {
-    width: 48px;
-    height: 48px;
-    --padding-start: 0;
-    --padding-end: 0;
-  }
-  ion-icon {
-    font-size: rem-calc(24px);
-  }
-  .memo-btn-container {
-    --padding-end: 16px;
-    text-align: right;
-  }
-  .memotoggle-btn {
-    margin: {
-      top: 6px;
-      bottom: 6px;
-      right: 0px;
-    }
-    height: 36px;
-    font: {
-      size: 14px;
-    }
-  }
 }
 
 .add-cate-popover {

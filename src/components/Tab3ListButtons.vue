@@ -136,6 +136,7 @@ li {
   list-style-type: none;
 }
 ion-item {
+  --background: none;
   height: 100%;
   --inner-padding-start: 0px;
   --padding-start: 0px;
@@ -154,6 +155,9 @@ ion-item-options {
       top: auto;
       bottom: auto;
       left: 16px;
+    }
+    & button::after {
+      transition: all 0.5 ease-in-out;
     }
   }
 }

@@ -1,7 +1,6 @@
 <template>
   <div>
     <ion-fab mode="ios" vertical="bottom" horizontal="end" slot="fixed">
-      <ion-label>재료추가</ion-label>
       <ion-fab-button @click="openModal(true)">
         <ion-icon :icon="add"></ion-icon>
       </ion-fab-button>
@@ -25,7 +24,7 @@
 <script lang="ts">
 import { add } from "ionicons/icons";
 import { useStore } from "@/store/index";
-import { IonFab, IonIcon, IonLabel, IonFabButton, IonModal } from "@ionic/vue";
+import { IonFab, IonIcon, IonFabButton, IonModal } from "@ionic/vue";
 import { computed, ref } from "@vue/reactivity";
 import { defineComponent } from "vue";
 import Modal from "./AppModalContainer.vue";
@@ -78,7 +77,6 @@ export default defineComponent({
   components: {
     Tab3AddModalContent,
     IonFab,
-    IonLabel,
     IonIcon,
     IonFabButton,
     IonModal,
@@ -89,11 +87,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-fab {
   text-align: center;
-  ion-label {
-    font-weight: 600;
-    font-size: rem-calc(14px);
-    color: var(--ion-color-primary);
-  }
   ion-fab-button {
     margin-top: 8px;
     animation: sticky_bounce 0.5s 3 ease-out 3s;
