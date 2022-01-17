@@ -270,19 +270,14 @@ export default defineComponent({
   margin-left: 16px;
   margin-right: 16px;
 }
-.swiper-container {
-  padding-top: 4px;
-}
 .swiper-wrapper {
   .swiper-slide {
-    margin-top: 0px;
     ion-card {
-      background: white;
+      background: var(--custom-gray-05);
       border-radius: 16px;
-      border: 1px solid var(--ion-color-primary);
       box-shadow: none;
-      margin: 16px;
-      margin-top: 0px;
+      margin-top: 8px;
+      margin-bottom: 8px;
       padding: 0px;
       widows: 60px;
       width: 140px;
@@ -337,7 +332,8 @@ export default defineComponent({
         border-radius: 16px;
         box-shadow: rgb(0 0 0 / 12%) 0px 4px 16px;
         margin: 16px;
-        margin-top: -4px;
+        margin-top: 0px;
+        margin-bottom: 16px;
         padding: 0px;
         widows: 60px;
       }

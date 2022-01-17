@@ -8,7 +8,7 @@
               ingredient.name
             }}</ion-col>
             <ion-col
-              v-if="expirationDateTag < 3"
+              v-if="expirationDateTag <= 7"
               class="badge-container"
               size="auto"
               ><ion-badge :color="expirationDateTagColor">{{
@@ -39,7 +39,7 @@
         <ion-toolbar>
           <ion-title mode="ios"
             >{{ ingredient.name
-            }}<span v-if="expirationDateTag < 3" class="badge-container"
+            }}<span v-if="expirationDateTag <= 7" class="badge-container"
               ><ion-badge :color="expirationDateTagColor">{{
                 expirationDateTagName
               }}</ion-badge></span
@@ -91,7 +91,16 @@
       <ion-footer line="true">
         <ion-toolbar>
           <ion-buttons slot="end">
-            <transition name="fade">
+            <transition name="fade" mode="out-in">
+              <ion-button
+                color="light"
+                fill="solid"
+                @click="ingreModify(true)"
+                :key="modifyMode"
+                >{{ modifyMode ? "수정하기" : "원래대로" }}</ion-button
+              >
+            </transition>
+            <transition name="fade" mode="out-in">
               <ion-button
                 v-if="!modifyMode"
                 expand="block"
@@ -101,15 +110,15 @@
               >
                 편집완료
               </ion-button>
-            </transition>
-            <transition name="fade" mode="out-in">
               <ion-button
-                color="light"
+                v-else
+                slot="start"
+                color="danger"
                 fill="solid"
-                @click="ingreModify(true)"
-                :key="modifyMode"
-                >{{ modifyMode ? "수정하기" : "원래대로" }}</ion-button
+                @click="deleteIngredient()"
               >
+                삭제하기
+              </ion-button>
             </transition>
           </ion-buttons>
         </ion-toolbar>
@@ -258,9 +267,9 @@ export default defineComponent({
     });
 
     const koreanUpdatedDate = computed(() => {
-      const expirationDate = props.propIngredient.expirationDate;
-      if (!expirationDate) return;
-      return changeKoreanDate(expirationDate);
+      const updatedDate = props.propIngredient.updatedDate;
+      if (!updatedDate) return;
+      return changeKoreanDate(updatedDate);
     });
 
     const ingreUpdatedDate = computed(() => {
@@ -344,7 +353,7 @@ export default defineComponent({
         })
         .then(() => {
           closePopover.value = false;
-          modifyMode.value = false;
+          modifyMode.value = !modifyMode.value;
         });
     };
     //삭제 버튼 클릭(재료 추가)
@@ -382,10 +391,11 @@ export default defineComponent({
 ion-card {
   box-sizing: border-box;
   box-shadow: 0px 2px 6px rgba(116, 69, 0, 0.1);
+  border-radius: 16px;
   width: 100%;
   height: auto;
   margin-bottom: 8px;
-  margin-top: 8px;
+  margin-top: 4px;
   margin-left: 0;
   margin-right: 0;
   padding: 16px;
@@ -396,13 +406,14 @@ ion-card {
     padding: 0px;
     ion-card-title {
       font-size: 16px;
+      font-weight: 500;
       padding: 0px;
     }
   }
   ion-card-content {
     border-radius: 10px;
     background: var(--custom-gray-05);
-    margin-top: 4px;
+    margin-top: 8px;
     padding: 8px;
   }
 }
@@ -452,8 +463,8 @@ ion-badge {
     --inner-padding-end: 0;
     transition: all 0.5s ease;
     ion-label {
-      font-weight: 600;
-      font-size: rem-calc(18px);
+      font-weight: 500;
+      font-size: rem-calc(16px);
       color: var(--ion-color-primary-shade);
       min-height: 26px;
     }
@@ -499,6 +510,7 @@ ion-badge {
       ion-buttons {
         ion-button {
           font-weight: 500;
+          margin-left: 14px;
           height: rem-calc(42px);
           --padding-start: 16px;
           --padding-end: 16px;

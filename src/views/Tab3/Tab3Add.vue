@@ -2,7 +2,7 @@
   <ion-page mode="ios">
     <ion-card class="cate-card">
       <ion-card-header>
-        <ion-card-title>카테고리</ion-card-title>
+        <ion-card-title>냉장고</ion-card-title>
         <ion-button @click="openPop(true)">
           <ion-icon slot="icon-only" :icon="add"></ion-icon>
         </ion-button>
@@ -11,21 +11,14 @@
         <frize-cate-thumbnail :propCates="testMock"></frize-cate-thumbnail>
       </ion-card-content>
     </ion-card>
-    <ion-card class="content-header-card">
-      <ion-card-header>
-        <ion-card-title>보관함</ion-card-title>
-        <ion-button
-          mode="ios"
-          color="dark"
-          fill="clear"
-          class="memotoggle-btn"
-          @click="memoDisabled = !memoDisabled"
-          >{{ memoDisabled ? "메모 끄기" : "메모 켜기" }}
-        </ion-button>
-      </ion-card-header>
-      <ion-card-content> </ion-card-content>
-    </ion-card>
 
+    <ion-toolbar mode="md">
+      <ion-title mode="md"> {{ frizeSeletedName }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-label>메모</ion-label>
+        <ion-toggle checked @click="memoDisabled = !memoDisabled"></ion-toggle>
+      </ion-buttons>
+    </ion-toolbar>
     <ion-content class="card-list-content">
       <tab-3-list-buttons :propMemoDisabled="memoDisabled"></tab-3-list-buttons>
     </ion-content>
@@ -80,8 +73,11 @@ import {
   IonCardTitle,
   IonCardContent,
   IonIcon,
+  IonLabel,
+  IonToggle,
   IonFooter,
   IonButton,
+  IonButtons,
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
@@ -106,6 +102,11 @@ export default defineComponent({
 
     //냉장고 아이디로
     const frizeSeletedId = computed(() => store.state.frige.selectedCateId);
+
+    //냉장고 이름
+    const frizeSeletedName = computed(() =>
+      store.getters["frige/getCateName"](frizeSeletedId.value)
+    );
 
     //냉장고 [이름, 아이디] 가져오기
     store
@@ -141,6 +142,7 @@ export default defineComponent({
       add,
       addCateSubmit,
       trashOutline,
+      frizeSeletedName,
       notificationsOutline,
       inputedName,
       openPop,
@@ -156,12 +158,15 @@ export default defineComponent({
     IonCardContent,
     IonIcon,
     IonPage,
+    IonLabel,
+    IonToggle,
     IonContent,
     AppInput,
     IonTitle,
     IonToolbar,
     FrizeCateThumbnail,
     FabButtonAdd,
+    IonButtons,
     Tab3ListButtons,
     AppPopover,
     IonFooter,
@@ -173,16 +178,18 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-card {
   border-radius: 0px;
-
   margin: 0px;
+  box-shadow: none;
+  padding-bottom: 20px;
   ion-card-header {
     margin: 16px;
     padding: 0px;
     position: relative;
     ion-card-title {
       font-size: rem-calc(18px);
-      font-weight: 500;
+      font-weight: 600;
     }
+
     ion-button {
       position: absolute;
       right: 0px;
@@ -209,20 +216,23 @@ ion-card {
     padding: 0px;
   }
 }
-.memotoggle-btn {
-  width: auto;
-  margin: {
-    right: 0px;
-  }
-  height: 36px;
-  font: {
-    size: 14px;
-  }
-}
 
 ion-content.card-list-content {
+  --background: rgb(255, 247, 239);
   --padding-start: 0px;
   --padding-end: 0px;
+}
+
+ion-toolbar {
+  --background: white;
+  border: {
+    top: 1px solid var(--custom-gray-04);
+    bottom: 1px solid var(--custom-gray-04);
+  }
+  ion-toggle {
+    --background-checked: rgb(255, 187, 118);
+  }
+  font-size: rem-calc(12px);
 }
 
 .add-cate-popover {

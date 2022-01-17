@@ -51,12 +51,7 @@ export default defineComponent({
     IonRouterOutlet,
   },
   setup() {
-    const store = useStore();
-    // const footer = computed(() => {
-    //   return store.state.ui.footer;
-    // });
     return {
-      // footer,
       homeOutline,
       notificationsOutline,
       fishOutline,
