@@ -276,6 +276,8 @@ export default defineComponent({
       background: var(--custom-gray-05);
       border-radius: 16px;
       box-shadow: none;
+      margin-left: 16px;
+      margin-right: auto;
       margin-top: 8px;
       margin-bottom: 8px;
       padding: 0px;
@@ -331,7 +333,8 @@ export default defineComponent({
         background: var(--ion-color-primary);
         border-radius: 16px;
         box-shadow: rgb(0 0 0 / 12%) 0px 4px 16px;
-        margin: 16px;
+        margin-left: 16px;
+        margin-right: auto;
         margin-top: 0px;
         margin-bottom: 16px;
         padding: 0px;

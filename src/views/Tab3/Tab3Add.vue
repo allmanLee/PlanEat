@@ -226,8 +226,8 @@ ion-content.card-list-content {
 ion-toolbar {
   --background: white;
   border: {
-    top: 1px solid var(--custom-gray-04);
-    bottom: 1px solid var(--custom-gray-04);
+    top: 1px solid var(--custom-gray-05);
+    bottom: 1px solid var(--custom-gray-05);
   }
   ion-toggle {
     --background-checked: rgb(255, 187, 118);
